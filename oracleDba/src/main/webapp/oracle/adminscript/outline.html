@@ -1,0 +1,329 @@
+<!--====================================-->
+<!--        powered by madmaxchow       -->
+<!-- https://github.com/MadMaxChow/Export-HTML-with-Outline-for-Typora -->
+<!---------------------------------------->
+<!--    TABLE OF CONTENT PANEL BEGIN    -->
+<!---------------------------------------->
+<!--      !!!NOTE!!! NEED INTERNET      -->
+<script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+<!--   !!!NOTE!!! DON'T NEED INTERNET   -->
+
+<style type='text/css'>
+    /* md 系统样式 */
+    .md-toc-inner {
+        text-decoration: none;
+    }
+    .md-toc-item:hover {
+        box-shadow: 0px -2px 0px #505050 inset;
+    }
+    .md-toc-item > a {
+        color: #505050;
+    }
+    .md-toc-item:hover > a,
+    .md-toc-item a:hover {
+        color: #EE5A5A;
+    }
+    .md-toc-item:active {
+        background-color: #EE5A5A;
+    }
+    .md-toc-item:active > a,
+    .md-toc-item:active > a:active,
+    .md-toc-item:active:before {
+        color: #FFF;
+    }
+    /* if use xxx.user.css. for example: Auto Numbering for Headings
+    must comment blow css ".md-toc-hx:before" and "#write hx:before"
+    */
+    /*.md-toc-h1:before,
+    .md-toc-h2:before,
+    .md-toc-h3:before,
+    .md-toc-h4:before,
+    .md-toc-h5:before,
+    .md-toc-h6:before {
+        content: "";
+    }
+    #write h1:before,
+    #write h2:before,
+    #write h3:before,
+    #write h4:before,
+    #write h5:before,
+    #write h6:before {
+        content: "";
+    }*/
+    /* mdx 自定义样式 */
+    .mdx-toc-menu {
+        background-color: #505050;
+        cursor: pointer;
+        color: #FFFFFF;
+        font-size: 3em;
+        left: 0px;
+        top: 0px;
+        width: 20px;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        position: fixed;
+        text-align: center;
+        z-index: 100;
+    }
+    .mdx-toc-box {
+        background-color: #505050;
+        box-shadow: 3px 0px 8px rgba(80, 80, 80, 0.2);
+        cursor: default;
+        display: block;
+        left: -280px;
+        top: 0px;
+        width: 280px;
+        height: 100%;
+        padding: 0px;
+        position: fixed;
+        z-index: 200;
+    }
+    .mdx-toc-box-header {
+        background-color: #FFFFFF;
+        color: #505050;
+        font-size: 1.2em;
+        width: 100%;
+        height: 50px;
+        padding: 10px 0px 10px 10px;
+        position: absolute;
+        z-index: 100;
+    }
+    .mdx-header-shadow {
+        box-shadow:
+                0px 1px 0px rgba(0, 0, 0, 0.02),
+                0px 2px 0px rgba(0, 0, 0, 0.02),
+                0px 3px 0px rgba(0, 0, 0, 0.02),
+                0px 4px 0px rgba(0, 0, 0, 0.02),
+                0px 5px 0px rgba(0, 0, 0, 0.02),
+                0px 6px 0px rgba(0, 0, 0, 0.02);
+    }
+    .mdx-footer-shadow {
+        box-shadow:
+                0px -1px 0px rgba(0, 0, 0, 0.02) inset,
+                0px -2px 0px rgba(0, 0, 0, 0.02) inset,
+                0px -3px 0px rgba(0, 0, 0, 0.02) inset,
+                0px -4px 0px rgba(0, 0, 0, 0.02) inset,
+                0px -5px 0px rgba(0, 0, 0, 0.02) inset,
+                0px -6px 0px rgba(0, 0, 0, 0.02) inset;
+    }
+    .mdx-toc-box-title {
+        left: 50px;
+        top: 10px;
+        position: absolute;
+    }
+    .mdx-toc-box-body-scroll {
+        background-color: #F1E7D8;
+        width: 100％;
+        height: 100%;
+        padding: 0px;
+        padding-top: 50px;
+        padding-bottom: 25px;
+        overflow: auto;
+        overflow-y: scroll;
+        z-index: 99;
+    }
+    .mdx-toc-info {
+        background-color: #FFF;
+        color: #A0A0A0;
+        font-size: 12px;
+        width: 100%;
+        height: 25px;
+        bottom: 0px;
+        text-align: center;
+        padding: 2px;
+        position: absolute;
+        z-index: 100;
+    }
+    .mdx-toc-box-body {
+        background-color: #FFFFFF;
+        width: 100％;
+        height: 100%;
+        padding: 0px;
+        overflow-y: scroll;
+        z-index: 99;
+    }
+    .mdx-pin {
+        cursor: pointer;
+        font-weight: bold;
+        left: 10px;
+        top: 10px;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        position: absolute;
+    }
+    .mdx-pin:hover {
+        background-color: #E8E8E8;
+        border: 1px solid #D0D0D0;
+        color: #505050;
+    }
+    .mdx-pin:active {
+        background-color: #EE5A5A;
+        border: 1px solid #EE5A5A;
+        color: #FFF;
+    }
+    .mdx-pinned {
+        background-color: #505050;
+        border: 1px solid #505050;
+        color: #FFFFFF;
+    }
+    .mdx-unpin {
+        background-color: #FFFFFF;
+        border: 1px solid #D0D0D0;
+        color: #505050;
+    }
+    .mdx-nav {
+        background-color: #FFFFFF;
+        border: 1px solid #D0D0D0;
+        cursor: pointer;
+        display: inline-block;
+        font-weight: bold;
+        top: 10px;
+        width: 30px;
+        text-align: center;
+        position: absolute;
+    }
+    .mdx-nav-back {
+        left: 205px;
+    }
+    .mdx-nav-forword {
+        left: 240px;
+    }
+    .mdx-nav:hover {
+        background-color: #E8E8E8;
+    }
+    .mdx-nav:active {
+        background-color: #EE5A5A;
+        border: 1px solid #EE5A5A;
+        color: #FFF;
+    }
+    .mdx-header-current {
+        background-color: #E0E0E0;
+    }
+    .mdx-header-current a {
+        font-weight: bold;
+    }
+    .mdx-header-current a:hover {
+        color: #505050;
+    }
+</style>
+<div class="mdx-toc-menu" onclick="showOutline(true)" onmouseenter="showOutline(true)">∥</div>
+
+<div class="mdx-toc-box" onmouseleave="showOutline(pinnedOutline)">
+    <div class="mdx-toc-box-header">
+        <div id="pinTOC" class="mdx-pin mdx-pinned" onclick="pinToggle()">≡</div>
+        <div class="mdx-toc-box-title">大纲导航</div>
+        <div class="mdx-nav mdx-nav-back" onclick="window.history.back()">＜</div>
+        <div class="mdx-nav mdx-nav-forword" onclick="window.history.forward()">＞</div>
+    </div>
+    <div class="mdx-toc-box-body-scroll">
+        <div id="toc-box-body" class="mdx-toc-box-body mdx-footer-shadow"></div>
+    </div>
+    <div class="mdx-toc-info">powered by <a href="https://github.com/MadMaxChow/Export-HTML-with-Outline-for-Typora" target="_blank">MadMaxChow</a>(git)</div>
+</div>
+
+<script type="text/javascript">
+    // 提取文档中由[toc]标签生成的文档目录作为浮动outline中的内容
+    //$(".mdx-toc-box-body").append($(".md-toc").clone()); // 复制模式
+    $(".mdx-toc-box-body").append($(".md-toc").wrapAll()); // 剪贴模式
+    // outline内容滚动时，根据内容是否滚动未结束而添加阴影
+    $(".mdx-toc-box-body").scroll(function() {
+        if ($(this).scrollTop() > 15)
+            $(".mdx-toc-box-header").addClass("mdx-header-shadow");
+        else
+            $(".mdx-toc-box-header").removeClass("mdx-header-shadow");
+
+        if(($(this).get(0).scrollHeight - $(this).height() - $(this).scrollTop()) <= 20)
+            $("#toc-box-body").removeClass("mdx-footer-shadow");
+        else
+            $("#toc-box-body").addClass("mdx-footer-shadow");
+    });
+
+    var pinnedOutline = false;
+    var orgWriteLeft = 0;
+    var extendSpace = 320;
+    // 显示/隐藏outline
+    function showOutline(v) {
+        if (v == true){//} && $(".mdx-toc-box").offset().left < 0) {
+            $(".mdx-toc-box").css("left", 0);
+            if ($("#write").offset().left < extendSpace) {
+                orgWriteLeft = $("#write").offset().left;
+                $("#write").css("margin", "0");
+                $("#write").offset({left:extendSpace});
+            }
+        }
+        else if (v == false){//} && $(".mdx-toc-box").offset().left >= 0){
+            $(".mdx-toc-box").css("left", -280);
+            if (orgWriteLeft > 0) {
+                $("#write").css("margin", "0px auto");
+                $("#write").offset({left:orgWriteLeft});
+                orgWriteLeft = 0;
+            }
+        }
+    }
+    // 钉住/取消钉住outline
+    function pinToggle() {
+        pinnedOutline = !pinnedOutline;
+        $("#pinTOC").attr("class", pinnedOutline?"mdx-pin mdx-pinned":"mdx-pin mdx-unpin");
+    }
+
+    var headers = new Array();
+    var lastItem = null;
+    // 为outline中的header项添加id标识和click事件
+    $(".md-toc-content").children().each(function(i,n){
+        var obj = $(n);
+        obj.attr("id", "oli-header-" + obj.attr("data-ref"));
+        obj.css("cursor", "pointer");
+        headers[i] = "header-" + obj.attr("data-ref");
+        obj.click(function() {
+            location.href = "#header-" + obj.attr("data-ref");
+        });
+    });
+    // 页面滚动时高亮outline中的当前章节项
+    function followHeader() {
+        var sTop = $("#toc-box-body").scrollTop();
+        var sBottom = sTop + $("#toc-box-body").height();
+        for(var i = 0; i < headers.length; i++) {
+            var hotArea = $("a[name='" + headers[i] + "']").offset().top - $("body").scrollTop();
+            if (hotArea > -10 && hotArea < 200) {
+                console.log(headers[i] + ".top: " + $("a[name='" + headers[i] + "']").offset().top);
+                if (lastItem != null)
+                    lastItem.removeClass("mdx-header-current");
+                lastItem = $("#oli-" + headers[i]);
+                lastItem.addClass("mdx-header-current");
+                var preDis = lastItem.height() * 2;
+                //console.log("lastItem: " + lastItem.position().top + ", scrollTop: " + sTop + ", height: " + sBottom + ", newPos: " + (sTop + $("#toc-box-body").height() / 2));
+                if (lastItem.position().top < sTop) {
+                    $("#toc-box-body").scrollTop(lastItem.position().top);
+                }else if (lastItem.position().top > (sBottom - preDis)) {
+                    $("#toc-box-body").scrollTop(lastItem.position().top - $("#toc-box-body").height() + preDis);
+                }
+                break;
+            }
+        }
+    }
+    function adjustOutline() {
+        //console.log(($("#write").width() + ", " + $(".mdx-toc-box").width()) + ", " + $(window).width());
+        if (($("#write").width() + $(".mdx-toc-box").width()) < $(window).width())
+            pinnedOutline = true;
+        else
+            pinnedOutline = false;
+        showOutline(pinnedOutline);
+        // 设置侧边条文本垂直居中
+        $(".mdx-toc-menu").css("line-height", $(".mdx-toc-menu").height() + "px");
+    }
+    // 绑定文档的滚动事件
+    $(document).scroll(function() {
+        followHeader();
+    });
+    // 绑定窗口大小缩放事件
+    $(window).resize(function() {
+        adjustOutline();
+    })
+    // Outline自适应显示
+    adjustOutline();
+</script>
+<!---------------------------------------->
+<!--     TABLE OF CONTENT PANEL END     -->
+<!--====================================-->

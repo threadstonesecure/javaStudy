@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="dlt.study.dao.DemoMapper">
+
+
+	<sql id="select" >
+		select id,
+		sn,
+		app,
+		app_date as appDate,
+		name,
+		code,
+		dept,
+		stage,
+		director,
+		costs,
+		memo,
+		app_dept as appDept,
+		parentid 
+		from demo
+	</sql>
+
+	<resultMap id="demoResultMap" type="dlt.study.model.Demo" autoMapping="true">
+		<id property="id" column="id" />
+		<result property="sn" column="sn"/>
+		<association property="parent" javaType="dlt.study.model.Demo"
+			column="parentid" select="selectDemo">
+			<id property="id" column="id" />
+		</association>
+	</resultMap>
+
+	<select id="selectDemo" parameterType="string" resultType="dlt.study.model.Demo" >   <!-- 必须为一条记录 -->
+		<include refid="select" />
+		where id = #{id,javaType=string,jdbcType=VARCHAR}
+	</select>
+
+
+	<select id="selectDemoResultMap" parameterType="string" resultMap="demoResultMap" >   <!-- 必须为一条记录 -->
+		<include refid="select" />
+		where id = #{id,javaType=string,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectDemo2" parameterType="string" resultType="hashmap">  <!-- 必须为一条记录 -->
+		<include refid="select" />
+		where id = #{id} and <![CDATA[  ROWNUM <= 1 ]]>
+	</select>
+
+	<select id="selectDemos" parameterType="int" resultMap="demoResultMap">
+		<include refid="select" />
+		where  <![CDATA[  ROWNUM <= ]]>
+		#{count}
+	</select>
+
+	<select id="selectDemosWhereIn" resultType="dlt.study.model.Demo">
+		<include refid="select" />
+		where id in
+		<foreach item="item" index="index" collection="list" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+
+	<select id="selectDemosMap" parameterType="hashMap" resultType="dlt.study.model.Demo">
+		<bind name="patternName"
+			value=" '%' + (_parameter.get('name') == null ? '':_parameter.get('name') )+ '%'" />  <!-- _parameter代表参数对象 -->
+		<include refid="select" />
+		where 1=1
+		<if test="'id' != null ">
+			and id = #{id}
+		</if>
+		<!-- <if test="name != null"> and name like #{name} || '%' </if> <if test="name 
+			!= null"> and name like '${name}%' </if> -->  <!-- 有sql注入的风险 -->
+
+		<if test=" name != null">
+			and name like #{patternName}
+		</if>
+	</select>
+
+
+	<delete id="deleteDemo" parameterType="String">
+		delete from demo where id
+		= #{id}
+	</delete>
+
+	<delete id="deleteDemo2" parameterType="dlt.study.model.Demo">  <!-- 改造为动态SQL -->
+		delete from demo
+		where 1 = 1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="name != null">
+			and name = #{name}
+		</if>
+	</delete>
+
+	<insert id="insertDemo" parameterType="dlt.study.model.Demo">
+		insert into demo
+		(id,sn,app,code)
+		values(
+		#{id,jdbcType=VARCHAR},#{sn,jdbcType=VARCHAR},#{app,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR})
+	</insert>
+
+
+
+	<insert id="insertDemoAutoID" parameterType="dlt.study.model.Demo"
+		databaseId="oracle" flushCache="true">
+		<selectKey databaseId="oracle" keyProperty="id" resultType="string"
+			order="BEFORE" statementType="PREPARED">
+			select	seq_share.nextval as id from dual
+		</selectKey>
+		insert into demo (id,sn,app,code)
+		values(#{id},#{sn,jdbcType=VARCHAR},#{app,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR})
+	</insert>
+
+	<insert id="insertDemoAutoID" parameterType="dlt.study.model.Demo"
+		databaseId="mysql" >
+		insert into demo (sn,app,code)
+		values(#{sn,jdbcType=VARCHAR},#{app,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR})
+		<selectKey resultType="int" keyProperty="id" order="AFTER">
+			select	last_insert_id() as id
+		</selectKey>
+	</insert>
+
+<!-- 同上
+	<insert id="insertDemoAutoID" parameterType="dlt.study.model.Demo" useGeneratedKeys="true" keyProperty="id" databaseId="mysql">
+		insert into demo (sn,app,code)
+		values(#{sn,jdbcType=VARCHAR},#{app,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR})
+	</insert>
+--><update id="updateDemo" parameterType="dlt.study.model.Demo">
+		update demo set
+		sn = #{sn},
+		app= #{app},
+		code= #{code,jdbcType=VARCHAR}
+		where id = #{id}
+	</update>
+</mapper>
+

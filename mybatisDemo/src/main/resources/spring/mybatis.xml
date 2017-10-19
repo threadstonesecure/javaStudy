@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mybatis="http://mybatis.org/schema/mybatis-spring"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+       default-init-method="init-" default-destroy-method="destroy-">
+
+    <context:component-scan base-package="dlt.study.plugins"></context:component-scan>
+
+    <mybatis:scan base-package="dlt.study.dao" />
+
+    <bean id="vendorProperties"
+          class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="properties">
+            <props>
+                <prop key="SQL Server">sqlserver</prop>
+                <prop key="DB2">db2</prop>
+                <prop key="Oracle">oracle</prop>
+                <prop key="MySQL">mysql</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="databaseIdProvider" class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
+        <property name="properties" ref="vendorProperties"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"> <!-- 继承FactoryBean -->
+        <property name="dataSource" ref="dataSource"/>
+        <!-- <property name="configLocation" value="MybatisConfig.xml"></property> -->
+        <property name="mapperLocations" value="classpath*:mapper/*.xml"/>
+        <property name="databaseIdProvider" ref="databaseIdProvider"/>
+        <property name="configurationProperties">  <!-- 自定义属性 -->
+            <props>
+                <prop key="myName">denglt</prop>
+                <prop key="myName2">${developer.name} </prop>
+            </props>
+        </property>
+        <property name="plugins">
+            <array>
+                <!-- <ref bean="examplePlugin" /> -->
+                <ref bean="statementHandlerPlugin"/>
+                <ref bean="pageHelper"/>
+            </array>
+        </property>
+    </bean>
+
+    <bean id="pageHelper" class="com.github.pagehelper.PageHelper">
+        <property name="properties">
+            <props>
+                <prop key="dialect">oracle</prop>
+                <prop key="offsetAsPageNum">true</prop>
+                <prop key="rowBoundsWithCount">true</prop>
+                <prop key="pageSizeZero">true</prop>
+                <prop key="reasonable">true</prop>
+                <prop key="params">pageNum=start;pageSize=limit;</prop>
+            </props>
+        </property>
+    </bean>
+
+
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+        <constructor-arg index="1" value="BATCH" />
+    </bean>
+
+    <!-- 使用<mybatis:scan>来简化一个个的配置mapper -->
+<!--    <bean id="demoMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="dlt.study.dao.DemoMapper"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+        <property name="sqlSessionTemplate" ref="sqlSession"/>
+    </bean>-->
+
+    <!-- 该配置与 mybatis:scan功能一样 -->
+<!--     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+         <property  name="basePackage" value="dlt.study.dao" />
+         <property name="sqlSessionFactoryBeanName" value="***" />
+     </bean>-->
+</beans>

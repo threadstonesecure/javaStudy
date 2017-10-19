@@ -1,0 +1,1274 @@
+<!doctype html>
+<html>
+<head>
+    <title>oralce 工具</title>
+    <meta name="description" content="oracle工具"/>
+    <meta name="keyword" content="oracle tool"/>
+<script type="text/javascript" async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" ></script>
+<meta charset='UTF-8'><meta name='viewport' content='width=device-width initial-scale=1'>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext' rel='stylesheet' type='text/css'><style type='text/css'>html, body {overflow-x: initial !important;}.CodeMirror { height: auto; }
+.CodeMirror-scroll { overflow-y: hidden; overflow-x: auto; }
+.CodeMirror-lines { padding: 4px 0px; }
+.CodeMirror pre { }
+.CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler { background-color: white; }
+.CodeMirror-gutters { border-right-width: 1px; border-right-style: solid; border-right-color: rgb(221, 221, 221); background-color: rgb(247, 247, 247); white-space: nowrap; }
+.CodeMirror-linenumbers { }
+.CodeMirror-linenumber { padding: 0px 3px 0px 5px; text-align: right; color: rgb(153, 153, 153); }
+.CodeMirror div.CodeMirror-cursor { border-left-width: 1px; border-left-style: solid; border-left-color: black; z-index: 3; }
+.CodeMirror div.CodeMirror-secondarycursor { border-left-width: 1px; border-left-style: solid; border-left-color: silver; }
+.CodeMirror.cm-keymap-fat-cursor div.CodeMirror-cursor { width: auto; border: 0px; background-color: rgb(119, 238, 119); z-index: 1; background-position: initial initial; background-repeat: initial initial; }
+.CodeMirror div.CodeMirror-cursor.CodeMirror-overwrite { }
+.cm-tab { display: inline-block; }
+.cm-s-typora-default .cm-header, .cm-s-typora-default .cm-property { color: rgb(217, 79, 138); }
+.cm-s-typora-default pre.cm-header1:not(.cm-atom) :not(.cm-overlay) { font-size: 2rem; line-height: 2rem; }
+.cm-s-typora-default pre.cm-header2:not(.cm-atom) :not(.cm-overlay) { font-size: 1.4rem; line-height: 1.4rem; }
+.cm-s-typora-default .cm-atom, .cm-s-typora-default .cm-number { color: rgb(149, 132, 134); }
+.cm-s-typora-default .cm-table-row, .cm-s-typora-default .cm-block-start { font-family: monospace; }
+.cm-s-typora-default .cm-comment, .cm-s-typora-default .cm-code { color: rgb(74, 90, 159); font-family: monospace; }
+.cm-s-typora-default .cm-tag { color: rgb(169, 68, 66); }
+.cm-s-typora-default .cm-string { color: rgb(126, 134, 169); }
+.cm-s-typora-default .cm-link { color: rgb(196, 122, 15); text-decoration: underline; }
+.cm-s-typora-default .cm-variable-2, .cm-s-typora-default .cm-variable-1 { color: inherit; }
+.cm-s-typora-default .cm-overlay { font-size: 1rem; font-family: monospace; }
+.CodeMirror.cm-s-typora-default div.CodeMirror-cursor { border-left-width: 3px; border-left-style: solid; border-left-color: rgb(228, 98, 154); }
+.cm-s-typora-default .CodeMirror-activeline-background { left: -60px; right: -30px; background-color: rgba(204, 204, 204, 0.2); background-position: initial initial; background-repeat: initial initial; }
+.cm-s-typora-default .CodeMirror-gutters { border-right-style: none; background-color: inherit; }
+.cm-s-typora-default .cm-trailing-space-new-line::after, .cm-startspace::after, .cm-starttab .cm-tab::after { content: '•'; position: absolute; left: 0px; opacity: 0; font-family: LetterGothicStd, monospace; }
+.os-windows .cm-startspace::after, .os-windows .cm-starttab .cm-tab::after { left: -0.1em; }
+.cm-starttab .cm-tab::after { content: ' '; }
+.cm-startspace, .cm-tab, .cm-starttab, .cm-trailing-space-a, .cm-trailing-space-b, .cm-trailing-space-new-line { font-family: monospace; position: relative; }
+.cm-s-typora-default .cm-trailing-space-new-line::after { content: '↓'; opacity: 0.3; }
+.cm-s-inner .cm-keyword { color: rgb(119, 0, 136); }
+.cm-s-inner .cm-atom, .cm-s-inner.cm-atom { color: rgb(34, 17, 153); }
+.cm-s-inner .cm-number { color: rgb(17, 102, 68); }
+.cm-s-inner .cm-def { color: rgb(0, 0, 255); }
+.cm-s-inner .cm-variable { color: black; }
+.cm-s-inner .cm-variable-2 { color: rgb(0, 85, 170); }
+.cm-s-inner .cm-variable-3 { color: rgb(0, 136, 85); }
+.cm-s-inner .cm-property { color: black; }
+.cm-s-inner .cm-operator { color: rgb(152, 26, 26); }
+.cm-s-inner .cm-comment, .cm-s-inner.cm-comment { color: rgb(170, 85, 0); }
+.cm-s-inner .cm-string { color: rgb(170, 17, 17); }
+.cm-s-inner .cm-string-2 { color: rgb(255, 85, 0); }
+.cm-s-inner .cm-meta { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-qualifier { color: rgb(85, 85, 85); }
+.cm-s-inner .cm-builtin { color: rgb(51, 0, 170); }
+.cm-s-inner .cm-bracket { color: rgb(153, 153, 119); }
+.cm-s-inner .cm-tag { color: rgb(17, 119, 0); }
+.cm-s-inner .cm-attribute { color: rgb(0, 0, 204); }
+.cm-s-inner .cm-header, .cm-s-inner.cm-header { color: blue; }
+.cm-s-inner .cm-quote, .cm-s-inner.cm-quote { color: rgb(0, 153, 0); }
+.cm-s-inner .cm-hr, .cm-s-inner.cm-hr { color: rgb(153, 153, 153); }
+.cm-s-inner .cm-link, .cm-s-inner.cm-link { color: rgb(0, 0, 204); }
+.cm-negative { color: rgb(221, 68, 68); }
+.cm-positive { color: rgb(34, 153, 34); }
+.cm-header, .cm-strong { font-weight: bold; }
+.cm-del { text-decoration: line-through; }
+.cm-em { font-style: italic; }
+.cm-link { text-decoration: underline; }
+.cm-error { color: rgb(255, 0, 0); }
+.cm-invalidchar { color: rgb(255, 0, 0); }
+.cm-constant { color: rgb(38, 139, 210); }
+.cm-defined { color: rgb(181, 137, 0); }
+div.CodeMirror span.CodeMirror-matchingbracket { color: rgb(0, 255, 0); }
+div.CodeMirror span.CodeMirror-nonmatchingbracket { color: rgb(255, 34, 34); }
+.cm-s-inner .CodeMirror-activeline-background { background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; background-position: inherit inherit; background-repeat: inherit inherit; }
+.CodeMirror { position: relative; overflow: hidden; }
+.CodeMirror-scroll { margin-bottom: -30px; margin-right: -30px; padding-bottom: 30px; padding-right: 30px; height: 100%; outline: none; position: relative; box-sizing: content-box; }
+.CodeMirror-sizer { position: relative; }
+.CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler { position: absolute; z-index: 6; display: none; }
+.CodeMirror-vscrollbar { right: 0px; top: 0px; overflow-x: hidden; overflow-y: scroll; }
+.CodeMirror-hscrollbar { bottom: 0px; left: 0px; overflow-y: hidden; overflow-x: scroll; }
+.CodeMirror-scrollbar-filler { right: 0px; bottom: 0px; }
+.CodeMirror-gutter-filler { left: 0px; bottom: 0px; }
+.CodeMirror-gutters { position: absolute; left: 0px; top: 0px; padding-bottom: 30px; z-index: 3; }
+.CodeMirror-gutter { white-space: normal; height: 100%; box-sizing: content-box; padding-bottom: 30px; margin-bottom: -32px; display: inline-block; }
+.CodeMirror-gutter-elt { position: absolute; cursor: default; z-index: 4; }
+.CodeMirror-lines { cursor: text; }
+.CodeMirror pre { border-top-left-radius: 0px; border-top-right-radius: 0px; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; border-width: 0px; background-color: transparent; font-family: inherit; font-size: inherit; margin: 0px; white-space: pre; word-wrap: normal; color: inherit; z-index: 2; position: relative; overflow: visible; background-position: initial initial; background-repeat: initial initial; }
+.CodeMirror-wrap pre { word-wrap: break-word; white-space: pre-wrap; word-break: normal; }
+.CodeMirror-code pre { border-right-width: 30px; border-right-style: solid; border-right-color: transparent; width: -webkit-fit-content; }
+.CodeMirror-wrap .CodeMirror-code pre { border-right-style: none; width: auto; }
+.CodeMirror-linebackground { position: absolute; left: 0px; right: 0px; top: 0px; bottom: 0px; z-index: 0; }
+.CodeMirror-linewidget { position: relative; z-index: 2; overflow: auto; }
+.CodeMirror-widget { }
+.CodeMirror-wrap .CodeMirror-scroll { overflow-x: hidden; }
+.CodeMirror-measure { position: absolute; width: 100%; height: 0px; overflow: hidden; visibility: hidden; }
+.CodeMirror-measure pre { position: static; }
+.CodeMirror div.CodeMirror-cursor { position: absolute; visibility: hidden; border-right-style: none; width: 0px; }
+.CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+.CodeMirror-focused div.CodeMirror-cursor { visibility: inherit; }
+.CodeMirror-selected { background-color: rgb(217, 217, 217); background-position: initial initial; background-repeat: initial initial; }
+.CodeMirror-focused .CodeMirror-selected { background-color: rgb(215, 212, 240); background-position: initial initial; background-repeat: initial initial; }
+.cm-searching { background-color: rgba(255, 255, 0, 0.4); background-position: initial initial; background-repeat: initial initial; }
+.CodeMirror span { }
+@media print { 
+  .CodeMirror div.CodeMirror-cursor { visibility: hidden; }
+}
+.CodeMirror-lint-markers { width: 16px; }
+.CodeMirror-lint-tooltip { background-color: infobackground; border: 1px solid black; border-top-left-radius: 4px; border-top-right-radius: 4px; border-bottom-right-radius: 4px; border-bottom-left-radius: 4px; color: infotext; font-family: monospace; overflow: hidden; padding: 2px 5px; position: fixed; white-space: pre-wrap; z-index: 10000; max-width: 600px; opacity: 0; -webkit-transition: opacity 0.4s; transition: opacity 0.4s; font-size: 0.8em; }
+.CodeMirror-lint-mark-error, .CodeMirror-lint-mark-warning { background-position: 0% 100%; background-repeat: repeat no-repeat; }
+.CodeMirror-lint-mark-error { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAYAAAC09K7GAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJDw4cOCW1/KIAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAHElEQVQI12NggIL/DAz/GdA5/xkY/qPKMDAwAADLZwf5rvm+LQAAAABJRU5ErkJggg==); }
+.CodeMirror-lint-marker-error, .CodeMirror-lint-marker-warning { cursor: pointer; display: inline-block; height: 16px; width: 16px; vertical-align: middle; position: relative; background-position: 50% 50%; background-repeat: no-repeat no-repeat; }
+.CodeMirror-lint-message-error, .CodeMirror-lint-message-warning { padding-left: 18px; background-position: 0% 0%; background-repeat: no-repeat no-repeat; }
+.CodeMirror-lint-marker-error, .CodeMirror-lint-message-error { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAHlBMVEW7AAC7AACxAAC7AAC7AAAAAAC4AAC5AAD///+7AAAUdclpAAAABnRSTlMXnORSiwCK0ZKSAAAATUlEQVR42mWPOQ7AQAgDuQLx/z8csYRmPRIFIwRGnosRrpamvkKi0FTIiMASR3hhKW+hAN6/tIWhu9PDWiTGNEkTtIOucA5Oyr9ckPgAWm0GPBog6v4AAAAASUVORK5CYII=); }
+.CodeMirror-lint-marker-warning, .CodeMirror-lint-message-warning { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAANlBMVEX/uwDvrwD/uwD/uwD/uwD/uwD/uwD/uwD/uwD6twD/uwAAAADurwD2tQD7uAD+ugAAAAD/uwDhmeTRAAAADHRSTlMJ8mN1EYcbmiixgACm7WbuAAAAVklEQVR42n3PUQqAIBBFUU1LLc3u/jdbOJoW1P08DA9Gba8+YWJ6gNJoNYIBzAA2chBth5kLmG9YUoG0NHAUwFXwO9LuBQL1giCQb8gC9Oro2vp5rncCIY8L8uEx5ZkAAAAASUVORK5CYII=); }
+.CodeMirror-lint-marker-multiple { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAMAAADzjKfhAAAACVBMVEUAAAAAAAC/v7914kyHAAAAAXRSTlMAQObYZgAAACNJREFUeNo1ioEJAAAIwmz/H90iFFSGJgFMe3gaLZ0od+9/AQZ0ADosbYraAAAAAElFTkSuQmCC); width: 100%; height: 100%; background-position: 100% 100%; background-repeat: no-repeat no-repeat; }
+
+
+html { font-size: 14px; background-color: rgb(255, 255, 255); color: rgb(51, 51, 51); }
+body { margin: 0px; padding: 0px; height: auto; bottom: 0px; top: 0px; left: 0px; right: 0px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 1rem; line-height: 1.42857143; overflow-x: hidden; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; background-position: inherit inherit; background-repeat: inherit inherit; }
+a:active, a:hover { outline: 0px; }
+.in-text-selection, ::selection { background-color: rgb(181, 214, 252); text-shadow: none; background-position: initial initial; background-repeat: initial initial; }
+#write { margin: 0px auto; height: auto; width: inherit; word-break: normal; word-wrap: break-word; position: relative; padding-bottom: 70px; white-space: pre-wrap; overflow-x: auto; }
+.for-image #write { padding-left: 8px; padding-right: 8px; }
+body.typora-export { padding-left: 30px; padding-right: 30px; }
+@media screen and (max-width: 500px) { 
+  body.typora-export { padding-left: 0px; padding-right: 0px; }
+  .CodeMirror-sizer { margin-left: 0px !important; }
+  .CodeMirror-gutters { display: none !important; }
+}
+.typora-export #write { margin: 0px auto; }
+#write > p:first-child, #write > ul:first-child, #write > ol:first-child, #write > pre:first-child, #write > blockquote:first-child, #write > div:first-child, #write > table:first-child { margin-top: 30px; }
+#write li > table:first-child { margin-top: -20px; }
+img { max-width: 100%; vertical-align: middle; }
+input, button, select, textarea { color: inherit; font-family: inherit; font-size: inherit; font-style: inherit; font-variant-caps: inherit; font-weight: inherit; line-height: inherit; }
+input[type="checkbox"], input[type="radio"] { line-height: normal; padding: 0px; }
+::before, ::after, * { box-sizing: border-box; }
+#write p, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6, #write div, #write pre { width: inherit; }
+#write p, #write h1, #write h2, #write h3, #write h4, #write h5, #write h6 { position: relative; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.8rem; }
+h3 { font-size: 1.6rem; }
+h4 { font-size: 1.4rem; }
+h5 { font-size: 1.2rem; }
+h6 { font-size: 1rem; }
+p { -webkit-margin-before: 1rem; -webkit-margin-after: 1rem; -webkit-margin-start: 0px; -webkit-margin-end: 0px; }
+.mathjax-block { margin-top: 0px; margin-bottom: 0px; -webkit-margin-before: 0rem; -webkit-margin-after: 0rem; }
+.hidden { display: none; }
+.md-blockmeta { color: rgb(204, 204, 204); font-weight: bold; font-style: italic; }
+a { cursor: pointer; }
+#write input[type="checkbox"] { cursor: pointer; width: inherit; height: inherit; margin: 4px 0px 0px; }
+tr { page-break-inside: avoid; page-break-after: auto; }
+thead { display: table-header-group; }
+table { border-collapse: collapse; border-spacing: 0px; width: 100%; overflow: auto; page-break-inside: auto; text-align: left; }
+table.md-table td { min-width: 80px; }
+.CodeMirror-gutters { border-right-width: 0px; background-color: inherit; }
+.CodeMirror { text-align: left; }
+.CodeMirror-placeholder { opacity: 0.3; }
+.CodeMirror pre { padding: 0px 4px; }
+.CodeMirror-lines { padding: 0px; }
+div.hr:focus { cursor: none; }
+pre { white-space: pre-wrap; }
+.CodeMirror-gutters { margin-right: 4px; }
+.md-fences { font-size: 0.9rem; display: block; page-break-inside: avoid; text-align: left; overflow: visible; white-space: pre; background-image: inherit; background-size: inherit; background-attachment: inherit; background-origin: inherit; background-clip: inherit; background-color: inherit; position: relative !important; background-position: inherit inherit; background-repeat: inherit inherit; }
+.md-diagram-panel { width: 100%; margin-top: 10px; text-align: center; padding-top: 0px; padding-bottom: 8px; overflow-x: auto; }
+.md-fences .CodeMirror.CodeMirror-wrap { top: -1.6em; margin-bottom: -1.6em; }
+.md-fences.mock-cm { white-space: pre-wrap; }
+.show-fences-line-number .md-fences { padding-left: 0px; }
+.show-fences-line-number .md-fences.mock-cm { padding-left: 40px; }
+.footnotes { opacity: 0.8; font-size: 0.9rem; padding-top: 1em; padding-bottom: 1em; }
+.footnotes + .footnotes { margin-top: -1em; }
+.md-reset { margin: 0px; padding: 0px; border: 0px; outline: 0px; vertical-align: top; background-color: transparent; text-decoration: none; text-shadow: none; float: none; position: static; width: auto; height: auto; white-space: nowrap; cursor: inherit; line-height: normal; font-weight: normal; text-align: left; box-sizing: content-box; direction: ltr; background-position: initial initial; background-repeat: initial initial; }
+li div { padding-top: 0px; }
+blockquote { margin: 1rem 0px; }
+li p, li .mathjax-block { margin: 0.5rem 0px; }
+li { margin: 0px; position: relative; }
+blockquote > :last-child { margin-bottom: 0px; }
+blockquote > :first-child { margin-top: 0px; }
+.footnotes-area { color: rgb(136, 136, 136); margin-top: 0.714rem; padding-bottom: 0.143rem; }
+@media print { 
+  html, body { height: 100%; }
+  .typora-export * { -webkit-print-color-adjust: exact; }
+  h1, h2, h3, h4, h5, h6 { page-break-after: avoid; break-after: avoid-page; orphans: 2; }
+  p { orphans: 4; }
+  html.blink-to-pdf { font-size: 13px; }
+  .typora-export #write { padding-left: 1cm; padding-right: 1cm; }
+  .typora-export #write::after { height: 0px; }
+  @page { margin: 20mm 0mm; }
+}
+.footnote-line { margin-top: 0.714em; font-size: 0.7em; }
+a img, img a { cursor: pointer; }
+pre.md-meta-block { font-size: 0.8rem; min-height: 2.86rem; white-space: pre-wrap; background-color: rgb(204, 204, 204); display: block; overflow-x: hidden; background-position: initial initial; background-repeat: initial initial; }
+p .md-image:only-child { display: inline-block; width: 100%; text-align: center; }
+#write .MathJax_Display { margin: 0.8em 0px 0px; }
+.mathjax-block { white-space: pre; overflow: hidden; width: 100%; }
+p + .mathjax-block { margin-top: -1.143rem; }
+.mathjax-block:not(:empty)::after { display: none; }
+[contenteditable="true"]:active, [contenteditable="true"]:focus { outline: none; box-shadow: none; }
+.task-list { list-style-type: none; }
+.task-list-item { position: relative; padding-left: 1em; }
+.task-list-item input { position: absolute; top: 0px; left: 0px; }
+.math { font-size: 1rem; }
+.md-toc { min-height: 3.58rem; position: relative; font-size: 0.9rem; border-top-left-radius: 10px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; border-bottom-left-radius: 10px; }
+.md-toc-content { position: relative; margin-left: 0px; }
+.md-toc::after, .md-toc-content::after { display: none; }
+.md-toc-item { display: block; color: rgb(65, 131, 196); text-decoration: none; }
+.md-toc-inner:hover { }
+.md-toc-inner { display: inline-block; cursor: pointer; }
+.md-toc-h1 .md-toc-inner { margin-left: 0px; font-weight: bold; }
+.md-toc-h2 .md-toc-inner { margin-left: 2em; }
+.md-toc-h3 .md-toc-inner { margin-left: 4em; }
+.md-toc-h4 .md-toc-inner { margin-left: 6em; }
+.md-toc-h5 .md-toc-inner { margin-left: 8em; }
+.md-toc-h6 .md-toc-inner { margin-left: 10em; }
+@media screen and (max-width: 48em) { 
+  .md-toc-h3 .md-toc-inner { margin-left: 3.5em; }
+  .md-toc-h4 .md-toc-inner { margin-left: 5em; }
+  .md-toc-h5 .md-toc-inner { margin-left: 6.5em; }
+  .md-toc-h6 .md-toc-inner { margin-left: 8em; }
+}
+a.md-toc-inner { font-size: inherit; font-style: inherit; font-weight: inherit; line-height: inherit; }
+.footnote-line a:not(.reversefootnote) { color: inherit; }
+.md-attr { display: none; }
+.md-fn-count::after { content: '.'; }
+.md-tag { opacity: 0.5; }
+.md-comment { color: rgb(162, 127, 3); opacity: 0.8; font-family: monospace; }
+code { text-align: left; }
+h1 .md-tag, h2 .md-tag, h3 .md-tag, h4 .md-tag, h5 .md-tag, h6 .md-tag { font-weight: initial; opacity: 0.35; }
+a.md-print-anchor { border: none !important; display: inline-block !important; position: absolute !important; width: 1px !important; right: 0px !important; outline: none !important; background-color: transparent !important; text-shadow: initial !important; background-position: initial initial !important; background-repeat: initial initial !important; }
+.md-inline-math .MathJax_SVG .noError { display: none !important; }
+.mathjax-block .MathJax_SVG_Display { text-align: center; margin: 1em 0em; position: relative; text-indent: 0px; max-width: none; max-height: none; min-height: 0px; min-width: 100%; width: auto; display: block !important; }
+.MathJax_SVG_Display, .md-inline-math .MathJax_SVG_Display { width: auto; margin: inherit; display: inline-block !important; }
+.MathJax_SVG .MJX-monospace { font-family: monospace; }
+.MathJax_SVG .MJX-sans-serif { font-family: sans-serif; }
+.MathJax_SVG { display: inline; font-style: normal; font-weight: normal; line-height: normal; zoom: 90%; text-indent: 0px; text-align: left; text-transform: none; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; direction: ltr; max-width: none; max-height: none; min-width: 0px; min-height: 0px; border: 0px; padding: 0px; margin: 0px; }
+.MathJax_SVG * { -webkit-transition: none; transition: none; }
+
+
+@include-when-export url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,700,400&subset=latin,latin-ext);
+
+/**
+ * css forked from https://github.com/GitbookIO/gitbook 
+ * www.gitbook.com
+ * Apache License
+ * https://github.com/GitbookIO/gitbook/blob/master/LICENSE
+ **/
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: normal;
+    src: local('Open Sans Regular'),url('file:///Users/denglt/Library/Application%20Support/abnerworks.Typora/themes/github/400.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: normal;
+    src: local('Open Sans Italic'),url('file:///Users/denglt/Library/Application%20Support/abnerworks.Typora/themes/github/400i.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: normal;
+    font-weight: bold;
+    src: local('Open Sans Bold'),url('file:///Users/denglt/Library/Application%20Support/abnerworks.Typora/themes/github/700.woff') format('woff')
+}
+
+@font-face {
+    font-family: 'Open Sans';
+    font-style: italic;
+    font-weight: bold;
+    src: local('Open Sans Bold Italic'),url('file:///Users/denglt/Library/Application%20Support/abnerworks.Typora/themes/github/700i.woff') format('woff')
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: "Open Sans","Clear Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: rgb(51, 51, 51);
+    line-height: 1.6;
+}
+
+#write{
+    max-width: 860px;
+  	margin: 0 auto;
+  	padding: 20px 30px 40px 30px;
+	padding-top: 20px;
+    padding-bottom: 100px;
+}
+#write > ul:first-child,
+#write > ol:first-child{
+    margin-top: 30px;
+}
+
+body > *:first-child {
+    margin-top: 0 !important;
+}
+body > *:last-child {
+    margin-bottom: 0 !important;
+}
+a {
+    color: #4183C4;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
+    line-height: 1.4;
+    cursor: text;
+}
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    /*background: url("file:///Users/denglt/Library/Application%20Support/images/modules/styleguide/para.png") no-repeat 10px center;*/
+    text-decoration: none;
+}
+h1 tt,
+h1 code {
+    font-size: inherit;
+}
+h2 tt,
+h2 code {
+    font-size: inherit;
+}
+h3 tt,
+h3 code {
+    font-size: inherit;
+}
+h4 tt,
+h4 code {
+    font-size: inherit;
+}
+h5 tt,
+h5 code {
+    font-size: inherit;
+}
+h6 tt,
+h6 code {
+    font-size: inherit;
+}
+h1 {
+    padding-bottom: .3em;
+    font-size: 2.25em;
+    line-height: 1.2;
+    border-bottom: 1px solid #eee;
+}
+h2 {
+   padding-bottom: .3em;
+    font-size: 1.75em;
+    line-height: 1.225;
+    border-bottom: 1px solid #eee;
+}
+h3 {
+    font-size: 1.5em;
+    line-height: 1.43;
+}
+h4 {
+    font-size: 1.25em;
+}
+h5 {
+    font-size: 1em;
+}
+h6 {
+   font-size: 1em;
+    color: #777;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table{
+    margin: 0.8em 0;
+}
+li>ol,
+li>ul {
+    margin: 0 0;
+}
+hr {
+    height: 4px;
+    padding: 0;
+    margin: 16px 0;
+    background-color: #e7e7e7;
+    border: 0 none;
+    overflow: hidden;
+    box-sizing: content-box;
+    border-bottom: 1px solid #ddd;
+}
+
+body > h2:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h1:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h1:first-child + h2 {
+    margin-top: 0;
+    padding-top: 0;
+}
+body > h3:first-child,
+body > h4:first-child,
+body > h5:first-child,
+body > h6:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+a:first-child h1,
+a:first-child h2,
+a:first-child h3,
+a:first-child h4,
+a:first-child h5,
+a:first-child h6 {
+    margin-top: 0;
+    padding-top: 0;
+}
+h1 p,
+h2 p,
+h3 p,
+h4 p,
+h5 p,
+h6 p {
+    margin-top: 0;
+}
+li p.first {
+    display: inline-block;
+}
+ul,
+ol {
+    padding-left: 30px;
+}
+ul:first-child,
+ol:first-child {
+    margin-top: 0;
+}
+ul:last-child,
+ol:last-child {
+    margin-bottom: 0;
+}
+blockquote {
+    border-left: 4px solid #dddddd;
+    padding: 0 15px;
+    color: #777777;
+}
+blockquote blockquote {
+    padding-right: 0;
+}
+table {
+    padding: 0;
+    word-break: initial;
+}
+table tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+}
+table tr:nth-child(2n) {
+    background-color: #f8f8f8;
+}
+table tr th {
+    font-weight: bold;
+    border: 1px solid #cccccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr td {
+    border: 1px solid #cccccc;
+    text-align: left;
+    margin: 0;
+    padding: 6px 13px;
+}
+table tr th:first-child,
+table tr td:first-child {
+    margin-top: 0;
+}
+table tr th:last-child,
+table tr td:last-child {
+    margin-bottom: 0;
+}
+
+.CodeMirror-gutters {
+    border-right: 1px solid #ddd;
+}
+
+.md-fences,
+code,
+tt {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+    border-radius: 3px;
+    padding: 0;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+}
+
+.md-fences {
+    margin-bottom: 15px;
+    margin-top: 15px;
+    padding: 0.2em 1em;
+    padding-top: 8px;
+    padding-bottom: 6px;
+}
+.task-list{
+	padding-left: 0;
+}
+
+.task-list-item {
+	padding-left:32px;
+}
+
+.task-list-item input {
+  top: 3px;
+  left: 8px;
+}
+
+@media screen and (min-width: 914px) {
+    /*body {
+        width: 854px;
+        margin: 0 auto;
+    }*/
+}
+@media print {
+    html {
+        font-size: 13px;
+    }
+    table,
+    pre {
+        page-break-inside: avoid;
+    }
+    pre {
+        word-wrap: break-word;
+    }
+}
+
+.md-fences {
+	background-color: #f8f8f8;
+}
+#write pre.md-meta-block {
+	padding: 1rem;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: #f7f7f7;
+    border: 0;
+    border-radius: 3px;
+    color: #777777;
+    margin-top: 0 !important;
+}
+
+.mathjax-block>.code-tooltip {
+	bottom: .375rem;
+}
+
+#write>h3.md-focus:before{
+	left: -1.5625rem;
+	top: .375rem;
+}
+#write>h4.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h5.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+#write>h6.md-focus:before{
+	left: -1.5625rem;
+	top: .285714286rem;
+}
+.md-image>.md-meta {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-family: Consolas, "Liberation Mono", Courier, monospace;
+    padding: 2px 4px 0px 4px;
+    font-size: 0.9em;
+    color: inherit;
+}
+
+.md-tag{
+	color: inherit;
+}
+
+.md-toc { 
+    margin-top:20px;
+    padding-bottom:20px;
+}
+
+#typora-quick-open {
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+}
+
+#typora-quick-open-item {
+    background-color: #FAFAFA;
+    border-color: #FEFEFE #e5e5e5 #e5e5e5 #eee;
+    border-style: solid;
+    border-width: 1px;
+}
+
+#md-notification:before {
+    top: 10px;
+}
+
+/** focus mode */
+.on-focus-mode blockquote {
+    border-left-color: rgba(85, 85, 85, 0.12);
+}
+
+header, .context-menu, .megamenu-content, footer{
+    font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+
+</style>
+</head>
+<body class='typora-export' >
+<div  id='write'  class = 'is-mac'>阅读:<span id=busuanzi_value_page_pv></span><h2><a name='header-c5' class='md-header-anchor '></a><a name='tool'>工具脚本</a></h2><p><a href='index.html' target="_blank">Index</a></p><h3><a name='header-c8' class='md-header-anchor '></a><a name='ddl'>获取DDL脚本</a></h3><p>以下脚本功能基于后台<code>dlt_sys$MigrateObj</code>包实现，该包实现了oracle的所有几乎对象</p><pre class="md-fences md-end-block" lang="plsql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-hscrollbar" style="left: 0px;"><div style="height: 100%; min-height: 1px; width: 0px;"></div></div><div class="CodeMirror-vscrollbar"><div style="min-width: 1px; height: 0px;"></div></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><div style="width: 50px; height: 50px; overflow-x: scroll;"></div></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">procedure</span> migrateObj_ <span class="cm-keyword">as</span></span></pre></div><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">begin</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">if</span> m_migrateobj.obj_type = <span class="cm-string">'SEQUENCE'</span> <span class="cm-keyword">then</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  mSequence;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  <span class="cm-keyword">return</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">end</span> <span class="cm-keyword">if</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">if</span> m_migrateobj.obj_type = <span class="cm-string">'VIEW'</span> <span class="cm-keyword">then</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  mView;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  <span class="cm-keyword">return</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">end</span> <span class="cm-keyword">if</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">if</span> m_migrateobj.obj_type = <span class="cm-string">'TABLE'</span> <span class="cm-keyword">then</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  mTable;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  <span class="cm-keyword">return</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">end</span> <span class="cm-keyword">if</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">if</span> m_migrateobj.obj_type = <span class="cm-string">'INDEX'</span> <span class="cm-keyword">then</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  mIndex; &nbsp; <span class="cm-comment">-- deal full text index with mFullTextIndex in mIndex</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  <span class="cm-keyword">return</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">end</span> <span class="cm-keyword">if</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-comment">-- DATABASE LINK</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">if</span> m_migrateobj.obj_type = <span class="cm-string">'DATABASE LINK'</span> <span class="cm-keyword">then</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  mDbLink;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  <span class="cm-keyword">return</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">end</span> <span class="cm-keyword">if</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-comment">-- MATERIALIZED VIEW</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">if</span> m_migrateobj.obj_type = <span class="cm-string">'MATERIALIZED VIEW'</span> <span class="cm-keyword">then</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  mMView;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  <span class="cm-keyword">return</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">end</span> <span class="cm-keyword">if</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-comment">--</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">if</span> m_migrateobj.obj_type = <span class="cm-string">'SYNONYM'</span> <span class="cm-keyword">then</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  mSynonym;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  <span class="cm-keyword">return</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">end</span> <span class="cm-keyword">if</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">if</span> m_migrateobj.obj_type <span class="cm-keyword">in</span> (<span class="cm-string">'PROCEDURE'</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="cm-string">'FUNCTION'</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="cm-string">'PACKAGE'</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="cm-string">'PACKAGE BODY'</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="cm-string">'TYPE'</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; <span class="cm-string">'TYPE BODY'</span>) <span class="cm-keyword">then</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  mProcedure;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  <span class="cm-keyword">return</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">end</span> <span class="cm-keyword">if</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">if</span> m_migrateobj.obj_type = <span class="cm-string">'JOB'</span> <span class="cm-keyword">then</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  mJOb;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  <span class="cm-keyword">return</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">end</span> <span class="cm-keyword">if</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">if</span> m_migrateobj.obj_type = <span class="cm-string">'TRIGGER'</span> <span class="cm-keyword">then</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  mTrigger;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  <span class="cm-keyword">return</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-keyword">end</span> <span class="cm-keyword">if</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-comment">--记录未处理的类型</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  mUnknownObjType;</span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">end</span>;</span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 1320px;"></div></div></div></pre><p>基于该包可以自定义迁移脚本。</p><h4><a name='header-c15' class='md-header-anchor '></a><a name='ddl_domain_idx'>获取全文索引创建脚本</a></h4><blockquote><p><code>ddl_domain_idx.sql</code>:获取指定schema中全文索引的创建脚本</p><p>Usage：</p><ul><li>@ddl_domain_idx   <owner></li><li>@ddl_domain_idx   USER    --代表当前用户</li></ul></blockquote><pre class='md-fences mock-cm' style='display:block;position:relative'>17:18:04 study&gt;@ddl_domain_idx
+请指定全文索引的拥有者(owner)
+Enter value for 1: med2
+指定的拥有者： MED2
+
+用户[MED2]拥有的全文索引如下：
+
+IDX_ID 索引名称                      IDX_TABLE_OWNER      IDX_TABLE            IDX_KEY_NAME         IDX_TEXT_NAME        STATUS     IDX_TYPE IDX_SYNC_TYPE
+------ ------------------------------ -------------------- -------------------- -------------------- -------------------- ---------- -------- --------------------
+  1115 IDXFT_BIGTABLE_CHEM_NAME       MED2                 BIGTABLE             无                   DRUG_CHEM_NAME       INDEXING   CTXCAT
+
+请输入上面的索引名称:IDXFT_BIGTABLE_CHEM_NAME
+-- 全文索引[MED2.IDXFT_BIGTABLE_CHEM_NAME]创建脚本如下：
+begin
+  ctx_ddl.create_preference(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_LEX&quot;&#39;,&#39;CHINESE_VGRAM_LEXER&#39;);
+end;
+/
+
+begin
+  ctx_ddl.create_preference(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_WDL&quot;&#39;,&#39;BASIC_WORDLIST&#39;);
+  ctx_ddl.set_attribute(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_WDL&quot;&#39;,&#39;SUBSTRING_INDEX&#39;,&#39;YES&#39;);
+  ctx_ddl.set_attribute(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_WDL&quot;&#39;,&#39;PREFIX_INDEX&#39;,&#39;YES&#39;);
+end;
+/
+
+begin
+  ctx_ddl.create_stoplist(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;BASIC_STOPLIST&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;Mr&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;Mrs&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;Ms&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;a&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;all&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;almost&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;also&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;although&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;an&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;and&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;any&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;are&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;as&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;at&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;be&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;because&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;been&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;both&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;but&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;by&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;can&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;could&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;d&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;did&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;do&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;does&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;either&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;for&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;from&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;had&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;has&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;have&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;having&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;he&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;her&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;here&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;hers&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;him&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;his&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;how&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;however&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;i&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;if&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;in&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;into&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;is&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;it&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;its&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;just&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;ll&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;me&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;might&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;my&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;no&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;non&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;nor&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;not&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;of&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;on&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;one&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;only&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;onto&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;or&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;our&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;ours&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;s&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;shall&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;she&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;should&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;since&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;so&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;some&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;still&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;such&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;t&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;than&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;that&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;the&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;their&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;them&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;then&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;there&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;therefore&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;these&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;they&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;this&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;those&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;though&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;through&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;thus&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;to&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;too&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;until&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;ve&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;very&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;was&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;we&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;were&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;what&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;when&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;where&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;whether&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;which&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;while&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;who&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;whose&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;why&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;will&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;with&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;would&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;yet&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;you&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;your&#39;);
+  ctx_ddl.add_stopword(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;&#39;,&#39;yours&#39;);
+end;
+/
+
+begin
+  ctx_ddl.create_preference(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_STO&quot;&#39;,&#39;BASIC_STORAGE&#39;);
+  ctx_ddl.set_attribute(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_STO&quot;&#39;,&#39;I_TABLE_CLAUSE&#39;,&#39;tablespace users&#39;);
+  ctx_ddl.set_attribute(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_STO&quot;&#39;,&#39;K_TABLE_CLAUSE&#39;,&#39;tablespace users&#39;);
+  ctx_ddl.set_attribute(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_STO&quot;&#39;,&#39;R_TABLE_CLAUSE&#39;,&#39;tablespace users&#39;);
+  ctx_ddl.set_attribute(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_STO&quot;&#39;,&#39;N_TABLE_CLAUSE&#39;,&#39;tablespace users&#39;);
+  ctx_ddl.set_attribute(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_STO&quot;&#39;,&#39;I_INDEX_CLAUSE&#39;,&#39;tablespace users&#39;);
+end;
+/
+
+begin
+  ctx_ddl.create_index_set(&#39;&quot;IDXFT_BIGTABLE_CHEM_NAME_IXS&quot;&#39;);
+end;
+/
+
+
+begin
+  ctx_output.start_log(&#39;IDXFT_BIGTABLE_CHEM_NAME_LOG&#39;);
+end;
+/
+
+create index &quot;MED2&quot;.&quot;IDXFT_BIGTABLE_CHEM_NAME&quot;
+  on &quot;MED2&quot;.&quot;BIGTABLE&quot;
+      (&quot;DRUG_CHEM_NAME&quot;)
+  indextype is ctxsys.ctxcat
+  parameters(&#39;
+    lexer           &quot;IDXFT_BIGTABLE_CHEM_NAME_LEX&quot;
+    wordlist        &quot;IDXFT_BIGTABLE_CHEM_NAME_WDL&quot;
+    stoplist        &quot;IDXFT_BIGTABLE_CHEM_NAME_SPL&quot;
+    storage         &quot;IDXFT_BIGTABLE_CHEM_NAME_STO&quot;
+    index set       &quot;IDXFT_BIGTABLE_CHEM_NAME_IXS&quot;
+  &#39;)
+/
+
+begin
+  ctx_output.end_log;
+end;
+/
+
+please more [E:\oradba_output\study-ddl_domain_idx_MED2_IDXFT_BIGTABLE_CHEM_NAME.sql]。
+
+18:14:40 study&gt;</pre><p><img src='image/ddl_domain_idx.png' alt='ddl_domain_idx' /></p><p><a href='scriptlog/study-ddl_domain_idx_MED2_IDXFT_BIGTABLE_CHEM_NAME.sql'>study-ddl_domain_idx_MED2_IDXFT_BIGTABLE_CHEM_NAME.sql</a></p><h4><a name='header-c33' class='md-header-anchor '></a><a name='ddl_object'>获取Object创建脚本</a></h4><blockquote><p><code>ddl_object.sql</code>:根据schema 和 object_name获取object创建脚本</p><p>支持的对象类型：【TABLE|VIEW|TRIGGER|PROCEDURE|FUNCTION|PACKAGE|PACKAGE BODY|TYPE|TYPE BODY|SEQUENCE|INDEX|DATABASE LINK|MATERIALIZED VIEW|SYNONYM|JOB】</p><p>注：当对象为TABLE时，附带生成COMMENT和INDEX(包括全文索引)</p></blockquote><pre class="md-fences md-end-block" lang="plsql"> <div class="CodeMirror cm-s-inner CodeMirror-wrap"><div style="overflow: hidden; position: relative; width: 3px; height: 0px; top: 0px; left: 4px;"></div><div class="CodeMirror-hscrollbar" style="left: 0px;"><div style="height: 100%; min-height: 1px; width: 0px;"></div></div><div class="CodeMirror-vscrollbar"><div style="min-width: 1px; height: 0px;"></div></div><div class="CodeMirror-scrollbar-filler"></div><div class="CodeMirror-gutter-filler"></div><div class="CodeMirror-scroll" tabindex="-1"><div class="CodeMirror-sizer" style="margin-left: 0px; min-height: 0px;"><div style="position: relative; top: 0px;"><div class="CodeMirror-lines"><div style="position: relative; outline: none;"><div class="CodeMirror-measure"><div style="width: 50px; height: 50px; overflow-x: scroll;"></div></div><div class="CodeMirror-measure"></div><div style="position: relative; z-index: 1;"></div><div class="CodeMirror-code" style=""><div class="CodeMirror-activeline" style="position: relative;"><div class="CodeMirror-activeline-background CodeMirror-linebackground"></div><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre></div><pre class=""><span style="padding-right: 0.1px;"><span class="cm-number">18</span>:14:40 study&gt;@ddl_object</span></pre><pre class=""><span style="padding-right: 0.1px;">请输入对象的用户:med2</span></pre><pre class=""><span style="padding-right: 0.1px;">请输入对象的名称:bigtable</span></pre><pre class=""><span style="padding-right: 0.1px;">正在获取[med2.bigtable]的脚本</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-comment">--</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-comment">-- BIGTABLE (TABLE)</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-comment">--</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">CREATE</span> <span class="cm-keyword">TABLE</span> <span class="cm-string">"BIGTABLE"</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; ( &nbsp;  <span class="cm-string">"DRUG_ID"</span> <span class="cm-builtin">NUMBER</span>(<span class="cm-number">15</span>,<span class="cm-number">0</span>) <span class="cm-keyword">NOT</span> <span class="cm-atom">NULL</span> <span class="cm-keyword">ENABLE</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_CODE"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">20</span>) <span class="cm-keyword">NOT</span> <span class="cm-atom">NULL</span> <span class="cm-keyword">ENABLE</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_CHEM_NAME"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">100</span>) <span class="cm-keyword">NOT</span> <span class="cm-atom">NULL</span> <span class="cm-keyword">ENABLE</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_PINYIN"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">100</span>) <span class="cm-keyword">NOT</span> <span class="cm-atom">NULL</span> <span class="cm-keyword">ENABLE</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_TRADE_NAME"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">100</span>),</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_SPEC"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">50</span>) <span class="cm-keyword">NOT</span> <span class="cm-atom">NULL</span> <span class="cm-keyword">ENABLE</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_DOSE"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">20</span>) <span class="cm-keyword">NOT</span> <span class="cm-atom">NULL</span> <span class="cm-keyword">ENABLE</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_MANUFATURER"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">100</span>),</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_LICENSE_NO"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">50</span>),</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_SOURCE_TYPE"</span> <span class="cm-builtin">NUMBER</span>(<span class="cm-number">1</span>,<span class="cm-number">0</span>),</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_PACKING_UNIT"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">20</span>),</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_DOSAGE_UNIT"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">20</span>) <span class="cm-keyword">NOT</span> <span class="cm-atom">NULL</span> <span class="cm-keyword">ENABLE</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_DOSAGE_NUM"</span> <span class="cm-builtin">NUMBER</span> <span class="cm-keyword">NOT</span> <span class="cm-atom">NULL</span> <span class="cm-keyword">ENABLE</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_APPERANCE_NUM"</span> <span class="cm-builtin">NUMBER</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_APPERANCE_UNIT"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">255</span>),</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_PHOTO"</span> <span class="cm-builtin">CLOB</span>,</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_TRADE_CODE"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">255</span>),</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_SPEC_TYPE"</span> <span class="cm-builtin">NUMBER</span>(<span class="cm-number">1</span>,<span class="cm-number">0</span>),</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"STATUS"</span> <span class="cm-builtin">NUMBER</span>(<span class="cm-number">1</span>,<span class="cm-number">0</span>),</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"REMARK"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">255</span>),</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"DRUG_WB"</span> <span class="cm-builtin">VARCHAR2</span>(<span class="cm-number">100</span>),</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp; &nbsp;  <span class="cm-string">"TEXT"</span> <span class="cm-builtin">CLOB</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; ) <span class="cm-keyword">SEGMENT</span> CREATION <span class="cm-keyword">IMMEDIATE</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">PCTFREE</span> <span class="cm-number">10</span> <span class="cm-keyword">PCTUSED</span> <span class="cm-number">40</span> <span class="cm-keyword">INITRANS</span> <span class="cm-number">1</span> <span class="cm-keyword">MAXTRANS</span> <span class="cm-number">255</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> <span class="cm-keyword">NOCOMPRESS</span> <span class="cm-keyword">LOGGING</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">TABLESPACE</span> <span class="cm-string">"USERS"</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> LOB (<span class="cm-string">"DRUG_PHOTO"</span>) STORE <span class="cm-keyword">AS</span> SECUREFILE (</span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">TABLESPACE</span> <span class="cm-string">"USERS"</span> <span class="cm-keyword">ENABLE</span> <span class="cm-keyword">STORAGE</span> <span class="cm-keyword">IN</span> <span class="cm-keyword">ROW</span> CHUNK <span class="cm-number">8192</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  NOCACHE <span class="cm-keyword">LOGGING</span>  <span class="cm-keyword">NOCOMPRESS</span>  KEEP_DUPLICATES )</span></pre><pre class=""><span style="padding-right: 0.1px;"> LOB (<span class="cm-string">"TEXT"</span>) STORE <span class="cm-keyword">AS</span> SECUREFILE (</span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">TABLESPACE</span> <span class="cm-string">"USERS"</span> <span class="cm-keyword">ENABLE</span> <span class="cm-keyword">STORAGE</span> <span class="cm-keyword">IN</span> <span class="cm-keyword">ROW</span> CHUNK <span class="cm-number">8192</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  NOCACHE <span class="cm-keyword">LOGGING</span>  <span class="cm-keyword">NOCOMPRESS</span>  KEEP_DUPLICATES ) ;</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-comment">--</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-comment">-- BIGTABLE (COMMENT)</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-comment">--</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; <span class="cm-keyword">COMMENT</span> <span class="cm-keyword">ON</span> <span class="cm-keyword">COLUMN</span> <span class="cm-string">"BIGTABLE"</span>.<span class="cm-string">"DRUG_ID"</span> <span class="cm-keyword">IS</span> <span class="cm-string">'ID'</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; <span class="cm-keyword">COMMENT</span> <span class="cm-keyword">ON</span> <span class="cm-keyword">COLUMN</span> <span class="cm-string">"BIGTABLE"</span>.<span class="cm-string">"DRUG_CODE"</span> <span class="cm-keyword">IS</span> <span class="cm-string">'编码'</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; <span class="cm-keyword">COMMENT</span> <span class="cm-keyword">ON</span> <span class="cm-keyword">COLUMN</span> <span class="cm-string">"BIGTABLE"</span>.<span class="cm-string">"DRUG_CHEM_NAME"</span> <span class="cm-keyword">IS</span> <span class="cm-string">'名称'</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; <span class="cm-keyword">COMMENT</span> <span class="cm-keyword">ON</span> <span class="cm-keyword">COLUMN</span> <span class="cm-string">"BIGTABLE"</span>.<span class="cm-string">"DRUG_PINYIN"</span> <span class="cm-keyword">IS</span> <span class="cm-string">'拼音'</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-comment">--</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-comment">-- IDX_BIGTABLE_DRUG_ID (INDEX)</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-comment">--</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">CREATE</span> <span class="cm-keyword">INDEX</span> <span class="cm-string">"IDX_BIGTABLE_DRUG_ID"</span> <span class="cm-keyword">ON</span> <span class="cm-string">"BIGTABLE"</span> (<span class="cm-string">"DRUG_ID"</span>)</span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">PCTFREE</span> <span class="cm-number">10</span> <span class="cm-keyword">INITRANS</span> <span class="cm-number">2</span> <span class="cm-keyword">MAXTRANS</span> <span class="cm-number">255</span> <span class="cm-string-2">COMPUTE</span> STATISTICS</span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">TABLESPACE</span> <span class="cm-string">"USERS"</span> ;</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-comment">--</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-comment">-- IDXFT_BIGTABLE_CHEM_NAME (FULLTEXT_INDEX)</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-comment">--</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">begin</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.create_preference(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_LEX"'</span>,<span class="cm-string">'CHINESE_VGRAM_LEXER'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">end</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;">/</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">begin</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.create_preference(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_WDL"'</span>,<span class="cm-string">'BASIC_WORDLIST'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.set_attribute(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_WDL"'</span>,<span class="cm-string">'SUBSTRING_INDEX'</span>,<span class="cm-string">'YES'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.set_attribute(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_WDL"'</span>,<span class="cm-string">'PREFIX_INDEX'</span>,<span class="cm-string">'YES'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">end</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;">/</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">begin</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.create_stoplist(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'BASIC_STOPLIST'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'Mr'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'Mrs'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'Ms'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'a'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'all'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'almost'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'also'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'although'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'an'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'and'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'any'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'are'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'as'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'at'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'be'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'because'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'been'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'both'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'but'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'by'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'can'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'could'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'d'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'did'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'do'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'does'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'either'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'for'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'from'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'had'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'has'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'have'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'having'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'he'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'her'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'here'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'hers'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'him'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'his'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'how'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'however'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'i'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'if'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'in'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'into'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'is'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'it'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'its'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'just'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'ll'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'me'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'might'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'my'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'no'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'non'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'nor'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'not'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'of'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'on'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'one'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'only'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'onto'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'or'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'our'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'ours'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'s'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'shall'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'she'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'should'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'since'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'so'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'some'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'still'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'such'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'t'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'than'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'that'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'the'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'their'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'them'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'then'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'there'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'therefore'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'these'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'they'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'this'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'those'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'though'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'through'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'thus'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'to'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'too'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'until'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'ve'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'very'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'was'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'we'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'were'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'what'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'when'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'where'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'whether'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'which'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'while'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'who'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'whose'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'why'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'will'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'with'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'would'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'yet'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'you'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'your'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.add_stopword(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_SPL"'</span>,<span class="cm-string">'yours'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">end</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;">/</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">begin</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.create_preference(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_STO"'</span>,<span class="cm-string">'BASIC_STORAGE'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.set_attribute(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_STO"'</span>,<span class="cm-string">'I_TABLE_CLAUSE'</span>,<span class="cm-string">'tablespace users'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.set_attribute(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_STO"'</span>,<span class="cm-string">'K_TABLE_CLAUSE'</span>,<span class="cm-string">'tablespace users'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.set_attribute(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_STO"'</span>,<span class="cm-string">'R_TABLE_CLAUSE'</span>,<span class="cm-string">'tablespace users'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.set_attribute(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_STO"'</span>,<span class="cm-string">'N_TABLE_CLAUSE'</span>,<span class="cm-string">'tablespace users'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.set_attribute(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_STO"'</span>,<span class="cm-string">'I_INDEX_CLAUSE'</span>,<span class="cm-string">'tablespace users'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">end</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;">/</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">begin</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_ddl.create_index_set(<span class="cm-string">'"IDXFT_BIGTABLE_CHEM_NAME_IXS"'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">end</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;">/</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">begin</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_output.start_log(<span class="cm-string">'IDXFT_BIGTABLE_CHEM_NAME_LOG'</span>);</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">end</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;">/</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">create</span> <span class="cm-keyword">index</span> <span class="cm-string">"IDXFT_BIGTABLE_CHEM_NAME"</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-keyword">on</span> <span class="cm-string">"BIGTABLE"</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp; &nbsp;  (<span class="cm-string">"DRUG_CHEM_NAME"</span>)</span></pre><pre class=""><span style="padding-right: 0.1px;">  indextype <span class="cm-keyword">is</span> ctxsys.ctxcat</span></pre><pre class=""><span style="padding-right: 0.1px;">  parameters(<span class="cm-string">'</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-string">lexer &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "IDXFT_BIGTABLE_CHEM_NAME_LEX"</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-string">wordlist &nbsp; &nbsp; &nbsp;  "IDXFT_BIGTABLE_CHEM_NAME_WDL"</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-string">stoplist &nbsp; &nbsp; &nbsp;  "IDXFT_BIGTABLE_CHEM_NAME_SPL"</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-string">storage &nbsp; &nbsp; &nbsp; &nbsp; "IDXFT_BIGTABLE_CHEM_NAME_STO"</span></span></pre><pre class=""><span style="padding-right: 0.1px;"> &nbsp;  <span class="cm-string">index set &nbsp; &nbsp; &nbsp; "IDXFT_BIGTABLE_CHEM_NAME_IXS"</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  <span class="cm-string">'</span>)</span></pre><pre class=""><span style="padding-right: 0.1px;">/</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">begin</span></span></pre><pre class=""><span style="padding-right: 0.1px;">  ctx_output.end_log;</span></pre><pre class=""><span style="padding-right: 0.1px;"><span class="cm-keyword">end</span>;</span></pre><pre class=""><span style="padding-right: 0.1px;">/</span></pre><pre class=""><span style="padding-right: 0.1px;"><span>​</span></span></pre><pre class=""><span style="padding-right: 0.1px;">please more [E:\oradba_output\study-ddl_object_med2_bigtable.<span class="cm-keyword">sql</span>]。</span></pre></div></div></div></div></div><div style="position: absolute; height: 30px; width: 1px; top: 0px;"></div><div class="CodeMirror-gutters" style="display: none; height: 5148px;"></div></div></div></pre><p><a href='scriptlog/study-ddl_object_med2_bigtable.sql'>study-ddl_object_med2_bigtable.sql</a></p><h4><a name='header-c44' class='md-header-anchor '></a><a name='ddl_type'>获取特定type对象的创建脚本</a></h4><blockquote><p><code>ddl_type.sql</code>:根据schema 和 object type获取object创建脚本</p><p>支持的object type：【TABLE|VIEW|TRIGGER|PROCEDURE|FUNCTION|PACKAGE|PACKAGE BODY|TYPE|TYPE BODY|SEQUENCE|INDEX|DATABASE LINK|MATERIALIZED VIEW|SYNONYM|JOB】</p></blockquote><pre class='md-fences mock-cm' style='display:block;position:relative'>16:32:27 study&gt;@ddl_type
+请输入对象的用户:med2
+
+对象类型:TABLE|VIEW|TRIGGER|PROCEDURE|FUNCTION|PACKAGE|PACKAGE BODY|TYPE|TYPE BODY|SEQUENCE|INDEX|DATABASE LINK|MATERIALIZED VIEW|SYNONYM|JOB
+
+请输入对象的类型:SEQUENCE
+正在获取用户[med2]中所有[SEQUENCE]对象的脚本
+--
+-- SEQ_DRUGCODE (SEQUENCE)
+--
+
+   CREATE SEQUENCE  &quot;SEQ_DRUGCODE&quot;  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 18020 CACHE 20 NOORDER  NOCYCLE  NOPARTITION ;
+
+--
+-- SEQ_SHARE (SEQUENCE)
+--
+
+   CREATE SEQUENCE  &quot;SEQ_SHARE&quot;  MINVALUE 1 MAXVALUE 9999999999999999999999999999 INCREMENT BY 1 START WITH 1 CACHE 20 NOORDER  NOCYCLE  NOPARTITION ;
+
+please more [E:\oradba_output\study-ddl_object_med2_SEQUENCE.sql]。</pre><p><a href='scriptlog/study-ddl_object_med2_SEQUENCE.sql'>study-ddl_object_med2_SEQUENCE.sql</a></p><h4><a name='header-c53' class='md-header-anchor '></a><a name='ddl_schema'>获取schema中所有对象的创建脚本</a></h4><blockquote><p><code>ddl_schema.sql</code>:获取指定schema中所有对象的创建脚本。</p><p>支持的对象类型：【TABLE|VIEW|TRIGGER|PROCEDURE|FUNCTION|PACKAGE|PACKAGE BODY|TYPE|TYPE BODY|SEQUENCE|INDEX|DATABASE LINK|MATERIALIZED VIEW|SYNONYM|JOB】</p></blockquote><pre class='md-fences mock-cm' style='display:block;position:relative'>17:01:51 study&gt;@ddl_schema
+请输入用户名:dba_dlt
+正在获取[dba_dlt]的脚本--
+-- DLT_ACCESS_SQL (TABLE)
+--
+
+  CREATE GLOBAL TEMPORARY TABLE &quot;DLT_ACCESS_SQL&quot;
+   (	&quot;USERNAME&quot; VARCHAR2(30),
+	&quot;SQL_TEXT&quot; CLOB
+   ) ON COMMIT PRESERVE ROWS ;
+
+--
+-- DLT_BLOCKLOCK (TABLE)
+--
+
+  CREATE GLOBAL TEMPORARY TABLE &quot;DLT_BLOCKLOCK&quot;
+   (	&quot;SESS_KEY&quot; VARCHAR2(20),
+	&quot;BLOCK_SESS_KEY&quot; VARCHAR2(20),
+	&quot;INST_ID&quot; NUMBER,
+	&quot;SID&quot; NUMBER,
+	&quot;SERIAL#&quot; NUMBER,
+......
+......
+......
+--
+-- PRINT_TABLE (PROCEDURE)
+--
+
+  CREATE OR REPLACE EDITIONABLE PROCEDURE &quot;PRINT_TABLE&quot; (p_query    IN VARCHAR2,
+                                        p_date_fmt IN VARCHAR2 DEFAULT &#39;yyyy-mm-dd hh24:mi:ss&#39;)
+  authid current_user as
+begin
+  dlt_sys$t.print_table(p_query, p_date_fmt);
+end;
+/
+
+please more [E:\oradba_output\study-ddl_schema_dba_dlt.sql]。</pre><p><a href='scriptlog/study-ddl_schema_dba_dlt.sql'>study-ddl_schema_dba_dlt.sql</a></p><h3><a name='header-c62' class='md-header-anchor '></a><a name='check_index'>检查index</a></h3><blockquote><p><code>check_index.sql</code>:检查表上index的状态(适用分区表和分区index)，并对损坏的index生成重建SQL。</p><p>特别是我们维护分区表时，可能损坏表上的index和分区index，通过该脚本快速进行check。</p><p>Usage：<code>@check_index  &lt;schema_name&gt;  &lt;tablename&gt;</code></p></blockquote><pre class='md-fences mock-cm' style='display:block;position:relative'>09:48:12 study&gt;@check_index
+请指定表的拥有者(owner),表名称(table_name)
+Enter value for 1: med2
+Enter value for 2: bigtable
+指定的拥有者： MED2
+指定的表名称： BIGTABLE
+
+表[MED2.BIGTABLE]的index状态结果
+
+OWNER     INDEX_NAME                     INDEX_TYPE           PARTITION_NAME                 SUBPARTITION_NAME              STATUS   TABLESPACE_NAME
+---------- ------------------------------ -------------------- ------------------------------ ------------------------------ -------- ------------------------------
+MED2       IDXFT_BIGTABLE_CHEM_NAME       DOMAIN               NO                             NO                     INPROGRS
+MED2       IDX_BIGTABLE_DRUG_ID           NORMAL               NO                             NO                     VALID    USERS
+MED2       SYS_IL0000092338C00022$$       LOB                  NO                             NO                     VALID    USERS
+MED2       SYS_IL0000092338C00016$$       LOB                  NO                             NO                     VALID    USERS
+
+请执行下面SQL,重建不可用index
+SQL
+-------------------------------------------------------------------------------------------------
+DOMAIN INDEX [MED2.IDXFT_BIGTABLE_CHEM_NAME] need to manually rebuild.
+
+please more [E:\oradba_output\study-check_index.txt]。</pre><p><a href='scriptlog/study-check_index.txt'>study-check_index.txt</a></p><blockquote><p>这个例子没有体现出‘重建不可用index的 SQL’，以后补个操作分区表，index损坏的例子。</p></blockquote><h3><a name='header-c76' class='md-header-anchor '></a><a name='wrapper'>包装系统脚本</a></h3><p><strong>相关脚本</strong></p><pre class='md-fences mock-cm' style='display:block;position:relative'>addmrpt.sql	ashrpt.sql	awrddrpt.sql	awrrpt.sql	awrsqrpt.sql
+addmrpti.sql	ashrpti.sql	awrddrpti.sql	awrrpti.sql	awrsqrpti.sql</pre><blockquote><p>上面的脚本名字与oracle自带的系统脚本名字一致，功能也一样，仅仅做了简单的包装``</p><ul><li>方便使用，无需输入脚本路径</li><li>输出文件统一存放在<code>script_output_dir</code>配置的输出目录</li><li>自动打开输出文件</li></ul></blockquote><p>以<code>addmrpt.sql</code>为例子，其他类似：</p><pre class='md-fences mock-cm' style='display:block;position:relative'>17:10:53 study&gt;@addmrpt
+
+Current Instance
+​~~~~~~~~~~~~~~~~
+   DB Id    DB Name      Inst Num Instance
+----------- ------------ -------- ------------
+ 1600670143 ORADLT              1 oradlt
+
+
+Instances in this Workload Repository schema
+​~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   DB Id     Inst Num DB Name      Instance     Host
+------------ -------- ------------ ------------ ------------
+* 1600670143        1 ORADLT       oradlt       DENGLT-PC
+
+Using 1600670143 for database Id
+Using          1 for instance number
+
+
+Specify the number of days of snapshots to choose from
+​~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Entering the number of days (n) will result in the most recent
+(n) days of snapshots being listed.  Pressing &lt;return&gt; without
+specifying a number lists all completed snapshots.
+
+
+
+Listing the last 3 days of Completed Snapshots
+
+                                                        Snap
+Instance     DB Name        Snap Id    Snap Started    Level
+------------ ------------ --------- ------------------ -----
+oradlt       ORADLT             171 03 Jul 2017 10:23      1
+                                172 03 Jul 2017 11:00      1
+                                173 03 Jul 2017 12:01      1
+                                174 03 Jul 2017 13:00      1
+                                175 03 Jul 2017 14:00      1
+                                176 03 Jul 2017 15:00      1
+                                177 03 Jul 2017 16:00      1
+                                178 03 Jul 2017 17:00      1
+                                179 03 Jul 2017 18:00      1
+                                180 04 Jul 2017 16:21      1
+                                181 04 Jul 2017 17:00      1
+
+
+
+Specify the Begin and End Snapshot Ids
+​~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Enter value for begin_snap: 180
+Begin Snapshot Id specified: 180
+
+Enter value for end_snap: 181
+Specify the Report Name
+​~~~~~~~~~~~~~~~~~~~~~~~
+The default report file name is addmrpt_1_180_181.txt.  To use this name,
+press &lt;return&gt; to continue, otherwise enter an alternative.
+
+Enter value for report_name:
+Using the report name addmrpt_1_180_181.txt
+
+Running the ADDM analysis on the specified pair of snapshots ...
+Generating the ADDM report for this analysis ...
+
+
+          ADDM Report for Task &#39;TASK_473&#39;
+          -------------------------------
+
+Analysis Period
+---------------
+AWR snapshot range from 180 to 181.
+Time period starts at 04-JUL-17 04.21.50 PM
+Time period ends at 04-JUL-17 05.00.19 PM
+...
+...
+...
+
+End of Report
+Report written to addmrpt_1_180_181.txt
+
+请输入上面的报表名称进行查看。
+Enter value for report_name: addmrpt_1_180_181.txt
+正在移动文件[addmrpt_1_180_181.txt]到[E:\oradba_output\]
+移动了         1 个文件。
+
+
+please more [E:\oradba_output\addmrpt_1_180_181.txt]。
+</pre><p><a href='scriptlog/addmrpt_1_180_181.txt'>addmrpt<em>1</em>180_181.txt</a></p><h3><a name='header-c98' class='md-header-anchor '></a><a name='unwrap'>解密加密包</a></h3><blockquote><p>解密由java代码实现(支持中文)，支持10g、11g、12c</p></blockquote><pre class='md-fences mock-cm' style='display:block;position:relative'>set classpath=.;ojdbc14.jar
+set ip=127.0.0.1
+set port=1521
+set sid=pdboradlt
+set username=dba_dlt
+set password=****
+set object_owner=sys
+set object_name=dbms_lock
+set object_type=&quot;PACKAGE BODY&quot;
+
+java UnWrap %ip%  %port%   %sid%  %username% %password% %object_owner% %object_name% %object_type%
+</pre><p><code>sys.dbms_lock</code>解密后代码：</p><pre class='md-fences mock-cm' style='display:block;position:relative'>PACKAGE BODY dbms_lock IS
+
+  PROCEDURE PSDLGT(ID BINARY_INTEGER, LOCKMODE BINARY_INTEGER,
+                   MAXHOLDERS BINARY_INTEGER, TIMEOUT BINARY_INTEGER,
+                   RELEASE_ON_COMMIT BINARY_INTEGER,
+                   GLOBAL_LOCK BINARY_INTEGER, STATUS IN OUT BINARY_INTEGER);
+    PRAGMA INTERFACE (C, PSDLGT);
+  PROCEDURE PSDLCV(ID BINARY_INTEGER, LOCKMODE BINARY_INTEGER,
+	  	   MAXHOLDERS BINARY_INTEGER, TIMEOUT BINARY_INTEGER,
+		   STATUS IN OUT BINARY_INTEGER);
+    PRAGMA INTERFACE (C, PSDLCV);
+  PROCEDURE PSDLRL(ID BINARY_INTEGER, STATUS IN OUT BINARY_INTEGER);
+    PRAGMA INTERFACE (C, PSDLRL);
+  PROCEDURE PSDWAT(TENS_OF_MILLISECS BINARY_INTEGER);
+    PRAGMA INTERFACE (C, PSDWAT);
+
+  PROCEDURE CONVERTBACK(LOCKHANDLE VARCHAR2,
+                        ID OUT INTEGER,
+                        STATUS OUT INTEGER) IS
+    TMPID INTEGER;
+  BEGIN
+    BEGIN
+      STATUS := 0;
+      ID := -1;
+      IF LENGTH(LOCKHANDLE)=0 THEN
+        STATUS := 5;
+      ELSE
+        TMPID := TO_NUMBER(SUBSTR(LOCKHANDLE,1,10));
+        IF (TMPID &lt;&gt; TO_NUMBER(SUBSTR(LOCKHANDLE,11,10))) THEN
+          STATUS := 5;
+        ELSIF (TMPID MOD 239) &lt;&gt; TO_NUMBER(SUBSTR(LOCKHANDLE,21,10)) THEN
+          STATUS := 5;
+        ELSIF TMPID&lt;1073741824 OR TMPID&gt;1999999999 THEN
+          STATUS := 3;
+        ELSE
+          ID := TMPID;
+        END IF;
+      END IF;
+    EXCEPTION WHEN OTHERS THEN
+      STATUS := 5;
+    END;
+  END;
+
+  FUNCTION  INTERNAL_REQUEST(ID INTEGER,
+                    LOCKMODE INTEGER,
+                    TIMEOUT INTEGER,
+                    RELEASE_ON_COMMIT BOOLEAN,
+                    GLOBAL_LOCK BOOLEAN)
+            RETURN INTEGER IS
+  ARG1    BINARY_INTEGER;
+  ARG2    BINARY_INTEGER;
+  ARG3    BINARY_INTEGER;
+  ARG4    BINARY_INTEGER;
+  ARG5    BINARY_INTEGER;
+  ARG6    BINARY_INTEGER;
+  STATUS  BINARY_INTEGER;
+  BEGIN
+    IF TIMEOUT&lt;0 OR LOCKMODE&lt;1 OR LOCKMODE&gt;6 THEN
+      RETURN 3;
+    END IF;
+    IF ID IS NULL OR LOCKMODE IS NULL OR TIMEOUT IS NULL THEN
+      RETURN 3;
+    END IF;
+    ARG1 := ID;
+    ARG2 := LOCKMODE;
+    ARG3 := 0;
+    IF TIMEOUT&gt;MAXWAIT THEN
+      ARG4 := MAXWAIT;
+    ELSE
+      ARG4 := TIMEOUT;
+    END IF;
+    IF RELEASE_ON_COMMIT THEN
+      ARG5 := 1;
+    ELSE
+      ARG5 := 0;
+    END IF;
+    IF GLOBAL_LOCK THEN
+      ARG6 := 1;
+    ELSE
+      ARG6 := 0;
+    END IF;
+    PSDLGT(ARG1, ARG2, ARG3, ARG4, ARG5, ARG6, STATUS);
+    RETURN STATUS;
+  END;
+
+  FUNCTION  REQUEST(LOCKHANDLE VARCHAR2,
+                    LOCKMODE INTEGER DEFAULT X_MODE,
+                    TIMEOUT INTEGER DEFAULT MAXWAIT,
+                    RELEASE_ON_COMMIT BOOLEAN DEFAULT FALSE)
+            RETURN INTEGER IS
+    ID INTEGER;
+    STATUS INTEGER;
+  BEGIN
+    CONVERTBACK(LOCKHANDLE, ID, STATUS);
+    IF STATUS &lt;&gt; 0 THEN
+      RETURN STATUS;
+    END IF;
+    RETURN INTERNAL_REQUEST(ID, LOCKMODE, TIMEOUT, RELEASE_ON_COMMIT, TRUE);
+  END;
+
+  FUNCTION  REQUEST(ID INTEGER,
+                    LOCKMODE INTEGER DEFAULT X_MODE,
+                    TIMEOUT INTEGER DEFAULT MAXWAIT,
+                    RELEASE_ON_COMMIT BOOLEAN DEFAULT FALSE)
+            RETURN INTEGER IS
+  BEGIN
+    IF ID&lt;0 OR (ID&gt;1073741823 AND ID&lt;2000000000) THEN
+      RETURN 3;
+    END IF;
+    RETURN INTERNAL_REQUEST(ID, LOCKMODE, TIMEOUT, RELEASE_ON_COMMIT, TRUE);
+  END;
+
+  FUNCTION INTERNAL_CONVERT(ID INTEGER,
+                   LOCKMODE INTEGER,
+                   TIMEOUT NUMBER)
+           RETURN INTEGER IS
+    ARG1   BINARY_INTEGER;
+    ARG2   BINARY_INTEGER;
+    ARG3   BINARY_INTEGER;
+    ARG4   BINARY_INTEGER;
+    STATUS BINARY_INTEGER;
+  BEGIN
+    IF TIMEOUT&lt;0 OR LOCKMODE&lt;1 OR LOCKMODE&gt;6 THEN
+      RETURN 3;
+    END IF;
+    IF ID IS NULL OR LOCKMODE IS NULL OR TIMEOUT IS NULL THEN
+      RETURN 3;
+    END IF;
+    ARG1 := ID;
+    ARG2 := LOCKMODE;
+    ARG3 := 0;
+    IF TIMEOUT&gt;MAXWAIT THEN
+      ARG4 := MAXWAIT;
+    ELSE
+      ARG4 := TIMEOUT;
+    END IF;
+    PSDLCV(ARG1, ARG2, ARG3, ARG4, STATUS);
+    RETURN STATUS;
+  END;
+
+  FUNCTION CONVERT(LOCKHANDLE VARCHAR2,
+                   LOCKMODE INTEGER,
+                   TIMEOUT NUMBER DEFAULT MAXWAIT)
+           RETURN INTEGER IS
+    ID INTEGER;
+    STATUS INTEGER;
+  BEGIN
+    CONVERTBACK(LOCKHANDLE, ID, STATUS);
+    IF STATUS &lt;&gt; 0 THEN
+      RETURN STATUS;
+    END IF;
+    RETURN INTERNAL_CONVERT(ID, LOCKMODE, TIMEOUT);
+  END;
+
+  FUNCTION CONVERT(ID INTEGER,
+                   LOCKMODE INTEGER,
+                   TIMEOUT NUMBER DEFAULT MAXWAIT)
+           RETURN INTEGER IS
+  BEGIN
+    IF ID&lt;0 OR (ID&gt;1073741823 AND ID&lt;2000000000) THEN
+      RETURN 3;
+    END IF;
+    RETURN INTERNAL_CONVERT(ID, LOCKMODE, TIMEOUT);
+  END;
+
+  FUNCTION INTERNAL_RELEASE(ID INTEGER) RETURN INTEGER IS
+    ARG1   BINARY_INTEGER;
+    STATUS BINARY_INTEGER;
+  BEGIN
+    IF ID IS NULL THEN
+      RETURN 3;
+    END IF;
+    ARG1 := ID;
+    PSDLRL(ARG1, STATUS);
+    RETURN STATUS;
+  END;
+
+  FUNCTION RELEASE(LOCKHANDLE VARCHAR2) RETURN INTEGER IS
+    ID INTEGER;
+    STATUS INTEGER;
+  BEGIN
+    CONVERTBACK(LOCKHANDLE, ID, STATUS);
+    IF STATUS &lt;&gt; 0 THEN
+      RETURN STATUS;
+    END IF;
+    RETURN INTERNAL_RELEASE(ID);
+  END;
+
+  FUNCTION RELEASE(ID INTEGER) RETURN INTEGER IS
+  BEGIN
+    IF ID&lt;0 OR (ID&gt;1073741823 AND ID&lt;2000000000) THEN
+      RETURN 3;
+    END IF;
+    RETURN INTERNAL_RELEASE(ID);
+  END;
+
+  PROCEDURE SLEEP(SECONDS NUMBER) IS
+    ARG1   BINARY_INTEGER;
+  BEGIN
+
+    IF SLEEP.SECONDS &lt; 0 THEN
+      DBMS_SYS_ERROR.RAISE_SYSTEM_ERROR(DBMS_LOCK.BADSECONDS_NUM);
+    ELSE ARG1 := SECONDS*100;
+    END IF;
+    PSDWAT(ARG1);
+  END;
+
+  PROCEDURE ALLOCATE_UNIQUE_AUTONOMOUS(LOCKNAME IN VARCHAR2,
+			    LOCKHANDLE OUT VARCHAR2,
+			    EXPIRATION_SECS IN INTEGER DEFAULT 864000) IS
+    PRAGMA AUTONOMOUS_TRANSACTION;
+    LOCKID            INTEGER;
+
+    CURSOR C1(LNAME VARCHAR2) IS
+      SELECT LOCKID FROM DBMS_LOCK_ALLOCATED
+                   WHERE NAME = C1.LNAME FOR UPDATE;
+    TRYCOUNT   INTEGER := 0;
+    DO_CLEANUP BOOLEAN := FALSE;
+  BEGIN
+    &lt;&lt;RETRYLOOP&gt;&gt;
+    LOOP
+      OPEN C1(LOCKNAME);
+      FETCH C1 INTO LOCKID;
+      IF C1%NOTFOUND
+      THEN
+        CLOSE C1;
+        BEGIN
+
+
+          SELECT DBMS_LOCK_ID_V2.NEXTVAL INTO LOCKID FROM DUAL;
+
+          IF (LOCKID MOD 100) = 0
+          THEN
+            DO_CLEANUP := TRUE;
+          END IF;
+
+
+          INSERT INTO DBMS_LOCK_ALLOCATED VALUES (LOCKNAME, LOCKID,
+            SYSDATE + (EXPIRATION_SECS/86400));
+          COMMIT;
+          EXIT RETRYLOOP;
+        EXCEPTION WHEN DUP_VAL_ON_INDEX
+        THEN
+
+
+
+
+          TRYCOUNT := TRYCOUNT+1;
+        END;
+      ELSE
+
+
+        UPDATE DBMS_LOCK_ALLOCATED
+          SET EXPIRATION = SYSDATE + (EXPIRATION_SECS/86400)
+          WHERE CURRENT OF C1;
+        CLOSE C1;
+        COMMIT;
+        EXIT RETRYLOOP;
+      END IF;
+    END LOOP;
+    IF ( DO_CLEANUP = TRUE )
+    THEN
+      DELETE DBMS_LOCK_ALLOCATED WHERE EXPIRATION &lt; SYSDATE;
+      COMMIT;
+    END IF;
+    LOCKHANDLE := TO_CHAR(LOCKID)||TO_CHAR(LOCKID)||TO_CHAR(LOCKID MOD 239);
+  END;
+
+
+
+  PROCEDURE ALLOCATE_UNIQUE(LOCKNAME IN VARCHAR2,
+			    LOCKHANDLE OUT VARCHAR2,
+			    EXPIRATION_SECS IN INTEGER DEFAULT 864000) IS
+  BEGIN
+    ALLOCATE_UNIQUE_AUTONOMOUS(LOCKNAME,LOCKHANDLE,EXPIRATION_SECS);
+    COMMIT ;
+  END;
+
+
+END;
+</pre><blockquote><p>如果不幸，你有代码需要解密，可以给我留言。</p><p>留言功能使用的是disqus，目前disqus被墙了，记得要翻墙哟。</p></blockquote></div>
+</body>
+</html>

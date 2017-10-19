@@ -1,0 +1,110 @@
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Show Inner Object</title>
+<script type="text/javascript" src="app/toolObjectProperty.js"></script>
+</head>
+<table border="1">
+	<tr>
+		<td>
+			<div class="f_left">
+				<select id="objects">
+					<option value="NewPerson">new Person(实例)</option>
+					<option value="Person">Person(函数)</option>
+					<option value="Window">Window</option>
+					<option value="Object">Object</option>
+					<option value="Array">Array</option>
+					<option value="Date">Date</option>
+					<option value="String">String</option>
+					<option value="Function">Function</option>
+				</select> <input type="button" onclick="javascript:showInnerObject()"
+					value="显示属性" />
+			</div>
+		</td>
+		<td>
+			<div class="f_left">
+				window属性名称: <input id="woName" value="Date" /> <input type="button"
+					onclick="javascript:showWinObject()" value="显示属性" />
+			</div>
+		</td>
+		<td>
+			<div class="f_left">
+				document对象名称: <input id="doName" value="table" /> <input
+					type="button" onclick="javascript:showDocObject()" value="显示属性" />
+			</div>
+		</td>
+	</tr>
+	<tr align="center">
+		<td colspan="3">
+			<div id="result">結果</div>
+		</td>
+	</tr>
+</table>
+
+<script type="text/javascript">
+	function showInnerObject() {
+		var objs = window.document.getElementById("objects");
+		var index = objs.selectedIndex;
+		var selectValue = objs.options[index].value;
+		//alert(selectValue);
+		var obj
+		if (selectValue == "Window") {
+			obj = window;
+		} else if (selectValue == "NewPerson") {
+			obj = new Person();
+			//obj = Object.getOwnPropertyDescriptor(obj, "name");
+		} else if (selectValue == "Person") {
+			obj = Person;
+		} else {
+			obj = window[selectValue];
+		}
+		//alert(obj);
+		var prosHtml = Dlt.pros.getProsHtml(obj);
+		var div = window.document.getElementById("result");
+		div.innerHTML = prosHtml;
+	};
+
+	function showWinObject() {
+		//var obj = window.document.getElementById("woName");
+		var obj = window[window.document.getElementById("woName").value];
+		//alert(obj==undefined);
+		var div = window.document.getElementById("result");
+		if (obj != undefined) {
+			var prosHtml = Dlt.pros.getProsHtml(obj);
+			div.innerHTML = prosHtml;
+		} else {
+			div.innerHTML = "该对象没有定义";
+		}
+
+	};
+
+	function showDocObject() {
+
+		var obj = document.createElement(window.document
+				.getElementById("doName").value);
+		//alert(obj==undefined);
+		var div = window.document.getElementById("result");
+		if (obj != undefined) {
+			var prosHtml = Dlt.pros.getProsHtml(obj);
+			div.innerHTML = prosHtml;
+		} else {
+			div.innerHTML = "该对象没有定义";
+		}
+
+	};
+	function Person() {
+		this.name = "denglt";
+		this.age = 30;
+		this.getInfo = function() {
+			alert(this.username + ", " + this.password);
+		}
+	}
+	Person.staticFun = function() {
+		//模拟静态函数
+	};
+	Person.staticField = "like static field";
+	Person.prototype.mywife = "zyy";
+
+	Object.prototype.basename = "basename";
+</script>
+</html>

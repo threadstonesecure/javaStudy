@@ -1,0 +1,2 @@
+ex_jcache=dlt.utils.dubbo.cache.JCacheFactory
+redis=dlt.utils.dubbo.cache.RedisCacheFactory

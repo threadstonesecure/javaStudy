@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans default-autowire="byName">
+	<!--<import resource="/dubbotest/*.xml"/>-->
+	<import resource="aop.xml" />
+	<import resource="cache.xml" />
+	<import resource="base.xml" />
+	<import resource="prop.xml" />
+	<import resource="redis.xml" />
+	<import resource="scheduler.xml" />
+</beans>

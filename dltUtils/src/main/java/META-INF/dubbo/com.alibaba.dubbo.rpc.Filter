@@ -1,0 +1,3 @@
+traceFilter=dlt.utils.dubbo.TraceFilter
+ex_cache=dlt.utils.dubbo.cache.CacheFilter
+invokeFilterWrapper=dlt.utils.dubbo.InvokeFilterWrapper

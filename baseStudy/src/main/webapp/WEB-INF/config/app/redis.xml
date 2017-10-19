@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	default-init-method="init-" default-destroy-method="destroy-">
+
+	<bean id="jedisConnectionFactory"
+		class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+		<property name="usePool" value="true" />
+		<property name="hostName" value="${redis.server.host}" />
+		<property name="port" value="${redis.server.port}" />
+		<property name="password" value="${redis.server.password}" />
+		<property name="database" value="${redis.server.database}" />
+		<property name="timeout" value="${redis.timeout}" />
+		<property name="poolConfig" ref="jedisPoolConfig"></property>
+	</bean>
+
+	<!-- jedis pool配置 -->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="${redis.pool.maxTotal}" />
+		<property name="maxIdle" value="${redis.pool.maxIdle}" />
+		<property name="minIdle" value="${redis.pool.minIdle}" />
+		<property name="maxWaitMillis" value="${redis.pool.maxWaitMillis}" />
+		<property name="testOnBorrow" value="${redis.pool.testOnBorrow}" />
+		<property name="testWhileIdle" value="${redis.pool.testWhileIdle}" />
+	</bean>
+
+	<!-- Redis Template -->
+	<bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+		<property name="connectionFactory" ref="jedisConnectionFactory" />
+	</bean>
+
+<!--    &lt;!&ndash; Redis Sentinel Config &ndash;&gt;
+    <bean id="redisSentinelConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        &lt;!&ndash; <constructor-arg index="0" value="#{ null }" />&ndash;&gt;
+        <constructor-arg index="0" ref="redisSentinelConfiguration"/>
+        <constructor-arg index="1" ref="jedisPoolConfig"/>
+        <property name="usePool" value="true"/>
+        <property name="password" value="hsyt"/>
+        <property name="database" value="${redis.server.database}"/>
+        <property name="timeout" value="${redis.timeout}"/>
+
+    </bean>
+    <bean id="redisSentinelConfiguration" class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
+        <constructor-arg index="0" value="mymaster"/>
+        <constructor-arg index="1">
+            <set>
+                <value>10.26.190.150:26379</value>
+                <value>10.26.190.149:26379</value>
+            </set>
+        </constructor-arg>
+    </bean>
+
+    <bean id="redisSentinelTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
+        <property name="connectionFactory" ref="redisSentinelConnectionFactory"/>
+    </bean>-->
+</beans>

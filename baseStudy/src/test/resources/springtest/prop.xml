@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 配置信息 -->
+	<bean class="dlt.utils.spring.PropertyConfigurer">
+		<property name="searchSystemEnvironment" value="true" />
+		<property name="locations">
+			<list>
+				<value>jdbc.properties</value>
+				<value>redis.properties</value>
+			</list>
+		</property>
+		<property name="strs" ref="strs" /> <!-- 这会使strs先创建，不会触发BeanPostProcessor-->
+	</bean>
+	<bean id="strs" class="java.util.ArrayList">
+		<constructor-arg index="0">
+			<list>
+				<value>localhost:8080</value>
+				<value>localhost:8081</value>
+				<value>localhost:8082</value>
+			</list>
+		</constructor-arg>
+	</bean>
+
+</beans>

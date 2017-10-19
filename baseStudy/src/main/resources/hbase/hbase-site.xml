@@ -1,0 +1,12 @@
+<configuration>
+
+	<property>
+		<name>hbase.zookeeper.quorum</name>
+		<!-- <value>172.16.110.132,172.16.110.133,172.16.110.134</value> -->
+		<!-- value>172.16.108.211</value -->
+		<value>172.16.110.133</value>
+	</property>
+
+
+
+</configuration>
