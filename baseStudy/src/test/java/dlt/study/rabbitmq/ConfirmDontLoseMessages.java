@@ -82,7 +82,8 @@ public class ConfirmDontLoseMessages {
                 QueueingConsumer qc = new QueueingConsumer(ch);
                 ch.basicConsume(QUEUE_NAME, true, qc);
                 for (int i = 0; i < msgCount; ++i) {
-                    qc.nextDelivery();
+                    QueueingConsumer.Delivery delivery = qc.nextDelivery();
+                    delivery.getBody();
                 }
 
                 // Cleanup

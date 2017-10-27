@@ -67,7 +67,7 @@ public class Send {
 		channel.basicPublish("", // ""代表default exchange。The default exchange is
 									// implicitly bound to every queue,
 									// with a routing key equal to the queue
-									// name. It it not possible to explicitly
+									// name. It is not possible to explicitly
 									// bind to, or unbind from the default
 									// exchange. It also cannot be deleted.
 				QueueInfo.QUEUE_NAME, null, message.getBytes());

@@ -1,7 +1,7 @@
 package dlt.utils;
 
+import java.util.HashMap;
 import java.util.Map;
-import java.util.WeakHashMap;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class LockWithString {
     public static LockWithString GLOBAL_LOCK = new LockWithString();
     private Lock lock = new ReentrantLock();
-    private Map<String, ConditionWapper> conditionMap = new WeakHashMap<>();
+    private Map<String, ConditionWapper> conditionMap = new HashMap<>();
     private final String TRYLOCK_PREFIX = "TRYLOCK-";
 
     public LockWithString() {

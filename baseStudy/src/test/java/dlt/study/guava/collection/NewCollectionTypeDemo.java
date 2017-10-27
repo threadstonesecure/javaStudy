@@ -191,7 +191,7 @@ public class NewCollectionTypeDemo {
         System.out.println(denglt == denglt2);
         denglt.add(new User("denglt",0));
         denglt2.add(new User("denglt",1));
-        System.out.println(listMultimap.size()); // 1
+        System.out.println(listMultimap.size()); // 2
         listMultimap.forEach((k,v) -> System.out.println(k + " -> " + v));
         listMultimap.asMap().forEach((k,v) -> System.out.println(k + " -> " + v));
     }
@@ -299,7 +299,8 @@ public class NewCollectionTypeDemo {
     public void classToInstanceMap() {
         ClassToInstanceMap<Integer> classToInstanceMap = MutableClassToInstanceMap.create();
         classToInstanceMap.putInstance(Integer.class, 1);
-        classToInstanceMap.putInstance(int.class, 2); //a primitive type and its corresponding wrapper type may map to different values
+        classToInstanceMap.putInstance(Integer.class, 2);
+        classToInstanceMap.putInstance(int.class, 3); //a primitive type and its corresponding wrapper type may map to different values
         classToInstanceMap.forEach((c, v) -> System.out.println(c + " -> " + v));
 
         System.out.println(int.class.equals(Integer.class));

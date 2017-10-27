@@ -31,7 +31,8 @@ public class ContiguousSetDemo {
         integers.forEach(System.out::println);
 
 
-        ContiguousSet.create(Range.greaterThan(0), DiscreteDomain.integers());
+        integers =  ContiguousSet.create(Range.greaterThan(0), DiscreteDomain.integers());
+        integers.forEach(System.out::println);
     }
 
 

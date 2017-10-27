@@ -1,6 +1,5 @@
 package dlt.study.guava;
 
-import com.google.common.collect.Maps;
 import com.google.common.hash.*;
 import dlt.domain.model.User;
 import org.junit.Test;
@@ -14,7 +13,7 @@ public class HashingDemo {
 
     @Test
     public void bitset(){
-        BitSet bitSet = new BitSet(100);
+        BitSet bitSet = new BitSet(100); // BitMap
 
         bitSet.set(1,true);
 
@@ -93,6 +92,8 @@ public class HashingDemo {
 
             }
            }, 500, 0.01);
+
+        //friends.mightContain()
     }
 
     /**

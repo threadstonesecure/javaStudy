@@ -5,13 +5,14 @@ import dlt.study.log4j.Log;
 import org.junit.Test;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class FuturesDemo {
 
     @Test
     public void addCallback() throws Exception {
-        ListenableFutureTask<Integer> task = Tasks.newTask();
+        ListenableFutureTask<Integer> task = Tasks.newTask();  //ListenableFutureTask.create
 
         Futures.addCallback(task, new FutureCallback<Integer>() {
             @Override
@@ -36,7 +37,7 @@ public class FuturesDemo {
     }
 
     @Test
-    public void allAsList() {  // 合并Future的结果
+    public void allAsList() throws ExecutionException, InterruptedException {  // 合并Future的结果
 
 
         /**
@@ -44,6 +45,22 @@ public class FuturesDemo {
          * If any of the input futures fails or is cancelled, this concurrency fails or is cancelled.
          */
         //  Futures.allAsList()
+        ListenableFutureTask<Integer> task = Tasks.newTask();
+        ListenableFutureTask<Integer> task2 = Tasks.newTask();
+        ListenableFutureTask<Integer> task3 = Tasks.newTask();
+        new Thread(task).start();
+        new Thread(task2).start();
+        new Thread(task3).start();
+        ListenableFuture<List<Integer>> listListenableFuture = Futures.allAsList(task, task2, task3);
+        List<Integer> integers = null;
+        try {
+            integers = listListenableFuture.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        integers.forEach(System.out::println);
         /**
          * Returns a ListenableFuture whose value is a list containing the values of each of the successful input futures, in order.
          * The values corresponding to failed or cancelled futures are replaced with null.
