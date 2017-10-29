@@ -28,17 +28,19 @@ public class TestGame {
 	}
 	
 	@Test
-	public void testCountDown(){
+	public void testCountDown() throws Exception{
 		int runnerCount =  10;
 		CountDownSameTime syncSame = new CountDownSameTime(runnerCount);
 		Game game = new Game(syncSame);
 		for (int i = 0; i < runnerCount; i++)
 			game.addPlayer(new Athlete(i, syncSame));
 		game.run();
+
+		System.in.read();
 	}
 	
 	@Test
-	public void testCyclicBarrier(){
+	public void testCyclicBarrier() throws Exception {
 		int runnerCount =  10;
 		CyclicBarrierSameTime syncSame = new CyclicBarrierSameTime(runnerCount);
 		Game game = new Game(syncSame);
@@ -46,10 +48,13 @@ public class TestGame {
 		for (int i = 0; i < runnerCount; i++)
 			game.addPlayer(new Athlete(i, syncSame));
 		game.run();
+
+		System.in.read();
+
 	}
 	
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 		TestGame test = new TestGame();
 		//test.testLock();
 		//test.testSync();

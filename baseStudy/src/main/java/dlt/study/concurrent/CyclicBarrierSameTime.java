@@ -14,7 +14,7 @@ public class CyclicBarrierSameTime implements SameTime {
 	@Override
 	public boolean prepare(Runnable runer) throws InterruptedException {
 		try {
-			barrier.await();
+			barrier.await();  // 人到齐就开始
 		} catch (BrokenBarrierException e) {
 			e.printStackTrace();
 			return false;

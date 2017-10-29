@@ -31,9 +31,6 @@ public class Athlete implements Runnable {
 
 	@Override
 	public void run() {
-		
-
-		
 		try {
 			Thread.sleep(new Random().nextInt(5) * 1000); // 模拟这个自身的准备
 			ThreadOut.println(this + " ready !");
