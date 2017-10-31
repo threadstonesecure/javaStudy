@@ -14,7 +14,8 @@ public class ByteBufDemo {
 
     @Test
     public void writeUTF() throws Exception {
-        ByteBuf byteBuf = Unpooled.buffer(20);
+        ByteBuf byteBuf = Unpooled.buffer(20);// Unpooled.buffer();
+        System.out.println(byteBuf.refCnt());
         System.out.println(byteBuf.getClass());
         ByteBufOutputStream byteBufOutputStream = new ByteBufOutputStream(byteBuf);
         StringBuffer sb = new StringBuffer();
@@ -32,6 +33,7 @@ public class ByteBufDemo {
 
         byte[] arrByte = sb.toString().getBytes(CharsetUtil.UTF_8);
         System.out.println(arrByte.length);
+        byteBuf.release();
     }
 
     @Test
@@ -108,7 +110,7 @@ public class ByteBufDemo {
     public void refCnt() {
         ByteBuf content = Unpooled.directBuffer(255).writeZero(2550);
         System.out.println(content);
-        System.out.println(content.refCnt());  // 引用计数 ByteBuf是引用计数对象
+        System.out.println(content.refCnt()); // 1  // 引用计数 ByteBuf是引用计数对象
         ByteBuf content2 = content.duplicate();
         content2.readByte();
         System.out.println(content.readerIndex());
@@ -116,8 +118,8 @@ public class ByteBufDemo {
 
         content2.retain();   //增加引用
         System.out.println(content2.readableBytes());
-        System.out.println(content2.refCnt());
-        System.out.println(content.refCnt());
+        System.out.println(content2.refCnt()); //2
+        System.out.println(content.refCnt()); //2
         content.release();
         content.release();
         content.release();
