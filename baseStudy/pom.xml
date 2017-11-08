@@ -17,7 +17,8 @@
             <artifactId>dltUtils</artifactId>
         </dependency>
 
-        <dependency>
+<!-- 暂时删除
+    <dependency>
             <groupId>org.terracotta</groupId>
             <artifactId>ehcache-probe</artifactId>
         </dependency>
@@ -25,7 +26,7 @@
         <dependency>
             <groupId>org.terracotta</groupId>
             <artifactId>ehcache-monitor</artifactId>
-        </dependency>
+        </dependency>-->
 
         <!-- jcache -->
         <dependency>
@@ -275,6 +276,11 @@
         <dependency>
             <groupId>com.janeluo</groupId>
             <artifactId>ikanalyzer</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
         </dependency>
 
     </dependencies>

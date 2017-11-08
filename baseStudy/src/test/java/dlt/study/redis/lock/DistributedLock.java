@@ -4,6 +4,7 @@ import dlt.study.spring.JUnit4Spring;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
+import org.redisson.api.RedissonClient;
 import org.springframework.integration.redis.util.RedisLockRegistry;
 
 import javax.annotation.Resource;
@@ -22,6 +23,9 @@ public class DistributedLock extends JUnit4Spring {
     final String lockKey = "hdpSeqno:1234567890";
     @Resource
     private RedisLockRegistry redisLockRegistry;
+
+    @Resource
+    private RedissonClient redissonClient;
 
     @Test
     public void lock() throws Exception {
@@ -43,6 +47,7 @@ public class DistributedLock extends JUnit4Spring {
             lock.lock();
             System.out.println(String.format("获取到[%s]锁!", lockKey));
             Thread.sleep(30000);
+            System.in.read();
         } finally {
             lock.unlock();
         }
@@ -50,7 +55,7 @@ public class DistributedLock extends JUnit4Spring {
     }
 
     /**
-     * 通过同时启用两个JVM运行观察,同一个APP里如果一个thread获取到redis lock后,其他的thread不会一直向redis发送指令(这说明维护了一个app级的同步lock来提高性能)
+     * 通过同时启用两个JVM运行观察,同一个JVM里如果一个thread获取到redis lock后,其他的thread不会一直向redis发送指令(这说明维护了一个app级的同步lock来提高性能)
      * 而另一个APP会一直向redis发送指令企图获取lock
      * @throws Exception
      */

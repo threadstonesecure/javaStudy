@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:redisson="http://redisson.org/schema/redisson"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+    http://redisson.org/schema/redisson http://redisson.org/schema/redisson/redisson.xsd
+    "
 	default-init-method="init-" default-destroy-method="destroy-">
 
 	<bean id="jedisConnectionFactory"
@@ -28,8 +33,38 @@
 
     <bean id="redisLockRegistry" class="org.springframework.integration.redis.util.RedisLockRegistry">
 		<constructor-arg index="0" ref="jedisConnectionFactory" />
-		<constructor-arg index="1" value="HDP:LOCK:" />
-		<constructor-arg index="2" value="60000" />
+		<constructor-arg index="1" value="LOCK:" />
+		<constructor-arg index="2" value="6000000" />
 	</bean>
 
+	<bean id="redisSentinelConfiguration" class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
+		<constructor-arg index="0" value="mymaster"/>
+		<constructor-arg index="1">
+			<set>
+				<value>10.26.190.150:26379</value>
+				<value>10.26.190.149:26379</value>
+			</set>
+		</constructor-arg>
+	</bean>
+
+	<bean id="redisClusterConfiguration" class="org.springframework.data.redis.connection.RedisClusterConfiguration">
+		<constructor-arg index="0">
+			<set>
+				<value>10.26.190.150:26379</value>
+				<value>10.26.190.149:26379</value>
+			</set>
+		</constructor-arg>
+	</bean>
+
+
+	<!-- Redisson Config -->
+	<redisson:client id="myRedisson1" name="redisson1,redisson2" threads="0" netty-threads="0"  >
+		<redisson:single-server  client-name="1" address="redis://127.0.0.1:6379"
+								 database="0"
+								 connect-timeout="10000" timeout="3000"
+								 reconnection-timeout="3000" retry-attempts="3" retry-interval="1500"
+								 idle-connection-timeout="10000" connection-pool-size="64"
+								 connection-minimum-idle-size="10"/>
+
+	</redisson:client>
 </beans>
