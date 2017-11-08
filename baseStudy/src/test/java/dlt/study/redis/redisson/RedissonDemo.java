@@ -1,4 +1,4 @@
-package dlt.study.redis;
+package dlt.study.redis.redisson;
 
 import com.alibaba.fastjson.JSON;
 import com.beust.jcommander.internal.Lists;
@@ -252,8 +252,7 @@ public class RedissonDemo extends JUnit4Spring {
 
     @Test
     public void offerIntoDelayedQueue() throws Exception {
-        RQueue<String> myqueue = redissonClient.getQueue("myDelayeQueue", StringCodec.INSTANCE);
-        redissonClient.getBlockingQueue()
+        RQueue<String> myqueue = redissonClient.getBlockingQueue("myDelayeQueue", StringCodec.INSTANCE);
         RDelayedQueue<String> delayedQueue = redissonClient.getDelayedQueue(myqueue);
         delayedQueue.offer("10",30,TimeUnit.SECONDS); // 消息到期后，消息将lpush -> List(myDelayeQueue)
         delayedQueue.offer("30",40,TimeUnit.SECONDS);
@@ -264,7 +263,7 @@ public class RedissonDemo extends JUnit4Spring {
 
     @Test
     public void pollFromDelayedQueue(){
-        RQueue<String> myqueue = redissonClient.getQueue("myDelayeQueue", StringCodec.INSTANCE);
+        RQueue<String> myqueue = redissonClient.getBlockingQueue("myDelayeQueue", StringCodec.INSTANCE);
         RDelayedQueue<String> delayedQueue = redissonClient.getDelayedQueue(myqueue);
         String v = delayedQueue.poll(); // 不会blocked , 直接返回第一个数据
         System.out.println(v);
