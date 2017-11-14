@@ -200,24 +200,6 @@ public class RedissonDemo extends JUnit4Spring {
     }
 
 
-    @Test
-    public void queue() throws Exception {
-
-        RQueue<String> myqueue = redissonClient.getQueue("myqueue", StringCodec.INSTANCE);
-        myqueue.expire(60,TimeUnit.MINUTES);  // 这句放在list中有数据了才会生效
-        myqueue.add("denglt");
-        myqueue.peek(); // LINDEX key index 实现
-       // myqueue.pollLastAndOfferFirstTo("newList"); // RPOPLPUSH source destination
-/*        while (true){
-            String v = myqueue.poll();
-            if (v == null){
-                Thread.sleep(100);
-            }else{
-                System.out.println("pool -> " + v );
-            }
-        }*/
-
-    }
 
 
     /**
@@ -250,24 +232,7 @@ public class RedissonDemo extends JUnit4Spring {
        System.in.read();
     }
 
-    @Test
-    public void offerIntoDelayedQueue() throws Exception {
-        RQueue<String> myqueue = redissonClient.getBlockingQueue("myDelayeQueue", StringCodec.INSTANCE);
-        RDelayedQueue<String> delayedQueue = redissonClient.getDelayedQueue(myqueue);
-        delayedQueue.offer("10",30,TimeUnit.SECONDS); // 消息到期后，消息将lpush -> List(myDelayeQueue)
-        delayedQueue.offer("30",40,TimeUnit.SECONDS);
-        delayedQueue.offer("denglt",600, TimeUnit.SECONDS);
-        //delayedQueue.destroy(); // 这个源代码有问题，会重新建立一个新的Topic
-        System.in.read();
-    }
 
-    @Test
-    public void pollFromDelayedQueue(){
-        RQueue<String> myqueue = redissonClient.getBlockingQueue("myDelayeQueue", StringCodec.INSTANCE);
-        RDelayedQueue<String> delayedQueue = redissonClient.getDelayedQueue(myqueue);
-        String v = delayedQueue.poll(); // 不会blocked , 直接返回第一个数据
-        System.out.println(v);
-    }
 
     public void t(){
          //redissonClient.getScoredSortedSet()

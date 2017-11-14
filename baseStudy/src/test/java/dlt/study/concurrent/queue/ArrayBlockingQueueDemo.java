@@ -24,7 +24,11 @@ public class ArrayBlockingQueueDemo {
 		queue.add("e");
 		//queue.add("f"); // IllegalStateException if this queue is full
 		System.out.println(queue.offer("f")); // false
-		queue.put("f"); // block
+		//queue.put("f"); // block
+
+		System.out.println(queue.take());
+
+
 		System.out.println("ok");
 	}
 }
