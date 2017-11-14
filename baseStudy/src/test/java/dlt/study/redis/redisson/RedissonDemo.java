@@ -17,6 +17,12 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.FutureListener;
 import io.netty.util.internal.PlatformDependent;
+import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.function.BiFunction;
+import javax.annotation.Resource;
 import org.junit.Test;
 import org.redisson.Redisson;
 import org.redisson.api.*;
@@ -29,13 +35,6 @@ import org.redisson.client.protocol.Encoder;
 import org.redisson.codec.CodecProvider;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
-
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
 
 public class RedissonDemo extends JUnit4Spring {
 
@@ -54,10 +53,10 @@ public class RedissonDemo extends JUnit4Spring {
         config.useCustomServers();
         config.useMasterSlaveServers();
         config.useSingleServer();*/
+
         System.out.println(config.toJSON());
         System.out.println(config.toYAML());
         System.out.println(config.toString());
-
     }
 
     @Test
