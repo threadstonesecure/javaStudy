@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import dlt.domain.model.User;
 import dlt.study.log4j.Log;
 import dlt.study.spring.JUnit4Spring;
+import dlt.utils.ByteUtils;
 import dlt.utils.ConfigUtils;
 import dlt.utils.JsonUtils;
 import io.netty.buffer.ByteBuf;
@@ -17,16 +18,23 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.FutureListener;
 import io.netty.util.internal.PlatformDependent;
+
 import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.BitSet;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import javax.annotation.Resource;
+
 import org.junit.Test;
+import org.reactivestreams.Publisher;
 import org.redisson.Redisson;
 import org.redisson.api.*;
 import org.redisson.api.listener.MessageListener;
+import org.redisson.api.listener.PatternMessageListener;
 import org.redisson.api.listener.StatusListener;
 import org.redisson.client.codec.Codec;
 import org.redisson.client.codec.StringCodec;
@@ -76,9 +84,7 @@ public class RedissonDemo extends JUnit4Spring {
 */
 
 
-
     }
-
 
 
     @Test
@@ -106,6 +112,19 @@ public class RedissonDemo extends JUnit4Spring {
         //booleanRFuture.handle()  // 1.8 后使用
 
         System.out.println(booleanRFuture.get());
+
+
+    }
+
+    @Test
+    public void createReactive() {
+        RedissonReactiveClient reactive = Redisson.createReactive(this.redissonClient.getConfig());
+        RAtomicLongReactive longObject = reactive.getAtomicLong("myLong");
+        Publisher<Boolean> booleanPublisher = longObject.compareAndSet(401, 402);
+
+        Publisher<Long> longPublisher = longObject.get();
+        // longPublisher.subscribe();
+
     }
 
     @Test
@@ -115,7 +134,7 @@ public class RedissonDemo extends JUnit4Spring {
         user.setAge(100);
         user.setUserName("denglt");
         //map.put(null,user);  map key can't be null
-        map.put(1,user);
+        map.put(1, user);
         System.out.println(map.getClass());
         Object o = map.get(1200L);
         System.out.println(o);
@@ -132,24 +151,33 @@ public class RedissonDemo extends JUnit4Spring {
         map.expire(60, TimeUnit.SECONDS); // 整个map 存活60s
         map.put("name", "denglt");
         map.put("age", "10");
+        /*map.fastPut();
+        map.fastPutIfAbsent();
+        map.fastRemove();*/
         System.out.println(map.get("name"));
         System.out.println(map.get("age"));
+        //map.getLock()
+        // map.getReadWriteLock()
     }
+
+
+
+
 
 
     /**
      * Multimap的多值实现，使用指定的Multimap名称 + Map 的键值 作为redis里的对象(List or Set)的key.
      * eg: {multimap}:Baaymosk0bNsX3suSnn9bQ
-     *    1) {} 里为Multimap的名称
-     *    2） : 后为 Hash.hashToBase64 处理Map Key的结果
+     * 1) {} 里为Multimap的名称
+     * 2） : 后为 Hash.hashToBase64 处理Map Key的结果
      */
     @Test
     public void listMultimap() {
 
         RListMultimap<String, String> multimap = redissonClient.getListMultimap("multimap");
-        multimap.put("name","denglt1");
-        multimap.put("name","denglt2");
-        multimap.put("name","denglt3");
+        multimap.put("name", "denglt1");
+        multimap.put("name", "denglt2");
+        multimap.put("name", "denglt3");
         System.out.println(multimap.get("name").get(0).getClass());
 
     }
@@ -182,7 +210,7 @@ public class RedissonDemo extends JUnit4Spring {
         byteBuf = valueEncoder.encode(user);
         System.out.println(new String(ByteBufUtil.getBytes(byteBuf))); // {"@class":"dlt.domain.model.User","age":100,"income":0.0,"married":false,"userName":"denglt"}
 
-        List<User> users = Lists.newArrayList(user,user);
+        List<User> users = Lists.newArrayList(user, user);
         byteBuf = valueEncoder.encode(users);
         System.out.println(new String(ByteBufUtil.getBytes(byteBuf)));//["java.util.ArrayList",[{"@class":"dlt.domain.model.User","age":100,"income":0.0,"married":false,"userName":"denglt"},{"@class":"dlt.domain.model.User","age":100,"income":0.0,"married":false,"userName":"denglt"}]]
 
@@ -192,21 +220,20 @@ public class RedissonDemo extends JUnit4Spring {
         System.out.println(v.getClass());
     }
 
-    public void list(){
-        RList<String> myList = redissonClient.getList("myList",StringCodec.INSTANCE);
+    public void list() {
+        RList<String> myList = redissonClient.getList("myList", StringCodec.INSTANCE);
         //myList.remove()
 
     }
 
 
-
-
     /**
      * pub/sub
+     *
      * @throws Exception
      */
     @Test
-    public void topic() throws Exception{
+    public void topic() throws Exception {
         RTopic<String> mytopic = redissonClient.getTopic("redisson_delay_queue_channel:{myDelayeQueue}", StringCodec.INSTANCE);
         mytopic.addListener(new StatusListener() {  // 执行 SUBSCRIBE
             @Override
@@ -216,7 +243,7 @@ public class RedissonDemo extends JUnit4Spring {
 
             @Override
             public void onUnsubscribe(String channel) {
-                Log.info("onUnsubscribe ->" + channel );
+                Log.info("onUnsubscribe ->" + channel);
             }
         });
 
@@ -227,14 +254,107 @@ public class RedissonDemo extends JUnit4Spring {
             }
         });
 
-       mytopic.publish("hello world");
-       System.in.read();
+        mytopic.publish("hello world");
+        System.in.read();
+
+        RPatternTopic<String> patternTopic = redissonClient.getPatternTopic("topic*");
+        int listenerId = patternTopic.addListener(new PatternMessageListener<String>() {
+            @Override
+            public void onMessage(String pattern, String channel, String msg) {
+            }
+        });
     }
 
 
-
-    public void t(){
-         //redissonClient.getScoredSortedSet()
+    public void t() {
+        //redissonClient.getScoredSortedSet()
         //redissonClient.getSortedSet()
+    }
+
+    @Test
+    public void bucket() {
+        RBucket<String> mybucket = redissonClient.getBucket("mybucket", StringCodec.INSTANCE);
+        mybucket.set("denglt");
+        String s = mybucket.get();
+        System.out.println("read from redis ->" + s);
+
+        RBuckets buckets = redissonClient.getBuckets(StringCodec.INSTANCE);
+        List<RBucket<String>> rBuckets = buckets.find("mybu*"); // 多key操作
+        //redissonClient.getKeys();
+
+    }
+
+    @Test
+    public void binaryStream() throws Exception {
+        RBinaryStream mybucket = redissonClient.getBinaryStream("mybucket");
+        byte[] bytes = mybucket.get();
+        System.out.println("read from redis -> " + new String(bytes));
+
+        OutputStream outputStream = mybucket.getOutputStream();
+        outputStream.write(" -> zyy".getBytes());
+        outputStream.write(" -> dzy".getBytes());
+        outputStream.write(" -> dwx".getBytes());
+
+
+    }
+
+    @Test
+    public void hyperLogLog() {
+        RHyperLogLog<String> hyperLogLog = redissonClient.getHyperLogLog("hyperLogLog", StringCodec.INSTANCE);
+        hyperLogLog.add("denglt");
+        hyperLogLog.add("zyy");
+        hyperLogLog.add("dzy");
+        hyperLogLog.add("dwx");
+        System.out.println(hyperLogLog.count());
+        System.out.println(hyperLogLog.countWith("hyperLogLog"));
+        //hyperLogLog.mergeWith();  合并 HyperLogLog
+
+    }
+
+    @Test
+    public void bloomFilter() {
+        RBloomFilter<String> myBloomFilter = redissonClient.getBloomFilter("myBloomFilter", StringCodec.INSTANCE);
+        myBloomFilter.delete();
+        myBloomFilter.tryInit(10000, 0.03);
+        for (int i = 0; i < 100; i++) {
+            myBloomFilter.add("denglt" + i);
+            myBloomFilter.add("zyy" + i);
+        }
+        System.out.println(myBloomFilter.count());
+        // for (int i = 0; i < 10; i++) {
+        System.out.println(myBloomFilter.contains("denglt5555"));
+        System.out.println(myBloomFilter.contains("zyy555"));
+        System.out.println(myBloomFilter.contains("zyy55"));
+        // }
+    }
+
+    /**
+     * Redis 的偏移offset是从左到右计算的（与jdk的BitSet是反对的）
+     */
+    @Test
+    public void getBitSet() {
+        RBitSet myBitSet = redissonClient.getBitSet("myBitSet");
+        myBitSet.delete();
+        myBitSet.set(1);
+        myBitSet.clear();
+        //myBitSet.set(4);
+        //myBitSet.asBitSet();
+        //myBitSet.and();
+        byte[] bytes = myBitSet.toByteArray();
+        System.out.println(ByteUtils.byteToBit(bytes[0]));
+        BitSet bitSet1 = myBitSet.asBitSet();
+        System.out.println(ByteUtils.byteToBit(bitSet1.toByteArray()[0]));
+
+        BitSet bitSet = new BitSet();
+        bitSet.set(1);
+        bytes = bitSet.toByteArray();
+        System.out.println(ByteUtils.byteToBit(bytes[0]));
+    }
+
+    @Test
+    public void sortedSet(){
+        RSortedSet<String> mySortedSet = redissonClient.getSortedSet("mySortedSet", StringCodec.INSTANCE);
+/*        mySortedSet.trySetComparator()
+        mySortedSet.add()  // 会加个分布式lock*/
     }
 }

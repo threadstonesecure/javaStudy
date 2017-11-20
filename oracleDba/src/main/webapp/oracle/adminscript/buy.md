@@ -16,7 +16,7 @@
 **购买方式：**可直接付款到支付宝： denglt76@gmail.com ，收款人： **通。也可以使用手机支付宝或者微信扫码支付：
 
 ```
-付款完成后请及时联系作者，或在付款备注中留下邮箱或QQ，方便作者及时联系您。 
+付款完成后请及时联系作者，或在付款备注中留下邮箱或QQ，方便作者及时联系您。
 ```
 
 **方式一：** `266元可获取全套脚本，但后台安装包为加密方式。`
@@ -31,7 +31,11 @@
 | :--------------------------------------: | :--------------------------------------: | ---------------------------------------- |
 | <img src="money/zfb_366.png" width="250px"/> | <img src="money/wx_366.png" width="250px" /> | <a href='https://www.paypal.me/denglt/70' target='_blank'>![](https://www.paypalobjects.com/webstatic/i/logo/rebrand/ppcom.svg)</a> |
 
-附送：`性能分析SQL和数据库管理`		
+附送：`性能分析SQL和数据库管理`
 
 ![oracle_docs](image/oracle_docs.png)
 
+| name  | age | sex | xixing |
+| ----- | --- | --- | ------ |
+| dengl | 10  |     | swing  |
+| zyy   | 8   |     |        |

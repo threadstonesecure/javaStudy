@@ -14,14 +14,17 @@ import org.junit.Test;
 import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 
 
 public class CacheDemo {
 
 
-
     static LoadingCache<String, City> cityCache;
+
+    static ConcurrentMap<String, City> cityConcurrentHashMap;
 
     private static City newCity(String key) {
         Log.info(String.format("new city by key[%s]", key));
@@ -50,7 +53,7 @@ public class CacheDemo {
 
                     }
                 })
-               // .refreshAfterWrite()
+                // .refreshAfterWrite()
                 .build(
                         new CacheLoader<String, City>() {
 
@@ -88,6 +91,8 @@ public class CacheDemo {
                             }
                         });
 
+        System.out.println(cityCache.getClass()); // com.google.common.cache.LocalCache$LocalLoadingCache
+        cityConcurrentHashMap = cityCache.asMap();
     }
 
     @Test
@@ -134,7 +139,7 @@ public class CacheDemo {
                                 notification.getKey(), notification.getValue(), notification.getCause()));
                     }
                 })
-                .refreshAfterWrite(10,TimeUnit.SECONDS)
+                .refreshAfterWrite(10, TimeUnit.SECONDS)
                 .build(
                         new CacheLoader<String, City>() {
 
@@ -143,6 +148,7 @@ public class CacheDemo {
                                     City.GUANGZHOU.getCode(), City.GUANGZHOU,
                                     City.SHANGHAI.getCode(), City.SHANGHAI,
                                     City.SHENZHEN.getCode(), City.SHENZHEN);
+
                             public City load(String key) {
                                 Log.info("loading " + key);
                                 City city = existCity.get(key);
@@ -169,7 +175,7 @@ public class CacheDemo {
                         });
 
         City temp = cityCache.get("temp");
-        Thread.sleep(11*1000);
+        Thread.sleep(11 * 1000);
         City temp2 = cityCache.get("temp");
         System.out.println(temp == temp2); // true
         Thread.sleep(2000);
@@ -248,7 +254,7 @@ public class CacheDemo {
 
     /**
      * 验证：
-     * this (weakKeys()) causes the whole cache to use identity (==) equality to compare keys, instead of equals().
+     * This (weakKeys()) causes the whole cache to use identity (==) equality to compare keys, instead of equals().
      */
     @Test
     public void identityKeyInWeakKeys() throws Exception {
@@ -276,7 +282,7 @@ public class CacheDemo {
 
     /**
      * 验证：
-     * this(weakValues()、softValues()) causes the whole cache to use identity (==) equality to compare keys, instead of equals()
+     * This(weakValues()、softValues()) causes the whole cache to use identity (==) equality to compare keys, instead of equals()
      */
     @Test
     public void identityValue() throws Exception {

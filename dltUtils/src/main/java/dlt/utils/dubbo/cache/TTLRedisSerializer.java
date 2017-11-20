@@ -1,5 +1,6 @@
 package dlt.utils.dubbo.cache;
 
+import dlt.utils.ByteUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.marshalling.*;
@@ -26,7 +27,7 @@ public class TTLRedisSerializer implements RedisSerializer<Object> {
     public static final Object EXPIRED_OBJ = new Object();
 
     static {
-        marshallerFactory =  Marshalling.getProvidedMarshallerFactory("serial");
+        marshallerFactory = Marshalling.getProvidedMarshallerFactory("serial");
         if (marshallerFactory == null) {
             log.error(" no matching factory was found ");
         }
@@ -73,7 +74,7 @@ public class TTLRedisSerializer implements RedisSerializer<Object> {
         return (data == null || data.length == 0);
     }
 
-    private  class MarshallingSerializationDelegate implements Serializer<Object>, Deserializer<Object> {
+    private class MarshallingSerializationDelegate implements Serializer<Object>, Deserializer<Object> {
         @Override
         public void serialize(Object o, OutputStream outputStream) throws IOException {
 
@@ -118,22 +119,42 @@ public class TTLRedisSerializer implements RedisSerializer<Object> {
     }
 
 
-    public static void main(String[] args) throws  Exception {
+    public static void main2(String[] args) throws Exception {
         TTLRedisSerializer serializer = new TTLRedisSerializer(0);
 
         MarshallingSerializationDelegate marshallingSerializationDelegate = serializer.new MarshallingSerializationDelegate();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(256);
-        marshallingSerializationDelegate.serialize(NullValue.INSTANCE,outputStream);
-
+        marshallingSerializationDelegate.serialize(NullValue.INSTANCE, outputStream);
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
-        Object  o = marshallingSerializationDelegate.deserialize(inputStream);
+        Object o = marshallingSerializationDelegate.deserialize(inputStream);
         System.out.println(o);
         System.out.println(o.getClass());
         System.out.println(NullValue.INSTANCE == o);
         System.out.println(NullValue.INSTANCE.getClass() == o.getClass());
         System.out.println(NullValue.INSTANCE.getClass().equals(o.getClass()));
         System.out.println(NullValue.INSTANCE.equals(o));
-        System.out.println(((NullValue)o).serialVersionUID);
+        System.out.println(((NullValue) o).serialVersionUID);
+    }
+
+    public static void main(String[] args) throws Exception {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream(256);
+        Marshaller marshaller = marshallerFactory.createMarshaller(marshallingConfiguration);
+        ByteOutput byteOutput = Marshalling.createByteOutput(outputStream);
+        try {
+            marshaller.start(byteOutput);
+            marshaller.writeInt(1); // 第一个字节作为数据格式，为以后兼容用
+            marshaller.writeLong(System.currentTimeMillis() + 5 * 1000);
+        } finally {
+            marshaller.finish();
+            marshaller.close();
+        }
+
+        char[] chars = ByteUtils.encodeHex(outputStream.toByteArray());
+        for (int i = 0; i < chars.length; i++) {
+            System.out.print("\\x" + chars[i] + chars[++i]);
+        }
+        //\xac\xed\x00\x05\x00\x00\x00\x01\x00\x00\x01\x5f\xd8\x04\xff\x1f
+        //\xac\xed\x00\x05\x00\x00\x00\x00\x00\x00\x01Xt\xda\xbf\x11t\x00
     }
 }
 

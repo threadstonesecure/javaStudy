@@ -11,17 +11,17 @@ public class MyExecutionThreadService extends AbstractExecutionThreadService {
 
     @Override
     protected void startUp() throws Exception {
-        Log.info("MyExecutionThreadService startUp()");
+        Log.info("MyExecutionThreadService->startUp()");
     }
 
     @Override
     protected void shutDown() throws Exception {
-        Log.info("MyExecutionThreadService shutDown()");
+        Log.info("MyExecutionThreadService->shutDown()");
     }
 
     @Override
     protected void triggerShutdown() {
-        Log.info("triggerShutdown()");
+        Log.info("MyExecutionThreadService->triggerShutdown()");
     }
 
     @Override
@@ -31,7 +31,7 @@ public class MyExecutionThreadService extends AbstractExecutionThreadService {
 
     @Override
     protected void run() throws Exception {
-        Log.info("开始计算");
+        Log.info("MyExecutionThreadService->开始计算");
         Thread.sleep(6000); // 延时执行
         int sum = 0;
         for (int i = 1; i < 10000; i++) {
@@ -40,10 +40,10 @@ public class MyExecutionThreadService extends AbstractExecutionThreadService {
             sum = sum + i;
         }
         if (this.state() == State.STOPPING)
-            Log.info("计算被终止");
+            Log.info("MyExecutionThreadService->计算被终止");
         else{
-            Log.info("计算完成");
-            Log.info("计算结果：" + sum);
+            Log.info("MyExecutionThreadService->计算完成");
+            Log.info("MyExecutionThreadService->计算结果：" + sum);
         }
     }
 }

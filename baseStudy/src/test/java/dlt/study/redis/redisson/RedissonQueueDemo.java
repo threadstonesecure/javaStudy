@@ -1,16 +1,17 @@
 package dlt.study.redis.redisson;
 
+import com.google.common.util.concurrent.AbstractExecutionThreadService;
 import dlt.domain.model.User;
 import dlt.study.log4j.Log;
 import dlt.study.spring.JUnit4Spring;
 import org.junit.Test;
-import org.redisson.RedissonBlockingQueue;
 import org.redisson.api.RBlockingQueue;
 import org.redisson.api.RDelayedQueue;
 import org.redisson.api.RQueue;
 import org.redisson.api.RedissonClient;
 import org.redisson.client.codec.StringCodec;
 import org.redisson.codec.JsonJacksonCodec;
+import org.redisson.codec.SerializationCodec;
 
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
@@ -41,6 +42,28 @@ public class RedissonQueueDemo extends JUnit4Spring {
 
     }
 
+
+    @Test
+    public void blockingQueue() throws Exception {
+        RBlockingQueue<User> myqueue = redissonClient.getBlockingQueue("myDelayedQueue", JsonJacksonCodec.INSTANCE);
+        new SendDataService().startAsync();
+       // myqueue.add(new User("denglt"));
+        while (true) {
+            User value = myqueue.take();
+            Log.info("take -> " + value);
+        }
+
+    }
+
+
+    @Test
+    public void pollFromBlockingQueue(){
+        RQueue<String> myqueue = redissonClient.getBlockingQueue("myDelayeQueue", StringCodec.INSTANCE);
+        RDelayedQueue<String> delayedQueue = redissonClient.getDelayedQueue(myqueue);
+        String v = delayedQueue.poll(); // 不会blocked , 直接返回第一个数据
+        System.out.println(v);
+    }
+
     @Test
     public void delayedQueue() throws Exception {
         RBlockingQueue<String> myqueue = redissonClient.getBlockingQueue("myDelayedQueue", StringCodec.INSTANCE);
@@ -52,29 +75,29 @@ public class RedissonQueueDemo extends JUnit4Spring {
         //myqueue.pollFromAny();
         while (true) {
             //String value = myqueue.takeLastAndOfferFirstTo("workingQueue"); // BRPOPLPUSH  (尾部)
-            String value = myqueue.take(); // BLPOP (头部)
+            String value = myqueue.take(); // BLPOP (头部) // 会占用一个实际的通信channel
             Log.info("take -> " + value);
         }
     }
 
-
-    @Test
-    public void delayedQueue2() throws Exception {
-        RBlockingQueue<User> myqueue = redissonClient.getBlockingQueue("myDelayedQueue", JsonJacksonCodec.INSTANCE);
-       // myqueue.add(new User("denglt"));
-        while (true) {
-            User value = myqueue.take();
-            Log.info("take -> " + value);
+    private class SendDataService extends AbstractExecutionThreadService{
+        @Override
+        protected void run() throws Exception {
+            RBlockingQueue<User> myqueue = redissonClient.getBlockingQueue("myDelayedQueue", JsonJacksonCodec.INSTANCE);
+            while (true){
+                try {
+                    myqueue.add(new User("denglt"));
+                    myqueue.add(new User("denglt"));
+                    myqueue.add(new User("denglt"));
+                    Thread.sleep(10000);
+                }catch (Exception ex){
+                    Log.error(ex);
+                }
+            }
         }
     }
 
 
-    @Test
-    public void pollFromDelayedQueue(){
-        RQueue<String> myqueue = redissonClient.getBlockingQueue("myDelayeQueue", StringCodec.INSTANCE);
-        RDelayedQueue<String> delayedQueue = redissonClient.getDelayedQueue(myqueue);
-        String v = delayedQueue.poll(); // 不会blocked , 直接返回第一个数据
-        System.out.println(v);
-    }
+
 
 }
