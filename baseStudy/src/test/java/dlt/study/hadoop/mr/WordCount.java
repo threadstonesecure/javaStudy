@@ -44,7 +44,7 @@ public class WordCount {
     @Override
     public void map(Object key, Text value, Context context
                     ) throws IOException, InterruptedException {
-      String pathName = ((FileSplit) context.getInputSplit()).getPath().toString();
+      String pathName = ((FileSplit) context.getInputSplit()).getPath().toString(); // 输入的文件
 
       StringTokenizer itr = new StringTokenizer(value.toString());
       while (itr.hasMoreTokens()) {

@@ -7,21 +7,15 @@ import io.netty.buffer.ByteBuf;
 import io.netty.util.CharsetUtil;
 import org.junit.Test;
 import org.redisson.Redisson;
-import org.redisson.api.RBlockingQueue;
-import org.redisson.api.RDelayedQueue;
-import org.redisson.api.RFuture;
-import org.redisson.api.RedissonClient;
+import org.redisson.api.*;
 import org.redisson.client.codec.StringCodec;
 import org.redisson.client.handler.State;
 import org.redisson.client.protocol.Decoder;
-import org.redisson.client.protocol.RedisCommand;
 import org.redisson.client.protocol.RedisCommands;
 import org.redisson.client.protocol.RedisStrictCommand;
-import org.redisson.client.protocol.decoder.StringReplayDecoder;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.command.CommandSyncService;
 import org.redisson.connection.ConnectionManager;
-import org.springframework.test.context.TestPropertySource;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -31,6 +25,28 @@ public class RedissonEvalDemo extends JUnit4Spring {
 
     @Resource
     RedissonClient redissonClient;
+
+
+    @Test
+    public void scprit() {
+        RScript script = redissonClient.getScript();
+        String eval_script = "local oldV = redis.call('get',KEYS[1]); redis.call('set','vvvvvv' ,ARGV[2]);" +
+                "redis.call('set',KEYS[1],ARGV[1]); " +
+                "return oldV;";
+        User user = new User();
+        user.setUserName("dengltdddd by scprit");
+        User oldUser = script.eval(RScript.Mode.READ_ONLY,
+                JsonJacksonCodec.INSTANCE,
+                eval_script, RScript.ReturnType.VALUE,
+                Lists.newArrayList("user"),
+                user,
+                "dengltzyy"
+        );
+        System.out.println("old user -> " + oldUser);
+        String sha = script.scriptLoad(eval_script);
+        System.out.println("script sha -> " + sha);
+        //script.scriptExists()
+    }
 
     @Test
     public void getset() throws Exception {
@@ -70,7 +86,6 @@ public class RedissonEvalDemo extends JUnit4Spring {
         user.setUserName("dengltzyy");
         delayedQueue.offer(user, 3000, TimeUnit.SECONDS);
 
-
     }
 
     @Test
@@ -83,14 +98,25 @@ public class RedissonEvalDemo extends JUnit4Spring {
                 return status;
             }
         });
+        String eval_script = "local value = struct.pack('dLc0', tonumber(ARGV[2]), string.len(ARGV[1]), ARGV[1]);"  //  "dLc0" 数值 和 不定长度字符串
+                + "redis.call('set',KEYS[1],value); "
+                + "return value ;";
         ConnectionManager connectionManager = ((Redisson) redissonClient).getConnectionManager();
         CommandSyncService commandExecutor = connectionManager.getCommandExecutor();
         String v = commandExecutor.evalWrite(null, null,
                 RedisCommands.EVAL_STRING_DATA, // 在netty中handler进行解码
-                "local value = struct.pack('dLc0', tonumber(ARGV[2]), string.len(ARGV[1]), ARGV[1]);"  //  "dLc0" 数值 和 不定长度字符串
-                        + "redis.call('set',KEYS[1],value); "
-                        + "return value ;",
+                eval_script,
                 Lists.newArrayList("structcontent"), "dengltzyy", 1000);
+        System.out.println(v);
+
+        System.out.println("使用script方法");
+        RScript script = redissonClient.getScript();
+        v = script.eval(RScript.Mode.READ_ONLY,
+                StringCodec.INSTANCE,
+                eval_script,
+                RScript.ReturnType.VALUE,
+                Lists.newArrayList("structcontent"),
+                "dengltzyy", 1000);
         System.out.println(v);
     }
 
@@ -108,10 +134,11 @@ public class RedissonEvalDemo extends JUnit4Spring {
                         "return nil;",
                 Lists.newArrayList("structcontent"));
         System.out.println(v);
+
     }
 
     @Test
-    public void pakcAndUnpack(){
+    public void pakcAndUnpack() {
         ConnectionManager connectionManager = ((Redisson) redissonClient).getConnectionManager();
         CommandSyncService commandExecutor = connectionManager.getCommandExecutor();
         String keyName = "structcontent";
@@ -120,8 +147,8 @@ public class RedissonEvalDemo extends JUnit4Spring {
                 "local value = struct.pack('Lc0Lc0', string.len(ARGV[1]), ARGV[1], string.len(ARGV[2]), ARGV[2]);"  //  'Lc0Lc0' 两个不定长度字符串
                         + "redis.call('set',KEYS[1],value); "
                         + "return value;",
-                Lists.newArrayList(keyName), "denglt", "zyy" );
-        System.out.println( "set "+ keyName + " -> " + v);
+                Lists.newArrayList(keyName), "denglt", "zyy");
+        System.out.println("set " + keyName + " -> " + v);
 
         v = commandExecutor.evalWrite(null, null,
                 RedisCommands.EVAL_STRING_DATA,
@@ -132,7 +159,7 @@ public class RedissonEvalDemo extends JUnit4Spring {
                         "end;" +
                         "return nil;",
                 Lists.newArrayList(keyName));
-        System.out.println("read "+ keyName + " -> " + v);
+        System.out.println("read " + keyName + " -> " + v);
 
     }
 

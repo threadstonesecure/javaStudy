@@ -7,11 +7,12 @@ import org.redisson.api.*;
 import org.redisson.client.codec.StringCodec;
 
 import javax.annotation.Resource;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+
+/*
+  Redisson 支持 spring cache :  RedissonSpringCacheManager  ( like RedisCacheManager)
+ */
 public class RedissonCacheDemo extends JUnit4Spring {
 
 
@@ -82,12 +83,12 @@ public class RedissonCacheDemo extends JUnit4Spring {
     @Test
     public  void listMultimapCache(){
         RListMultimapCache<String, String> myListMultimapCache = redissonClient.getListMultimapCache("myListMultimapCache", StringCodec.INSTANCE);
-        //myListMultimapCache.expireKey()
+        //myListMultimapCache.expireKey()  boolean expireKey(K key, long timeToLive, TimeUnit timeUnit);
     }
 
     public void setCache(){
         RSetCache<String> mySetCache = redissonClient.getSetCache("mySetCache", StringCodec.INSTANCE);
-        //mySetCache.add();
+        // mySetCache.add(); boolean add(V value, long ttl, TimeUnit unit);
         //  mySetCache.iterator();
     }
     /**

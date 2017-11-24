@@ -43,6 +43,7 @@ import org.redisson.client.protocol.Encoder;
 import org.redisson.codec.CodecProvider;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
+import org.redisson.config.SingleServerConfig;
 
 public class RedissonDemo extends JUnit4Spring {
 
@@ -54,8 +55,10 @@ public class RedissonDemo extends JUnit4Spring {
         Config config = new Config();
         config.setUseLinuxNativeEpoll(true);
         config.useClusterServers()
+                .setPassword("")
                 //可以用"rediss://"来启用SSL连接
                 .addNodeAddress("redis://127.0.0.1:7181", "redis://127.0.0.1:7182");
+
 
 /*        config.useSentinelServers().addSentinelAddress()
         config.useCustomServers();
@@ -258,6 +261,7 @@ public class RedissonDemo extends JUnit4Spring {
         System.in.read();
 
         RPatternTopic<String> patternTopic = redissonClient.getPatternTopic("topic*");
+       // patternTopic.addListener() PatternStatusListener
         int listenerId = patternTopic.addListener(new PatternMessageListener<String>() {
             @Override
             public void onMessage(String pattern, String channel, String msg) {

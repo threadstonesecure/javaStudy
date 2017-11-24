@@ -59,7 +59,7 @@
 
     <!-- Redisson Config -->
     <redisson:client id="myRedisson1" name="redisson1,redisson2" threads="0" netty-threads="0" >
-        <redisson:single-server client-name="1" address="redis://127.0.0.1:6379"
+        <redisson:single-server client-name="denglt" address="redis://127.0.0.1:6379"
                                 database="0"
                                 connect-timeout="10000" timeout="3000"
                                 reconnection-timeout="3000" retry-attempts="3" retry-interval="1500"
@@ -67,5 +67,9 @@
                                 connection-minimum-idle-size="1"
                                 subscription-connection-minimum-idle-size="1"/>
 
+        <redisson:executor-service  id="redissonExecutorService" service="myExecutor"  />
     </redisson:client>
+
+
+
 </beans>

@@ -6,10 +6,7 @@ import org.junit.Test;
 import org.redisson.Redisson;
 import org.redisson.RedissonMultiLock;
 import org.redisson.RedissonRedLock;
-import org.redisson.api.RLock;
-import org.redisson.api.RReadWriteLock;
-import org.redisson.api.RSemaphore;
-import org.redisson.api.RedissonClient;
+import org.redisson.api.*;
 
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
@@ -75,7 +72,7 @@ public class RedissonLockDemo extends JUnit4Spring {
 
         // Acquire lock1, lock2, lock3 and release it automatically after 10 seconds
         // if unlock method hasn't been invoked
-        lock.lock(10, TimeUnit.SECONDS);
+        lock.lock(10, TimeUnit.SECONDS); // lock定时长
 
         // Wait for 100 seconds and automatically unlock it after 10 seconds
         boolean res = lock.tryLock(100, 10, TimeUnit.SECONDS);
@@ -121,6 +118,28 @@ public class RedissonLockDemo extends JUnit4Spring {
         mySemaphore.acquire();
         mySemaphore.release();
     }
+
+    @Test
+    public void permitExpirableSemaphore() throws Exception{
+        RPermitExpirableSemaphore myPermitExpirableSemaphore = redissonClient.getPermitExpirableSemaphore("myPermitExpirableSemaphore");
+        myPermitExpirableSemaphore.trySetPermits(30);
+        String permitId = myPermitExpirableSemaphore.acquire();// 在请求许可的时候，会先释放超时的许可（故不需要定时任务清理）
+        myPermitExpirableSemaphore.acquire(30,TimeUnit.SECONDS);
+        myPermitExpirableSemaphore.release(permitId);
+    }
+
+    @Test
+    public void countDownLatch() throws Exception{
+        RCountDownLatch latch = redissonClient.getCountDownLatch("myCountDownLatch");
+        latch.trySetCount(1);
+        latch.await();
+    }
+
+    public void s(){
+        RCountDownLatch latch = redissonClient.getCountDownLatch("anyCountDownLatch");
+        latch.countDown();
+    }
+
     @Test
     public void threadId() {
         System.out.println(Thread.currentThread().getId());
