@@ -15,4 +15,23 @@ public class WordCollator implements RCollator<String, Integer, Integer> {
         return result;
     }
 
+    public static void main(String[] args) {
+        System.out.println(test());
+    }
+
+    static String test() {
+
+        try{
+            int i =0;
+            i = i/i;
+            return "try";
+        }catch (Exception e){
+            e.printStackTrace();
+            return "catch";
+        }finally {
+           // return "finally";
+            System.out.println("finally");
+        }
+    }
+
 }
