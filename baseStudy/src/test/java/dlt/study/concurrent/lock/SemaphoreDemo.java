@@ -1,4 +1,4 @@
-package dlt.study.concurrent;
+package dlt.study.concurrent.lock;
 
 import dlt.study.log4j.Log;
 import org.junit.Test;
