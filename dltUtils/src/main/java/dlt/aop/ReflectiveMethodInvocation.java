@@ -28,6 +28,9 @@ public class ReflectiveMethodInvocation implements MethodInvocation {
 
     }
 
+    public void add(MethodInterceptor methodInterceptor){
+        interceptors.add(methodInterceptor);
+    }
     @Override
     public Object proceed() throws Throwable {
         if (this.currentInterceptorIndex == this.interceptors.size() - 1) {

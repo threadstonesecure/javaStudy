@@ -1,7 +1,5 @@
 package dlt.utils.dubbo.cache;
 
-import com.alibaba.dubbo.common.extension.ExtensionFactory;
-import com.alibaba.dubbo.common.extension.ExtensionLoader;
 import com.alibaba.dubbo.config.spring.extension.SpringExtensionFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
