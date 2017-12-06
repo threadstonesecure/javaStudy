@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 public class UserServiceImpl implements UserService {
 
 
-    private UService uService;
+    private UService uService ;
 	private static Map<Integer, User> mapUsers = new ConcurrentHashMap<Integer, User>();
 
 	static {

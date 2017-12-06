@@ -50,7 +50,7 @@ public class RedissonCacheDemo extends JUnit4Spring {
     public void localCachedMap() throws Exception {
         LocalCachedMapOptions options = LocalCachedMapOptions.<String, String>defaults()
                 // LFU, LRU, SOFT, WEAK and NONE policies are available
-                .evictionPolicy(LocalCachedMapOptions.EvictionPolicy.LFU)
+                .evictionPolicy(LocalCachedMapOptions.EvictionPolicy.LFU) //SOFT、WEAF
                 // If cache size is 0 then local cache is unbounded.
                 .cacheSize(1000)
                 // if value is `ON_CHANGE`, `ON_CHANGE_WITH_CLEAR_ON_RECONNECT` or `ON_CHANGE_WITH_LOAD_ON_RECONNECT`

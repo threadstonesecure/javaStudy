@@ -91,7 +91,7 @@ public class RedissonDemo extends JUnit4Spring {
 
 
     @Test
-    public void getAtomicLong() throws Exception {
+    public void atomicLong() throws Exception {
         System.out.println(this.redissonClient);
         RAtomicLong longObject = redissonClient.getAtomicLong("myLong");
         // longObject.set(3);
@@ -302,6 +302,7 @@ public class RedissonDemo extends JUnit4Spring {
 
     }
 
+    //Hyperloglog基数统计
     @Test
     public void hyperLogLog() {
         RHyperLogLog<String> hyperLogLog = redissonClient.getHyperLogLog("hyperLogLog", StringCodec.INSTANCE);
@@ -336,7 +337,7 @@ public class RedissonDemo extends JUnit4Spring {
      * Redis 的偏移offset是从左到右计算的（与jdk的BitSet是反对的）
      */
     @Test
-    public void getBitSet() {
+    public void bitSet() {
         RBitSet myBitSet = redissonClient.getBitSet("myBitSet");
         myBitSet.delete();
         myBitSet.set(1);
@@ -346,7 +347,7 @@ public class RedissonDemo extends JUnit4Spring {
         //myBitSet.and();
         byte[] bytes = myBitSet.toByteArray();
         System.out.println(ByteUtils.byteToBit(bytes[0]));
-        BitSet bitSet1 = myBitSet.asBitSet();
+        BitSet bitSet1 = myBitSet.asBitSet();// 注意与toByteArray的字节顺序
         System.out.println(ByteUtils.byteToBit(bitSet1.toByteArray()[0]));
 
         BitSet bitSet = new BitSet();

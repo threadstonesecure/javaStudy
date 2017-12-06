@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://code.alibabatech.com/schema/dubbo  http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <dubbo:application name="dubbo_demo"/>
+    <!-- 使用multicast广播注册中心暴露服务地址 -->
+    <dubbo:registry id="multicast" address="multicast://224.5.6.7:1234"/>
+
+    <dubbo:provider   />
+    <dubbo:protocol name="dubbo" port="20881"/>
+<!--    <dubbo:service interface="dlt.domain.model.service.UserService"
+                   ref="userServiceImpl" cluster="failsafe" loadbalance="random" />-->
+
+    <dubbo:service interface="dlt.domain.model.service.UserService"
+                   ref="userServiceImpl" />
+
+    <bean id="userServiceImpl" class="dlt.domain.module.service.impl.UserServiceImpl" />
+
+
+
+</beans>

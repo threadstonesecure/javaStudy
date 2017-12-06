@@ -5,10 +5,7 @@ import dlt.domain.model.User;
 import dlt.study.log4j.Log;
 import dlt.study.spring.JUnit4Spring;
 import org.junit.Test;
-import org.redisson.api.RBlockingQueue;
-import org.redisson.api.RDelayedQueue;
-import org.redisson.api.RQueue;
-import org.redisson.api.RedissonClient;
+import org.redisson.api.*;
 import org.redisson.client.codec.StringCodec;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.codec.SerializationCodec;
@@ -49,7 +46,7 @@ public class RedissonQueueDemo extends JUnit4Spring {
         new SendDataService().startAsync();
        // myqueue.add(new User("denglt"));
         while (true) {
-            User value = myqueue.take();
+            User value = myqueue.take(); // myqueue.poll(10,TimeUnit.SECONDS);
             Log.info("take -> " + value);
         }
 
@@ -78,6 +75,11 @@ public class RedissonQueueDemo extends JUnit4Spring {
             String value = myqueue.take(); // BLPOP (头部) // 会占用一个实际的通信channel
             Log.info("take -> " + value);
         }
+    }
+
+    public void boundedBlockingQueue(){
+        RBoundedBlockingQueue<Object> myBoundedBlockingQueue = redissonClient.getBoundedBlockingQueue("myBoundedBlockingQueue");
+        myBoundedBlockingQueue.trySetCapacity(100);
     }
 
     private class SendDataService extends AbstractExecutionThreadService{

@@ -14,7 +14,7 @@ public class ByteBufferDemo {
 
 
     /**
-     * 堆外内存  -XX:MaxDirectMemorySize ( default 0 and the VM selects the maximum size of direct memory.)
+     * 堆外内存  -XX:MaxDirectMemorySize=10M ( default 0 and the VM selects the maximum size of direct memory.)
      */
     @Test
     public void allocateDirect() throws Exception {
@@ -32,22 +32,24 @@ public class ByteBufferDemo {
         System.out.println("freeMemory" + Runtime.getRuntime().freeMemory() / 1024 / 1024);
         System.out.println("maxMemory" + Runtime.getRuntime().maxMemory() / 1024 / 1024);
         System.out.println("totalMemory" + Runtime.getRuntime().totalMemory() / 1024 / 1024);
-
+/*        byteBuffer = null;
+        System.gc();*/
+        ByteBuffer.allocateDirect(1 * 1024 * 1024); // java.lang.OutOfMemoryError: Direct buffer memory
         System.out.println("start");
-        Thread.sleep(10000);
-        if (byteBuffer.isDirect()) {
+        Thread.sleep(1000);
+/*        if (byteBuffer.isDirect()) {
             ((DirectBuffer) byteBuffer).cleaner().clean();
-        }
+        }*/
 
         System.out.println("end");
 
         System.out.println(SharedSecrets.getJavaNioAccess().getDirectBufferPool().getMemoryUsed() / 1024 / 1024);
         System.out.println(SharedSecrets.getJavaNioAccess().getDirectBufferPool().getTotalCapacity() / 1024 / 1024);
 
-        System.out.println("env");
+/*        System.out.println("env");
         System.getenv().forEach((k, v) -> System.out.println(k + "->" + v));
         System.out.println("Properties");
-        System.getProperties().forEach((k, v) -> System.out.println(k + "->" + v));
+        System.getProperties().forEach((k, v) -> System.out.println(k + "->" + v));*/
 
         System.out.println("freeMemory=" + Runtime.getRuntime().freeMemory() / 1024 / 1024);
         System.out.println("maxMemory=" + Runtime.getRuntime().maxMemory() / 1024 / 1024);

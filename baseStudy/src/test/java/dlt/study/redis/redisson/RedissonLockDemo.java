@@ -30,7 +30,8 @@ public class RedissonLockDemo extends JUnit4Spring {
 /*        //redissonClient.getConfig().setLockWatchdogTimeout(60000*2);
         ((Redisson) redissonClient).getConnectionManager().getCfg().setLockWatchdogTimeout(60000 * 10);*/
         System.out.println(redissonClient.getConfig());
-        myLock.lock(); // 没有设置超时时间，key(myLock) 的ttl设置为Config.LockWatchdogTimeout,并通过Redisson.scheduleExpirationRenewal调度设置不断设置key的ttl
+        myLock.lock(); // 没有设置超时时间，key(myLock) 的ttl设置为Config.LockWatchdogTimeout,
+                       // 并通过Redisson.scheduleExpirationRenewal调度设置不断设置key的ttl
         try {
             Log.info("get lock!!!!");
             Thread.sleep(60000 * 10);
@@ -59,6 +60,11 @@ public class RedissonLockDemo extends JUnit4Spring {
 
     }
 
+    /**
+     * Redisson的RedissonMultiLock对象可以将多个RLock对象关联为一个联锁，
+     * 每个RLock对象实例可以来自于不同的Redisson实例。
+     * @throws Exception
+     */
     @Test
     public void multiLock() throws Exception{
         RLock lock1 = redissonClient.getLock("lock1");
@@ -78,6 +84,10 @@ public class RedissonLockDemo extends JUnit4Spring {
         boolean res = lock.tryLock(100, 10, TimeUnit.SECONDS);
     }
 
+    /**
+     * Redisson的RedissonRedLock对象实现了Redlock介绍的加锁算法。
+     * 该对象也可以用来将多个RLock对象关联为一个红锁，每个RLock对象实例可以来自于不同的Redisson实例。
+     */
     @Test
     public void redLock(){
         RLock lock1 = redissonClient.getLock("lock1");
@@ -86,6 +96,7 @@ public class RedissonLockDemo extends JUnit4Spring {
 
         RedissonRedLock lock = new RedissonRedLock(lock1, lock2, lock3);
         // locks: lock1 lock2 lock3
+        // 红锁在大部分节点上加锁成功就算成功。
         lock.lock();
         lock.unlock();
     }
