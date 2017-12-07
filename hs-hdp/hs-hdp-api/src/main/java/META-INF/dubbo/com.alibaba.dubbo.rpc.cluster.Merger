@@ -1,0 +1,2 @@
+HdpOneResultPack=com.yuntai.hdp.access.ResultPackMerger
+HdpOneBoolean=com.yuntai.hdp.access.BooleanMerger

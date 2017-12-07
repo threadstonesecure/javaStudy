@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 配置信息 -->
+	<bean class="com.yuntai.util.spring.PropertyConfigurer">
+		<property name="searchSystemEnvironment" value="true" />
+		<property name="locations">
+			<list>
+				<value>dubbo.properties</value>
+				<value>hdp.properties</value>
+				<value>jdbc.properties</value>
+                <value>hdpname</value>
+				<value>redis.properties</value>
+			</list>
+		</property>
+	</bean>
+</beans>

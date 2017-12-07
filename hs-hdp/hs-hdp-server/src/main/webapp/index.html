@@ -1,0 +1,59 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="json/json.js"></script>
+    <script type="text/javascript" src="jquery/jquery-2.1.1.js"></script>
+</head>
+<body>
+
+<h1>HDP对接前置机测试</h1>
+
+<form action="sendData.do" method="POST">
+    <table border="1">
+        <tr >
+            <td>医院ID</td>
+            <td>
+                <div class="f_left"><input name="hosId" value=""/></div>
+
+        </tr>
+        <tr>
+            <td>访问Token</td>
+            <td>
+                <div class="f_left"><input name="accessToken" value=""/></div>
+            </td>
+        </tr>
+        <tr>
+            <td>业务代码</td>
+            <td >
+                <div class="f_left"><input name="cmd" value=""/></div>
+            </td>
+        </tr>
+        <tr>
+            <td>流水号</td>
+            <td>
+                <div class="f_left"><input name="seqno" value=""/></div>
+            </td>
+        </tr>
+        <tr>
+            <td>超时时长</td>
+            <td>
+                <div class="f_left"><input name="timeout" value="25"/></div>
+            </td>
+        </tr>
+        <tr>
+            <td>业务数据</td>
+            <td>
+                <div class="f_left"><textarea name="body" style="width:600px;height:100px;" value=""> </textarea></div>
+            </td>
+        </tr>
+        <tr align="center">
+            <td colspan="2">
+                <div><input type="submit" value="发送数据"/></div>
+            </td>
+        </tr>
+    </table>
+
+</form>
+
+</body>
+</html>

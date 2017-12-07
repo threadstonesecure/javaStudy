@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"
+	default-init-method="init" default-destroy-method="destroy">
+
+	<context:component-scan
+		base-package="com.yuntai.util.spring,com.yuntai.hdp.server,com.yuntai.hdp.server.accesshosp"></context:component-scan>
+
+
+	<bean id="updataHandlerManager" class="com.yuntai.hdp.server.updata.UpdataHandlerManager">
+		<property name="providers">
+			<list>
+				<ref bean="consoleProvider" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 配置指令与UpdataHandler的 关系 -->
+	<bean id="consoleProvider" class="com.yuntai.hdp.server.updata.CommandProvider">
+		<property name="code" value="console" />
+		<property name="handler" ref="consoleHandler" />
+	</bean>
+
+
+
+</beans> 
