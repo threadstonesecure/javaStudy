@@ -333,8 +333,7 @@ public final class HdpWatchClient implements
         if (resultPack == null) {
             resultPack = HdpHelper.newResult(request);
             resultPack.setKind(ResultKind.ERROR_TIMEOUT.getKind());
-            resultPack
-                    .setMsg(ResultKind.ERROR_TIMEOUT.getMessage(timeout + ""));
+            resultPack.setMsg(ResultKind.ERROR_TIMEOUT.getMessage(timeout + ""));
             log.error(String.format("对接HdpServer超时：%s", resultPack));
             return resultPack;
         }

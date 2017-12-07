@@ -16,7 +16,7 @@ public class BadDataHandler implements DataHandler {
         if (msg instanceof RequestPack) {
             RequestPack request = (RequestPack) msg;
             if (request.getCmd().equals(IAccessTypeConstants.ACCESSS_RemainQueryBusiness)) {
-                if (request.getBody().contains("030101:000100:2017-12-08:1:002002")) {
+               // if (request.getBody().contains("030101:000100:2017-12-08:1:002002")) {
                     log.info("请求->" + JsonUtils.toJson(msg));
                     ResultPack result = new ResultPack();
                     result.setSeqno(request.getSeqno());
@@ -24,10 +24,10 @@ public class BadDataHandler implements DataHandler {
                     result.setCmd(request.getCmd());
                     result.setHdpSeqno(request.getHdpSeqno());
                     result.setCallMode(request.getCallMode());
-                    result.setKind("4444");
-                    result.setMsg("访问异常！");
+                    //result.setKind("4444");
+                    //result.setMsg("访问异常！");
                     return result;
-                }
+               // }
             }
         }
 
