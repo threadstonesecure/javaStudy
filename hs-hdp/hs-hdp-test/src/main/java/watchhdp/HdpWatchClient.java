@@ -493,6 +493,12 @@ public final class HdpWatchClient implements
                     //log.info("发送心跳");
                     ChannelFuture channelFuture = ctx.writeAndFlush(HEART_BEAT);
                     System.out.println(channelFuture.getClass()); // io.netty.channel.DefaultChannelPromise  see: ChannelOutboundHandler.void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception;
+                    channelFuture.addListener(new ChannelFutureListener() {
+                        @Override
+                        public void operationComplete(ChannelFuture future) throws Exception {
+                            //
+                        }
+                    })
                     channelFuture.awaitUninterruptibly();
                     if (channelFuture.isSuccess()) {
                         log.info("发送心跳");
