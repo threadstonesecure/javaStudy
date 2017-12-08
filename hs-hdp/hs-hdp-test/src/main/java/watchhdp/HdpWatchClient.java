@@ -21,6 +21,7 @@ import io.netty.handler.ssl.SslHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.DefaultThreadFactory;
+import io.netty.util.concurrent.FutureListener;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -207,7 +208,7 @@ public final class HdpWatchClient implements
 
                             ch.pipeline()
                                     .addLast(
-                                            new ReadTimeoutHandler(15),
+                                            new ReadTimeoutHandler(60),
                                             new ReconnectHandler(
                                                     HdpWatchClient.this,
                                                     HdpWatchClient.this.reconnectDelay),
@@ -276,6 +277,12 @@ public final class HdpWatchClient implements
         FutureResult<Boolean> result = HdpWatchClient.receiveAnswerManager
                 .newFutureResult(request.getHdpSeqno());
         ChannelFuture f = channel.writeAndFlush(request);
+        f.addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture future) throws Exception {
+
+            }
+        });
         f.awaitUninterruptibly();
         if (f.isSuccess()) {
             Boolean b = result.get(waitAnswerTime);
@@ -340,6 +347,26 @@ public final class HdpWatchClient implements
         return resultPack;
     }
 
+
+    private boolean _bombData(RequestPack request) {
+        FutureResult<Boolean> result = HdpWatchClient.receiveAnswerManager
+                .newFutureResult(request.getHdpSeqno());
+        ChannelFuture f = channel.writeAndFlush(request);
+        f.awaitUninterruptibly();
+        if (f.isSuccess()) {
+            return true;
+        } else {
+            HdpWatchClient.receiveAnswerManager.remove(request.getHdpSeqno());
+            log.error("发送数据失败：", f.cause());
+            return false;
+        }
+
+    }
+    public void bombData(RequestPack request){
+        fillData(request);
+        request.setCallMode(1);
+        _bombData(request);
+    }
     private void fillData(RequestPack data) {
         if (StringUtils.isEmpty(data.getClientId())) {
             data.setClientId(clientId);
@@ -443,7 +470,7 @@ public final class HdpWatchClient implements
         public void channelRead(ChannelHandlerContext ctx, Object msg)
                 throws Exception {
             if (msg.equals(HEART_BEAT)) {
-                log.debug("收到服务端心跳");
+                log.info("收到服务端心跳");
                 return;
             }
             super.channelRead(ctx, msg);
@@ -463,8 +490,15 @@ public final class HdpWatchClient implements
                         return;
                     }
 
-                    log.debug("发送心跳");
-                    ctx.writeAndFlush(HEART_BEAT);
+                    //log.info("发送心跳");
+                    ChannelFuture channelFuture = ctx.writeAndFlush(HEART_BEAT);
+                    System.out.println(channelFuture.getClass()); // io.netty.channel.DefaultChannelPromise  see: ChannelOutboundHandler.void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception;
+                    channelFuture.awaitUninterruptibly();
+                    if (channelFuture.isSuccess()) {
+                        log.info("发送心跳");
+                    } else {
+                        log.error("发送心跳失败：", channelFuture.cause());
+                    }
                 }
             }, 0, intervalNanos, TimeUnit.NANOSECONDS);
         }

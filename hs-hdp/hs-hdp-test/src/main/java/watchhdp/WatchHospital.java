@@ -1,14 +1,9 @@
 package watchhdp;
 
-import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.MoreExecutors;
 import com.yuntai.hdp.access.RequestPack;
 import com.yuntai.hdp.access.ResultPack;
-import dlt.utils.JsonUtils;
-import io.netty.channel.ChannelHandlerContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutorService;
@@ -48,17 +43,17 @@ public class WatchHospital {
     @Test
     public void bomb() throws Exception {
 
-        String ip = "120.26.224.231";//"120.55.66.16";// "121.40.182.17";
+        String ip = "120.55.66.16";//"120.55.66.16";// "121.40.182.17";
         int port = 8088;
         String hosId = "99999";
-        String accessToken = "eece77d113a908a1bed958b3bbcc0c68";
+        String accessToken = "c5fbe05b6aaf6cf3f994f8c234fe048d";
         hdpWatchClient = new HdpWatchClient()
                 .remoteAddress(ip, port).hosId(hosId).accessToken(accessToken)
                 .reconnectDelay(10).ssl(true)
                 .dataHandler(new LogDataHandler())
                 .businessThreadPoolSize(2).connect();
 
-        byte[] bs = new byte[1024 * 1024 * 5 - 300];
+        byte[] bs = new byte[1024 * 1024 * 10 - 300];
         String s = new String(bs);
         final RequestPack request = new RequestPack();
         request.setCmd("nocmd");
@@ -69,7 +64,9 @@ public class WatchHospital {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
-                    hdpWatchClient.sendData(request,1);
+                    log.info("one bomb begin");
+                    hdpWatchClient.bombData(request);
+                    log.info("one bomb end !");
                 }
             });
         }
