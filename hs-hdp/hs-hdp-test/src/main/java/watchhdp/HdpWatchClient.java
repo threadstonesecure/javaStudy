@@ -429,13 +429,13 @@ public final class HdpWatchClient implements
             }*/
 
             ChannelFuture channelFuture = ctx.writeAndFlush(HEART_BEAT);
-            log.info("发送心跳");
+            log.debug("发送心跳");
         }
 
         @Override
         public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
             if (msg.equals(HEART_BEAT)) {
-                log.info("收到服务端心跳");
+                log.debug("收到服务端心跳");
                 return;
             }
             super.channelRead(ctx, msg);
