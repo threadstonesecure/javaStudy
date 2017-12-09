@@ -18,6 +18,9 @@ import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.ssl.SslHandler;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
+import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import io.netty.util.concurrent.DefaultThreadFactory;
@@ -208,7 +211,7 @@ public final class HdpWatchClient implements
 
                             ch.pipeline()
                                     .addLast(
-                                            new ReadTimeoutHandler(60),
+                                            //new ReadTimeoutHandler(60), // 并发发送大数据量时，周期性的心跳数据无法保证在timeout内完成
                                             new ReconnectHandler(
                                                     HdpWatchClient.this,
                                                     HdpWatchClient.this.reconnectDelay),
@@ -217,7 +220,8 @@ public final class HdpWatchClient implements
                                                             .cacheDisabled(HdpWatchClient.class
                                                                     .getClassLoader())),
                                             new ObjectEncoder());
-                            ch.pipeline().addLast(new HeartBeatReqHandler(1),
+                            ch.pipeline().addLast(
+                                    new HeartBeatOnIdle(5), //new HeartBeatReqHandler(1),
                                     new HospitalLogonHanhler(),
                                     new BusinessHandler());
                         }
@@ -411,9 +415,37 @@ public final class HdpWatchClient implements
         }
     }
 
+    private class HeartBeatOnIdle extends IdleStateHandler{
+        private static final String HEART_BEAT = "heartbeat";
+
+        public HeartBeatOnIdle(int idleTimeSeconds){
+            super(0,0,idleTimeSeconds);
+        }
+
+        @Override
+        protected void channelIdle(ChannelHandlerContext ctx, IdleStateEvent evt) throws Exception {
+    /*        if (evt.state() == IdleState.READER_IDLE || evt.state() == IdleState.WRITER_IDLE){
+
+            }*/
+
+            ChannelFuture channelFuture = ctx.writeAndFlush(HEART_BEAT);
+            log.info("发送心跳");
+        }
+
+        @Override
+        public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+            if (msg.equals(HEART_BEAT)) {
+                log.info("收到服务端心跳");
+                return;
+            }
+            super.channelRead(ctx, msg);
+        }
+    }
+
     /**
      * 心跳请求处理器
      */
+    @Deprecated
     private class HeartBeatReqHandler extends ChannelInboundHandlerAdapter {
         private static final String HEART_BEAT = "heartbeat";
         private final long MIN_TIMEOUT_NANOS = TimeUnit.MILLISECONDS.toNanos(1);
@@ -498,7 +530,7 @@ public final class HdpWatchClient implements
                         public void operationComplete(ChannelFuture future) throws Exception {
                             //
                         }
-                    })
+                    });
                     channelFuture.awaitUninterruptibly();
                     if (channelFuture.isSuccess()) {
                         log.info("发送心跳");

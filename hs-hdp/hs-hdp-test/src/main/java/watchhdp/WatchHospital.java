@@ -17,11 +17,11 @@ public class WatchHospital {
     private HdpWatchClient hdpWatchClient;
 
     @Test
-    public void watch() throws Exception {
+    public void bad() throws Exception {
         //120.55.66.16  测试
         //120.26.224.231  预发
         //121.40.182.17  -- 正式 come on, someboay kills it. jack get out.
-        String ip = "121.40.182.17";
+        String ip = "120.55.66.16";
         int port = 8088;
         String hosId = "_";
         String accessToken = "98608d4679a28b719815ee03f7c404e0";
