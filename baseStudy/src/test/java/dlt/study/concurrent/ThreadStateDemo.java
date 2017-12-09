@@ -10,7 +10,7 @@ import java.util.concurrent.locks.LockSupport;
  * Created by denglt on 16/9/29.
  */
 public class ThreadStateDemo {
-    public static void main(String[] args) throws Exception {
+    public static void main2(String[] args) throws Exception {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -89,5 +89,28 @@ public class ThreadStateDemo {
             if (state == Thread.State.WAITING) LockSupport.unpark(thread);
 
         }
+    }
+
+    @Test
+    public void join() throws Exception{
+
+        Thread.currentThread().join();
+    }
+
+    public static void main(String[] args) throws Exception{
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    System.out.println("run");
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+        Thread.currentThread().join();
     }
 }
