@@ -6,6 +6,10 @@ import sun.misc.SignalHandler;
 
 public class ShutdownDemo {
 
+    /**
+     * 在进程被kill的时候main函数就已经结束了，仅会运行shutdownHook中run()方法的代码。
+     * @throws Exception
+     */
     @Test
     public void addShutdownHoo() throws Exception {
 
@@ -28,6 +32,7 @@ public class ShutdownDemo {
     }
 
     /**
+     * SingalHandler函数会在进程被kill时收到TERM信号，对main函数的运行不会有任何影响
      * 拦截信号，用自定义SignalHander处理，需要自己主动关闭
      *
      * @throws Exception
