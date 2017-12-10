@@ -37,7 +37,8 @@ public class ShutdownDemo {
         Signal signalKill = new Signal("KILL");
         Signal signalTerm = new Signal("TERM");
         //    Signal.handle(signalKill,new SystemShutdown());
-        Signal.handle(signalTerm, new SystemShutdown());
+        SignalHandler prevHandler = Signal.handle(signalTerm, new SystemShutdown());
+        System.out.println("TREM的原SignalHandler："+ prevHandler.getClass());
         synchronized (ShutdownDemo.class) {
             ShutdownDemo.class.wait();
         }
