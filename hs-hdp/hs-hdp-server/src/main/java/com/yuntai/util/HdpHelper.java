@@ -178,6 +178,10 @@ public class HdpHelper {
 
     }
 
+    public static void shutdown(){
+        Runtime.getRuntime().exit(0);
+    }
+
     private static Iterable<String> mapToIterable(Map<String, String> map, final String separator) {
         return Iterables.transform(map.entrySet(),
                 new Function<Map.Entry<String, String>, String>() {
@@ -237,7 +241,7 @@ public class HdpHelper {
     static {
         accessHospitalHandler = SpringContextUtils.getBean("accessHospitalHandler");
         discoveryUpdataHandler = SpringContextUtils.getBean("discoveryUpdataHandler");
-        HDP_SERVER_VERSION = "3.1";
+        HDP_SERVER_VERSION = "3.2";
     }
 
 

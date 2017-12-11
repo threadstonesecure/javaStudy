@@ -146,6 +146,16 @@ public final class HdpServer {
         final EventLoopGroup bossGroup = DefaultNettyContext.get().getBossEventLoopGroup();
         final EventLoopGroup workerGroup = DefaultNettyContext.get().getWorkerEventLoopGroup();
         businessExecutor = new DefaultEventExecutorGroup(businessThreadPoolSize, new DefaultThreadFactory("HdpServerHandler"));
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            @Override
+            public void run() {
+                log.info("close netty start...");
+                workerGroup.shutdownGracefully();
+                bossGroup.shutdownGracefully();
+                businessExecutor.shutdownGracefully();
+                log.info("close netty end!");
+            }
+        },"HdpShutdownHook"));
 
         try {
             Class<? extends ServerChannel> serverChannelClass = DefaultNettyContext.get().getServerChannelClass();
