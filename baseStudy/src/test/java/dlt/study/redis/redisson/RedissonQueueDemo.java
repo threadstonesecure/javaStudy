@@ -23,7 +23,7 @@ public class RedissonQueueDemo extends JUnit4Spring {
     public void queue() throws Exception {
 
         RQueue<String> myqueue = redissonClient.getQueue("myqueue", StringCodec.INSTANCE);
-        myqueue.expire(60, TimeUnit.MINUTES);  // 这句放在list中有数据了才会生效
+        myqueue.expire(60, TimeUnit.MINUTES);  // 注意：这句放在list中有数据了才会生效
         myqueue.add("denglt"); // rpush
         myqueue.add("zyy");
         myqueue.peek(); // LINDEX key index 实现

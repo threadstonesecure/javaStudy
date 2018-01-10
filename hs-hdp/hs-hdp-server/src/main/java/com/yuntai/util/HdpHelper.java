@@ -6,7 +6,9 @@ import com.google.common.collect.*;
 import com.yuntai.hdp.access.RequestPack;
 import com.yuntai.hdp.access.ResultPack;
 import com.yuntai.hdp.access.service.AccessHospitalHandler;
+import com.yuntai.hdp.server.HdpServer;
 import com.yuntai.hdp.server.HospitalManager;
+import com.yuntai.hdp.server.StartHdpServer;
 import com.yuntai.hdp.server.updata.dynamic.Command;
 import com.yuntai.hdp.server.updata.dynamic.DiscoveryUpdataHandler;
 import com.yuntai.util.spring.PropertyConfigurer;
@@ -14,6 +16,8 @@ import com.yuntai.util.spring.SpringContextUtils;
 import org.springframework.util.StringUtils;
 import sun.misc.SharedSecrets;
 
+import java.io.File;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.*;
@@ -166,6 +170,28 @@ public class HdpHelper {
                 orderList2String("Properties Info:", mapToIterable2(System.getProperties(), "="));
     }
 
+
+    public static void restart() throws Exception {
+        StringBuilder cmd = new StringBuilder();
+        cmd.append("sh " + System.getProperty("user.dir") + File.separator + "bin" + File.separator + "run.sh restart");
+        HdpServer.log.info("exec:" + cmd.toString());
+        Process process = Runtime.getRuntime().exec(cmd.toString());
+        process.waitFor();
+    }
+
+    public static void restart_bak() throws Exception {
+        StringBuilder cmd = new StringBuilder();
+        // cmd.append("cd "+System.getProperty("user.dir")+" ; ");
+        cmd.append(System.getProperty("java.home") + File.separator + "bin" + File.separator + "java ");
+        for (String jvmArg : ManagementFactory.getRuntimeMXBean().getInputArguments()) {
+            cmd.append(jvmArg + " ");
+        }
+        cmd.append("-cp ").append(ManagementFactory.getRuntimeMXBean().getClassPath()).append(" ");
+        cmd.append(System.getProperty("sun.java.command"));
+        Runtime.getRuntime().exec(cmd.toString());
+        System.exit(0);
+    }
+
     public static String gc() {
         try {
             long start = System.currentTimeMillis();
@@ -178,7 +204,7 @@ public class HdpHelper {
 
     }
 
-    public static void shutdown(){
+    public static void shutdown() {
         Runtime.getRuntime().exit(0);
     }
 
@@ -243,6 +269,5 @@ public class HdpHelper {
         discoveryUpdataHandler = SpringContextUtils.getBean("discoveryUpdataHandler");
         HDP_SERVER_VERSION = "3.2";
     }
-
 
 }

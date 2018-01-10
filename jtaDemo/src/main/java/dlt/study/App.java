@@ -7,6 +7,9 @@ package dlt.study;
  */
 public class App {
     public static void main(String[] args) {
-        //SpringContextUtils.init(new String[]{"spring-context.xml"});
+        //SpringContextUtils.init(new String[]{"spring-context.xml"})
+        int i = 0;
+
     }
 }
+

@@ -15,30 +15,34 @@ public class StartHdpServer {
 
     public static void main(String[] args)  {
 
+/*
+        Netty的EventLoopGroup线程interrupt()不成功
+
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
             public void run() {
-                System.out.println("Interrupting threads");
+                log.info("Interrupting threads");
                 Set<Thread> runningThreads = Thread.getAllStackTraces().keySet();
                 for (Thread th : runningThreads) {
                     if (th != Thread.currentThread() && !th.isDaemon()) {
-                        System.out.println("Interrupting '" + th.getClass() + "' termination");
+                        log.info("Interrupting '" + th.getClass() + "' termination");
                         th.interrupt();
                     }
                 }
                 for (Thread th : runningThreads) {
                     try {
                         if (th != Thread.currentThread() && !th.isDaemon() && th.isInterrupted()) {
-                            System.out.println("Waiting '" + th.getName() + "' termination");
+                            log.info("Waiting '" + th.getName() + "' termination");
                             th.join();
                         }
                     } catch (InterruptedException ex) {
-                        System.out.println("Shutdown interrupted");
+                        log.info("Shutdown interrupted");
                     }
                 }
-                System.out.println("Shutdown finished");
+                log.info("Shutdown finished");
             }
         });
+*/
 
         try {
             String[] paths = new String[]{"spring/*.xml"};

@@ -48,7 +48,7 @@ public class CacheDemo {
                 .removalListener(new RemovalListener<String, City>() { // 如果onRemoval动作比较耗时，可以使用RemovalListeners.asynchronous包装为异步
                     @Override
                     public void onRemoval(RemovalNotification<String, City> notification) {
-                        System.out.println(String.format("remove key[%s] value[%s],cause is [%s]",
+                        Log.info(String.format("remove key[%s] value[%s],cause is [%s]",
                                 notification.getKey(), notification.getValue(), notification.getCause()));
 
                     }
@@ -112,6 +112,7 @@ public class CacheDemo {
 
     }
 
+
     @Test
     public void refresh() throws Exception {
         cityCache.get(City.BEIJIN.getCode());
@@ -126,6 +127,60 @@ public class CacheDemo {
         newCity = cityCache.get("ddddd");
         System.out.println(oldCity == newCity);
         cityCache.stats();
+
+    }
+
+    @Test
+    public void overMaximum(){
+        cityCache = CacheBuilder.newBuilder()
+
+                .maximumSize(1000)
+                .ticker(Ticker.systemTicker())
+                .removalListener(new RemovalListener<String, City>() {
+                    @Override
+                    public void onRemoval(RemovalNotification<String, City> notification) {
+                        Log.info(String.format("remove key[%s] value[%s],cause is [%s]",
+                                notification.getKey(), notification.getValue(), notification.getCause()));
+
+                    }
+                })
+                // .refreshAfterWrite()
+                .build(
+                        new CacheLoader<String, City>() {
+
+                            private Map<String, City> existCity = ImmutableMap.of(
+                                    City.BEIJIN.getCode(), City.BEIJIN,
+                                    City.GUANGZHOU.getCode(), City.GUANGZHOU,
+                                    City.SHANGHAI.getCode(), City.SHANGHAI,
+                                    City.SHENZHEN.getCode(), City.SHENZHEN);
+
+                            public City load(String key) {
+                                System.out.println("loading " + key);
+                                City city = existCity.get(key);
+                                return city != null ? city : newCity(key);
+                            }
+
+                            @Override
+                            public ListenableFuture<City> reload(String key, City oldValue) throws Exception {
+                                System.out.println(String.format("begin reloading key[%s] oldValue[%s]", key, oldValue));
+                                if (City.FIXED_CITY.get(key) != null)
+                                    return Futures.immediateFuture(oldValue);
+                                else { // 这儿进行异步 reload
+                                    // asynchronous!
+                                    ListenableFutureTask<City> task = ListenableFutureTask.create(new Callable<City>() {
+                                        @Override
+                                        public City call() throws Exception {
+                                            Log.info("asynchronous load!");
+                                            Thread.sleep(1000);
+                                            return newCity(key);
+                                        }
+                                    });
+                                    // task.addListener(); 可以增加一个完成监听
+                                    new Thread(task).start();
+                                    return task;
+                                }
+                            }
+                        });
 
     }
 
