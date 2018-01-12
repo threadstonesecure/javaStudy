@@ -10,7 +10,7 @@
 
     <context:component-scan base-package="dlt.study.plugins"></context:component-scan>
 
-    <mybatis:scan base-package="dlt.study.dao" />
+
 
     <bean id="vendorProperties"
           class="org.springframework.beans.factory.config.PropertiesFactoryBean">
@@ -67,7 +67,10 @@
         <constructor-arg index="1" value="BATCH" />
     </bean>
 
+    <mybatis:scan base-package="dlt.study.dao" />
+
     <!-- 使用<mybatis:scan>来简化一个个的配置mapper -->
+
 <!--    <bean id="demoMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
         <property name="mapperInterface" value="dlt.study.dao.DemoMapper"/>
         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
