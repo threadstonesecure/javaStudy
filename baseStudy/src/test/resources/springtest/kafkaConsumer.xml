@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd"
+       default-init-method="init" default-destroy-method="destroy">
+
+    <context:component-scan
+            base-package="dlt.study,dlt.utils.spring"></context:component-scan>
+
+    <bean id="consumerProperties" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="bootstrap.servers" value="192.168.1.134:19092"/>
+                <entry key="group.id" value="GroupA"/>
+                <entry key="enable.auto.commit" value="false"/>
+                <entry key="auto.commit.interval.ms" value="1000"/>
+                <entry key="session.timeout.ms" value="15000"/>
+                <entry key="key.deserializer" value="org.apache.kafka.common.serialization.StringDeserializer"/>
+                <entry key="value.deserializer" value="org.apache.kafka.common.serialization.StringDeserializer"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <task:executor id="consumerExecutor" pool-size="2-5" queue-capacity="100" rejection-policy="CALLER_RUNS" keep-alive="120"/>
+
+    <!-- 创建consumerFactory bean -->
+    <bean id="consumerFactory" class="org.springframework.kafka.core.DefaultKafkaConsumerFactory">
+        <constructor-arg>
+            <ref bean="consumerProperties"/>
+        </constructor-arg>
+    </bean>
+
+    <bean id="containerProperties_trade" class="org.springframework.kafka.listener.config.ContainerProperties">
+        <constructor-arg value="denglt"/>
+        <property name="messageListener" ref="kafkaAcknowledgeConsumerServer"/>
+        <property name="consumerTaskExecutor" ref="consumerExecutor" />
+        <property name="ackMode" value="MANUAL_IMMEDIATE"/>
+    </bean>
+
+
+    <bean id="messageListenerContainer_trade" class="org.springframework.kafka.listener.KafkaMessageListenerContainer"
+          init-method="doStart">  <!-- ConcurrentMessageListenerContainer  -->
+        <constructor-arg ref="consumerFactory"/>
+        <constructor-arg ref="containerProperties_trade"/>
+    </bean>
+</beans>

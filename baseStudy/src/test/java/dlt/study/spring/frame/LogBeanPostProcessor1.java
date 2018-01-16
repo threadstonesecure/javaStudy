@@ -27,7 +27,11 @@ public class LogBeanPostProcessor1 implements InstantiationAwareBeanPostProcesso
     private int order = 1;
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        log.info("postProcessBeforeInitialization:" + beanName + ":" + bean);
+        try {
+            log.info("postProcessBeforeInitialization:" + beanName + ":" + bean);
+        }catch (Exception e){
+            // bean.toString() 可能发生错误
+        }
         log.info(bean.getClass());
         return bean;
     }
@@ -50,7 +54,11 @@ public class LogBeanPostProcessor1 implements InstantiationAwareBeanPostProcesso
     /** Bean创建完成调用 **/
     @Override
     public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException {
-        log.info("postProcessAfterInstantiation:" + bean + ":"+ beanName );
+        try {
+            log.info("postProcessAfterInstantiation:" + bean + ":" + beanName);
+        }catch (Exception  e){
+            // bean.toString() 可能发生错误
+        }
         return true;
     }
 

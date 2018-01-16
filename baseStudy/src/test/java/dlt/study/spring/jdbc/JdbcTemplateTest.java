@@ -24,6 +24,7 @@ public class JdbcTemplateTest {
 	 */
 	public static void main(String[] args) {
 		User user = findUser("zhangsan");
+
 		// System.out.println("data:" + getData(1));
 	}
 

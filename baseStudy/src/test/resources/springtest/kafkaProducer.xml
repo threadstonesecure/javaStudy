@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd"
+       default-init-method="init" default-destroy-method="destroy">
+
+    <context:component-scan
+            base-package="dlt.study,dlt.utils.spring"></context:component-scan>
+
+    <bean id="producerProperties" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry key="bootstrap.servers" value="192.168.1.134:19092"/>
+                <entry key="retries" value="0"/>
+                <entry key="batch.size" value="16384"/>
+                <entry key="linger.ms" value="1"/>
+                <entry key="buffer.memory" value="33554432"/>
+                <entry key="acks" value="1"/>
+                <entry key="key.serializer"
+                       value="org.apache.kafka.common.serialization.StringSerializer"/>
+                <entry key="value.serializer"
+                       value="org.apache.kafka.common.serialization.StringSerializer"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="producerFactory"
+          class="org.springframework.kafka.core.DefaultKafkaProducerFactory">
+        <constructor-arg>
+            <ref bean="producerProperties"/>
+        </constructor-arg>
+        <property name="transactionIdPrefix" value="my-transactional-id"/>
+    </bean>
+
+    <bean id="kafkaTemplate" class="org.springframework.kafka.core.KafkaTemplate">
+        <constructor-arg ref="producerFactory"/>
+        <constructor-arg name="autoFlush" value="true"/>
+        <property name="defaultTopic" value="denglt"/>
+        <property name="producerListener" ref="kafkaProducerListener"/>
+    </bean>
+
+</beans>

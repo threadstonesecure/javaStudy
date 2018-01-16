@@ -31,6 +31,7 @@ public class WatchHospital {
                 .remoteAddress(ip, port).hosId(hosId).accessToken(accessToken)
                 .reconnectDelay(10).ssl(true)
                 .dataHandler(new BadDataHandler())
+                //.dataHandler(new LookupDataHandler())
                 .businessThreadPoolSize(2).connect();
         RequestPack requestPack = new RequestPack();
         requestPack.setCmd("$$HDP_COMMAND$$");
@@ -50,7 +51,7 @@ public class WatchHospital {
         hdpWatchClient = new HdpWatchClient()
                 .remoteAddress(ip, port).hosId(hosId).accessToken(accessToken)
                 .reconnectDelay(10).ssl(true)
-                .dataHandler(new LogDataHandler())
+                .dataHandler(new LookupDataHandler())
                 .businessThreadPoolSize(2).connect();
 
         byte[] bs = new byte[1024 * 1024 * 10 - 300];
