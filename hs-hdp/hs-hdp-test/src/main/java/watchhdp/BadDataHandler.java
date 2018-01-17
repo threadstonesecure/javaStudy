@@ -35,8 +35,8 @@ public class BadDataHandler implements DataHandler {
                 result.setCallMode(request.getCallMode());
                 //result.setKind("4444");
                 //result.setMsg("访问异常！");
-                result.setKind("610010000100017");
-                result.setMsg(UDBErrorCode.LOGGOUT_MSG_610010001105003);
+                result.setKind(OAuth2ErrorCodeEnum.INVALID_TOKEN.getCode());
+                result.setMsg(OAuth2ErrorCodeEnum.INVALID_TOKEN.getMessage());
                 return result;
             }
         }
