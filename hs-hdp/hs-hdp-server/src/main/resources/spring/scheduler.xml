@@ -65,9 +65,6 @@
 		value="0/5 * * ? * SAT-SUN" /> </bean> -->
 
 	<task:annotation-driven executor="hdpExecutor" scheduler="hdpTaskScheduler" />
-
-	<!-- ThreadPoolTaskExecutor -->
 	<task:executor id="hdpExecutor" pool-size="2-5" queue-capacity="100" rejection-policy="CALLER_RUNS" keep-alive="120"/>
-	<!-- ThreadPoolTaskScheduler -->
 	<task:scheduler id="hdpTaskScheduler" pool-size="3" />
 </beans> 

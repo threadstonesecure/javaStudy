@@ -42,12 +42,4 @@ public enum ResultKind {
 			return msg;
 		}
 	}
-
-	public static void main(String[] args) {
-		System.out.println(ResultKind.OK.ordinal());
-		System.out.println(Enum.valueOf(ResultKind.class,"OK"));
-		System.out.println(ResultKind.valueOf("OK").ordinal());
-		ResultKind[] values = ResultKind.values();
-
-	}
 }
