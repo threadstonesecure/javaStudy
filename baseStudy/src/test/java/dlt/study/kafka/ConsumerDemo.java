@@ -9,6 +9,7 @@ import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
 import org.junit.Test;
+import org.springframework.kafka.core.KafkaAdmin;
 
 import java.util.*;
 
@@ -29,7 +30,6 @@ public class ConsumerDemo {
         //ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG //  最大poll的间隔，可以为消费者提供更多的时间去处理返回的消息，缺点是此值越大将会延迟组重新平衡
         //ConsumerConfig.MAX_POLL_RECORDS_CONFIG // 此设置限制每次调用poll返回的消息数
         //ConsumerConfig.AUTO_OFFSET_RESET_CONFIG // 决定consumer如何reset offset
-
     }
 
 
@@ -53,7 +53,7 @@ public class ConsumerDemo {
             }
 
             private void position() {
-                System.out.println(consumer.assignment().size());
+                //System.out.println(consumer.assignment().size());
                 consumer.assignment().forEach((tp) -> {
                     long position = consumer.position(tp);
                     Log.info(String.format("group=%s, topic = %s, partition = %d, offset = %d", props.getProperty(ConsumerConfig.GROUP_ID_CONFIG),
@@ -93,7 +93,7 @@ public class ConsumerDemo {
      */
     @Test
     public void assgin() { //Manual Partition Assignment
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);  // 如果由消费者subscribe了topic，则commit会发生 CommitFailedException
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);  // 如果有消费者subscribe了topic，则commit会发生 CommitFailedException
         Consumer<String, String> consumer = new KafkaConsumer<>(props);
         consumer.assign(Lists.newArrayList(new TopicPartition(topic, 0)));
         while (true) {
@@ -110,7 +110,7 @@ public class ConsumerDemo {
         TopicPartition topicPartition = new TopicPartition(topic, 0);
         consumer.assign(Lists.newArrayList(topicPartition));
         consumer.seek(topicPartition, 100); // seek后 不会 auto commit
-        consumer.commitSync(); // 会设置 consumer's offset = 100 //如果由消费者subscribe了topic，则commit会发生 CommitFailedException
+        consumer.commitSync(); // 会设置 consumer's offset = 100 //如果有消费者subscribe了topic，则commit会发生 CommitFailedException
         long position = consumer.position(topicPartition);
         Log.info(String.format("group=%s, topic = %s, partition = %d, offset = %d", props.getProperty(ConsumerConfig.GROUP_ID_CONFIG),
                 topicPartition.topic(), topicPartition.partition(), position));
@@ -127,8 +127,8 @@ public class ConsumerDemo {
      */
     @Test
     public void position() {
-        //props.put(ConsumerConfig.GROUP_ID_CONFIG, "dengltxx");
-        //props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); //[earliest|latest|none|anything else] 如果没有初始偏移量，或者当前的偏移量不再存在，该怎么办
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "GroupA");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest"); //[earliest|latest|none|anything else] 如果没有初始偏移量，或者当前的偏移量不再存在，该怎么办
         Consumer<String, String> consumer = new KafkaConsumer<>(props);
         List<PartitionInfo> partitionInfos = consumer.partitionsFor(topic);
         consumer.assign(Lists.newArrayList(Iterables.transform(partitionInfos, (p) -> new TopicPartition(p.topic(), p.partition()))));
@@ -166,7 +166,6 @@ public class ConsumerDemo {
      */
     @Test
     public void beginningOffsets() {
-
         Consumer<String, String> consumer = new KafkaConsumer<>(props);
         List<PartitionInfo> partitionInfos = consumer.partitionsFor(topic);
         consumer.beginningOffsets(Lists.newArrayList(Iterables.transform(partitionInfos, t -> new TopicPartition(t.topic(), t.partition()))))
@@ -198,4 +197,20 @@ public class ConsumerDemo {
                 Log.info(String.format("topic = %s, partition = %d, offset = %d, key = %s, value = %s", record.topic(), record.partition(), record.offset(), record.key(), record.value()));
         }
     }
+
+
+    @Test
+    public void infoTopic(){
+        topic = "denglt";
+        Consumer<String, String> consumer = new KafkaConsumer<>(props);
+        List<PartitionInfo> partitionInfos = consumer.partitionsFor(topic);
+        Log.info("begin offsets:");
+        consumer.beginningOffsets(Lists.transform(partitionInfos, t -> new TopicPartition(t.topic(), t.partition())))
+                .forEach((tp, p) -> Log.info(String.format("topic = %s, partition = %d, offset = %d", tp.topic(), tp.partition(), p)));
+
+        Log.info("end offsets:");
+        consumer.endOffsets(Lists.transform(partitionInfos, t -> new TopicPartition(t.topic(), t.partition())))
+                .forEach((tp, p) -> Log.info(String.format("topic = %s, partition = %d, offset = %d", tp.topic(), tp.partition(), p)));
+    }
+
 }

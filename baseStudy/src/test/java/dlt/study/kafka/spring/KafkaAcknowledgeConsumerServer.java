@@ -26,6 +26,6 @@ public class KafkaAcknowledgeConsumerServer implements AcknowledgingMessageListe
         Log.info("-------------offset:" + offset);
         Log.info("-------------partition:" + partition);
         Log.info("~~~~~~~~~~~~~kafkaConsumer消费结束~~~~~~~~~~~~~");
-        acknowledgment.acknowledge();// 不能自己实现，目前 ConsumerAcknowledgment 和 ConsumerBatchAcknowledgment
+        acknowledgment.acknowledge();// 不能自己实现，目前实现 ConsumerAcknowledgment 和 ConsumerBatchAcknowledgment
     }
 }

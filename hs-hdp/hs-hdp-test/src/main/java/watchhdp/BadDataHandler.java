@@ -7,11 +7,11 @@ import io.netty.channel.ChannelHandlerContext;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class BadDataHandler implements DataHandler {
+public class BadDataHandler extends DataHandler {
     private static Log log = LogFactory.getLog(WatchHospital.class);
 
     @Override
-    public ResultPack dealData(Object msg) {
+    public ResultPack deal(Object msg) {
         //log.info( msg.getClass().getSimpleName() + ":" + JsonUtils.toJson(msg));
         boolean intercept = false;
         if (msg instanceof RequestPack) {

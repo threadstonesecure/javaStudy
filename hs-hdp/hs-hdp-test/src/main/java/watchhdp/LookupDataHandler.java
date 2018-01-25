@@ -6,11 +6,11 @@ import dlt.utils.JsonUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-public class LookupDataHandler implements DataHandler {
+public class LookupDataHandler extends DataHandler {
     private static Log log = LogFactory.getLog(LookupDataHandler.class);
 
     @Override
-    public ResultPack dealData(Object msg) {
+    public ResultPack deal(Object msg) {
         if (msg instanceof RequestPack) {
             RequestPack request = (RequestPack) msg;
             if (request.getHosId().equals("226")) {

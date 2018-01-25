@@ -42,11 +42,12 @@
         <property name="messageListener" ref="kafkaAcknowledgeConsumerServer"/>
         <property name="consumerTaskExecutor" ref="consumerExecutor" />
         <property name="ackMode" value="MANUAL_IMMEDIATE"/>
+        <!--<property name="idleEventInterval"  />-->
     </bean>
 
 
     <bean id="messageListenerContainer_trade" class="org.springframework.kafka.listener.KafkaMessageListenerContainer"
-          init-method="doStart">  <!-- ConcurrentMessageListenerContainer  -->
+          init-method="doStart">  <!-- ConcurrentMessageListenerContainer  多分区并发，最多并发数量为分区数 -->
         <constructor-arg ref="consumerFactory"/>
         <constructor-arg ref="containerProperties_trade"/>
     </bean>
