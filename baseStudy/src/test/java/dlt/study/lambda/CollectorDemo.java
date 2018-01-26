@@ -20,7 +20,7 @@ public class CollectorDemo {
     @Test
     public void toList() {
         List<String> names = Stream.of("denglt", "zyy", "dzy", "dwx").collect(Collectors.toList());
-        names.stream().forEach(System.out::println);
+        names.forEach(System.out::println);
     }
 
     @Test
@@ -55,13 +55,11 @@ public class CollectorDemo {
         System.out.println(count);
     }
 
-
     @Test
     public void grouping() {
         Map<String, List<User>> groups = users.stream().collect(Collectors.groupingBy(User::getUserName));
         groups.forEach((name, users) -> System.out.println(name + " -> " + users.size()));
         groups.forEach((name, users) -> System.out.println(name + " -> " + users.stream().mapToInt(User::getAge).sum() ));
-
     }
 
     @Test
@@ -99,8 +97,8 @@ public class CollectorDemo {
         System.out.println("----other----");
         names = users.stream().collect(Collector.of(ArrayList::new,
                                                    List::add,
-                                                   (l , r) -> {return null;},
-                                                   (List<User> us )->  us.stream().map(User::getUserName).collect(Collectors.toList())
+                                                   (l , r) -> {return null;}, // 合并结果集（ parallel 才会用到）
+                                                   (List<User> us )->  us.stream().map(User::getUserName).collect(Collectors.toList()) //转换为最终返回的value
                                                    ));
         names.stream().forEach(System.out::println);
 
@@ -124,10 +122,10 @@ public class CollectorDemo {
 
     @Test
     public void myCollector() {
-        Collector<User, ?, OneString<User>> collector = Collectors.toCollection(() -> new OneString<>(u -> "" + u.getAge()));
+        Collector<User, ?, OneString<User>> collector; // = Collectors.toCollection(() -> new OneString<>(u -> "" + u.getAge()));
         collector = Collector.of( () -> new OneString<>( u -> "" + u.getAge()),
                 OneString::add,
-                (r1, r2) -> r1.add(r2) ,
+                OneString::add,
                 Collector.Characteristics.IDENTITY_FINISH
         );
 
@@ -144,7 +142,7 @@ public class CollectorDemo {
                                                                         (left, right) -> { return null; }, // parallel 才会用到
                                                                         us -> us.stream().mapToInt(User::getAge).sum()
                                                                       //  ,Collector.Characteristics.IDENTITY_FINISH
-                                                                        );
+                                                                        );  // like Collectors.summarizingLong
         Map<String, Integer> group2 = users.stream().collect(Collectors.groupingBy(User::getUserName,collector2));
         group2.forEach((k,v) -> System.out.println(k+ " -> " + v));
 
@@ -155,7 +153,7 @@ public class CollectorDemo {
         group2 = users.stream().collect(Collectors.groupingBy(User::getUserName,
                                                              Collector.of( ArrayList::new,
                                                                            List::add,
-                                                                           (left, right) -> { return null; },
+                                                                           (left, right) -> null,
                                                                            (List<User> us) -> us.stream().mapToInt(User::getAge).sum()
                                                                          )
                                                            )
