@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class CollectorDemo {
 
-    List<User> users = Lists.newArrayList(new User("zz",100),new User("denglt", 100), new User("zyy", 100), new User("denglt", 50));
+    List<User> users = Lists.newArrayList(new User("zz", 100), new User("denglt", 100), new User("zyy", 100), new User("denglt", 50));
 
     @Test
     public void toList() {
@@ -35,10 +35,11 @@ public class CollectorDemo {
      */
     @Test
     public void toMapWithMerge() {
-        Map<String, User> maps = users.stream().collect(Collectors.toMap(User::getUserName,
-                u -> u,
-                (u1, u2) -> u1.getAge() > u2.getAge() ? u2 : u1,
-                TreeMap::new)
+        Map<String, User> maps = users.stream().collect(
+                Collectors.toMap(User::getUserName,
+                        u -> u,
+                        (u1, u2) -> u1.getAge() > u2.getAge() ? u2 : u1,
+                        TreeMap::new)
         );
         maps.forEach((name, u) -> System.out.println(name + " -> " + u));
     }
@@ -59,71 +60,76 @@ public class CollectorDemo {
     public void grouping() {
         Map<String, List<User>> groups = users.stream().collect(Collectors.groupingBy(User::getUserName));
         groups.forEach((name, users) -> System.out.println(name + " -> " + users.size()));
-        groups.forEach((name, users) -> System.out.println(name + " -> " + users.stream().mapToInt(User::getAge).sum() ));
+        groups.forEach((name, users) -> System.out.println(name + " -> " + users.stream().mapToInt(User::getAge).sum()));
     }
 
     @Test
     public void grouping2() {
         Map<String, Set<User>> groups = users.stream().collect(Collectors.groupingBy(User::getUserName, Collectors.toSet()));
         groups.forEach((name, users) -> System.out.println(name + " -> " + users.size()));
-        groups = users.stream().collect(Collectors.groupingBy(User::getUserName,TreeMap::new,Collectors.toSet()));
+        groups = users.stream().collect(Collectors.groupingBy(User::getUserName, TreeMap::new, Collectors.toSet()));
         groups.forEach((name, users) -> System.out.println(name + " -> " + users.size()));
-        groups = users.stream().collect(Collectors.groupingBy(User::getUserName,TreeMap::new,Collectors.toCollection(TreeSet::new)));
+        groups = users.stream().collect(Collectors.groupingBy(User::getUserName, TreeMap::new, Collectors.toCollection(TreeSet::new)));
         groups.forEach((name, users) -> System.out.println(name + " -> " + users.size()));
     }
 
     @Test
-    public void partitioning(){ //与groupingBy类似
+    public void partitioning() { //与groupingBy类似
         Map<Boolean, List<User>> partions = users.stream().collect(Collectors.partitioningBy(t -> t.getAge() > 50));
-        partions.forEach((b,users) -> System.out.println(b +"->"+ users));
+        partions.forEach((b, users) -> System.out.println(b + "->" + users));
     }
 
     @Test
-    public  void joining(){
-        String s = Stream.of("denglt","zyy").collect(Collectors.joining());
+    public void joining() {
+        String s = Stream.of("denglt", "zyy").collect(Collectors.joining());
         System.out.println(s);
-        s = Stream.of("denglt","zyy").collect(Collectors.joining(","));
+        s = Stream.of("denglt", "zyy").collect(Collectors.joining(","));
         System.out.println(s);
 
-        s = Stream.of("denglt","zyy").collect(Collectors.joining(",","begin->"," :end"));
+        s = Stream.of("denglt", "zyy").collect(Collectors.joining(",", "begin->", " :end"));
         System.out.println(s);
     }
 
     @Test
-    public void mapping(){
+    public void mapping() {
         List<String> names = users.stream().collect(Collectors.mapping(User::getUserName, Collectors.toList()));
         names.stream().forEach(System.out::println);
 
         System.out.println("----other----");
         names = users.stream().collect(Collector.of(ArrayList::new,
-                                                   List::add,
-                                                   (l , r) -> {return null;}, // 合并结果集（ parallel 才会用到）
-                                                   (List<User> us )->  us.stream().map(User::getUserName).collect(Collectors.toList()) //转换为最终返回的value
-                                                   ));
+                List::add,
+                (l, r) -> {
+                    return null;
+                }, // 合并结果集（ parallel 才会用到）
+                (List<User> us) -> us.stream().map(User::getUserName).collect(Collectors.toList()) //转换为最终返回的value
+        ));
         names.stream().forEach(System.out::println);
 
         System.out.println("----other----");
         names = users.stream().collect(Collector.of(ArrayList::new,
-                                                    (l , u) -> l.add(u.getUserName()),
-                                                    (left, right) -> { left.addAll(right); return left; }
-                                            ));
+                (l, u) -> l.add(u.getUserName()),
+                (left, right) -> {
+                    left.addAll(right);
+                    return left;
+                }
+        ));
         names.stream().forEach(System.out::println);
     }
 
     @Test
-    public void summarizing(){
+    public void summarizing() {
         LongSummaryStatistics ageStatis = users.stream().collect(Collectors.summarizingLong(User::getAge));
         System.out.println(ageStatis);
 
         System.out.println("--------------------");
         Map<String, LongSummaryStatistics> userStatis = users.stream().collect(Collectors.groupingBy(User::getUserName, Collectors.summarizingLong(User::getAge)));
-        userStatis.forEach((k,v) -> System.out.println( k + " -> " + v));
+        userStatis.forEach((k, v) -> System.out.println(k + " -> " + v));
     }
 
     @Test
     public void myCollector() {
         Collector<User, ?, OneString<User>> collector; // = Collectors.toCollection(() -> new OneString<>(u -> "" + u.getAge()));
-        collector = Collector.of( () -> new OneString<>( u -> "" + u.getAge()),
+        collector = Collector.of(() -> new OneString<>(u -> "" + u.getAge()),
                 OneString::add,
                 OneString::add,
                 Collector.Characteristics.IDENTITY_FINISH
@@ -132,33 +138,37 @@ public class CollectorDemo {
         OneString<User> oneString = users.stream().collect(collector);
         System.out.println(oneString.toString());
 
-        Map<String, OneString<User>> group = users.stream().collect(Collectors.groupingBy(User::getUserName,collector));
-        group.forEach((k , v ) -> System.out.println(k + " -> " + v) );
+        Map<String, OneString<User>> group = users.stream().collect(Collectors.groupingBy(User::getUserName, collector));
+        group.forEach((k, v) -> System.out.println(k + " -> " + v));
 
-       System.out.println("---------------------");
+        System.out.println("---------------------");
 
-        Collector<User, List<User>, Integer> collector2 =  Collector.of(ArrayList::new,
-                                                                        List::add,
-                                                                        (left, right) -> { return null; }, // parallel 才会用到
-                                                                        us -> us.stream().mapToInt(User::getAge).sum()
-                                                                      //  ,Collector.Characteristics.IDENTITY_FINISH
-                                                                        );  // like Collectors.summarizingLong
-        Map<String, Integer> group2 = users.stream().collect(Collectors.groupingBy(User::getUserName,collector2));
-        group2.forEach((k,v) -> System.out.println(k+ " -> " + v));
+        Collector<User, List<User>, Integer> collector2 = Collector.of(ArrayList::new,
+                List::add,
+                (left, right) -> {
+                    System.out.println(" run in parallel!");
+                    left.addAll(right);
+                    return left;
+                }, // parallel 才会用到
+                us -> us.stream().mapToInt(User::getAge).sum()
+                // ,Collector.Characteristics.CONCURRENT
+        );  // like Collectors.summarizingLong
+        Map<String, Integer> group2 = users.stream().parallel().collect(Collectors.groupingBy(User::getUserName, collector2));
+        group2.forEach((k, v) -> System.out.println(k + " -> " + v));
 
         Integer sumAge = users.stream().collect(collector2);
         System.out.println(sumAge);
 
         System.out.println("----------------------");
         group2 = users.stream().collect(Collectors.groupingBy(User::getUserName,
-                                                             Collector.of( ArrayList::new,
-                                                                           List::add,
-                                                                           (left, right) -> null,
-                                                                           (List<User> us) -> us.stream().mapToInt(User::getAge).sum()
-                                                                         )
-                                                           )
-                                       );
-        group2.forEach((k,v) -> System.out.println(k+ " -> " + v));
+                Collector.of(ArrayList::new,
+                        List::add,
+                        (left, right) -> null,
+                        (List<User> us) -> us.stream().mapToInt(User::getAge).sum()
+                )
+                )
+        );
+        group2.forEach((k, v) -> System.out.println(k + " -> " + v));
     }
 
 
@@ -188,7 +198,7 @@ public class CollectorDemo {
             return true;
         }
 
-        public OneString add(OneString otherString){
+        public OneString add(OneString otherString) {
             sb.append(otherString.toString());
             return this;
         }

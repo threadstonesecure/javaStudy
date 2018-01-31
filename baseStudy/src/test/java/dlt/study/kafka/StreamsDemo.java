@@ -24,15 +24,36 @@ public class StreamsDemo {
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
     }
 
+    /**
+     * 转换topic 到另一个topic
+     * @throws Exception
+     */
     @Test
-    public void to() throws Exception {
+    public void map() throws Exception {
         StreamsConfig config = new StreamsConfig(props);
         KStreamBuilder builder = new KStreamBuilder();
-        builder.stream("denglt").map((k, v) -> new KeyValue<>(k, v)).to("my-output-topic");
+        builder.stream("denglt").filter((k,v) -> true).map((k, v) -> new KeyValue<>(k, v)).to("my-output-topic");
+
 
         KafkaStreams streams = new KafkaStreams(builder, config);
         streams.setStateListener(((newState, oldState) -> Log.info("状态改变：" + oldState + "->" + newState)));
         streams.start();
         System.in.read();
     }
+
+    public void table(){
+        StreamsConfig config = new StreamsConfig(props);
+        KStreamBuilder builder = new KStreamBuilder();
+        //builder.table("denglt").to();
+    }
+
+    @Test
+    public void process(){
+        StreamsConfig config = new StreamsConfig(props);
+        KStreamBuilder builder = new KStreamBuilder();
+       // builder.stream("denglt").process();
+       // builder.table()
+    }
+
+   // private class MyProcess implements Processor
 }

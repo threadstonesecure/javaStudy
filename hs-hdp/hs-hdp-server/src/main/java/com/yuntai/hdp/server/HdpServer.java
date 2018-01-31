@@ -10,6 +10,7 @@ import com.yuntai.hdp.server.ssl.SSLEngineFactory;
 import com.yuntai.hdp.server.updata.UpdataHandlerManager;
 import com.yuntai.hdp.server.updata.dynamic.DiscoveryUpdataHandler;
 import com.yuntai.netty.DefaultNettyContext;
+import com.yuntai.util.HdpHelper;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.*;
@@ -149,13 +150,19 @@ public final class HdpServer {
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
-                log.info("close netty start...");
-                workerGroup.shutdownGracefully();
-                bossGroup.shutdownGracefully();
-                businessExecutor.shutdownGracefully();
-                log.info("close netty end!");
+                try {
+                    log.info("close netty start...");
+                    workerGroup.shutdownGracefully();
+                    bossGroup.shutdownGracefully();
+                    businessExecutor.shutdownGracefully();
+                    log.info("close netty end!");
+                    if (System.getProperty("hdp.restart") != null && System.getProperty("hdp.restart").equals("1"))
+                        HdpHelper.start();
+                }catch (Exception e){
+                    log.error(e);
+                }
             }
-        },"HdpShutdownHook"));
+        }, "HdpShutdownHook"));
 
         try {
             Class<? extends ServerChannel> serverChannelClass = DefaultNettyContext.get().getServerChannelClass();

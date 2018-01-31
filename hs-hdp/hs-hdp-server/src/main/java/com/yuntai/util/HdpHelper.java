@@ -2,13 +2,13 @@ package com.yuntai.util;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
-import com.google.common.collect.*;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Ordering;
 import com.yuntai.hdp.access.RequestPack;
 import com.yuntai.hdp.access.ResultPack;
 import com.yuntai.hdp.access.service.AccessHospitalHandler;
-import com.yuntai.hdp.server.HdpServer;
 import com.yuntai.hdp.server.HospitalManager;
-import com.yuntai.hdp.server.StartHdpServer;
 import com.yuntai.hdp.server.updata.dynamic.Command;
 import com.yuntai.hdp.server.updata.dynamic.DiscoveryUpdataHandler;
 import com.yuntai.util.spring.PropertyConfigurer;
@@ -20,7 +20,9 @@ import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Method;
 import java.net.Socket;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static io.netty.util.internal.StringUtil.NEWLINE;
 
@@ -170,16 +172,32 @@ public class HdpHelper {
                 orderList2String("Properties Info:", mapToIterable2(System.getProperties(), "="));
     }
 
-
-    public static void restart() throws Exception {
-        StringBuilder cmd = new StringBuilder();
-        cmd.append("sh " + System.getProperty("user.dir") + File.separator + "bin" + File.separator + "run.sh restart");
-        HdpServer.log.info("exec:" + cmd.toString());
-        Process process = Runtime.getRuntime().exec(cmd.toString());
-        process.waitFor();
+    public static void start() throws Exception{
+        String shellFile = System.getProperty("user.dir") + File.separator + "bin" + File.separator + "run.sh";
+        ProcessBuilder pb = new ProcessBuilder("sh",shellFile, "start");
+        Process p = pb.start();
+        int exitCode = p.waitFor();
+        System.out.println(exitCode);
+        assert exitCode == 0;
     }
 
-    public static void restart_bak() throws Exception {
+    public static void restart() throws Exception {
+        System.setProperty("hdp.restart","1");
+        shutdown();
+    }
+
+    public static void restart_2() throws Exception {
+        String shellFile = System.getProperty("user.dir") + File.separator + "bin" + File.separator + "run.sh";
+        Integer pid = Integer.valueOf(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]).intValue();
+        ProcessBuilder pb = new ProcessBuilder("sh",shellFile, "restartpid", pid.toString());
+        Process p = pb.start();
+        int exitCode = p.waitFor();
+        System.out.println(exitCode);
+        assert exitCode == 0;
+    }
+
+
+    public static void restart_1() throws Exception {
         StringBuilder cmd = new StringBuilder();
         // cmd.append("cd "+System.getProperty("user.dir")+" ; ");
         cmd.append(System.getProperty("java.home") + File.separator + "bin" + File.separator + "java ");
@@ -269,5 +287,6 @@ public class HdpHelper {
         discoveryUpdataHandler = SpringContextUtils.getBean("discoveryUpdataHandler");
         HDP_SERVER_VERSION = "3.2";
     }
+
 
 }
