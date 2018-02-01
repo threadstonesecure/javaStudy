@@ -1,4 +1,4 @@
-package dlt.study.kafka;
+package dlt.study.kafka.streams;
 
 
 import dlt.study.log4j.Log;
@@ -29,16 +29,17 @@ public class StreamsDemo {
      * @throws Exception
      */
     @Test
-    public void map() throws Exception {
+    public void mapAndTo() throws Exception {
         StreamsConfig config = new StreamsConfig(props);
         KStreamBuilder builder = new KStreamBuilder();
-        builder.stream("denglt").filter((k,v) -> true).map((k, v) -> new KeyValue<>(k, v)).to("my-output-topic");
-
-
+        builder.stream("denglt").filter((k, v) -> true).map((k, v) -> new KeyValue<>(k, v)).to("my-output-topic");
         KafkaStreams streams = new KafkaStreams(builder, config);
         streams.setStateListener(((newState, oldState) -> Log.info("状态改变：" + oldState + "->" + newState)));
         streams.start();
         System.in.read();
+        //Thread.sleep(60000);
+        streams.close();
+        streams.cleanUp();
     }
 
     public void table(){

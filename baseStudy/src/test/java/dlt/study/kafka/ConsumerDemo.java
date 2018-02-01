@@ -8,6 +8,8 @@ import dlt.study.log4j.Log;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.serialization.IntegerDeserializer;
+import org.apache.kafka.common.serialization.LongDeserializer;
 import org.junit.Test;
 import org.springframework.kafka.core.KafkaAdmin;
 
@@ -30,6 +32,7 @@ public class ConsumerDemo {
         //ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG //  最大poll的间隔，可以为消费者提供更多的时间去处理返回的消息，缺点是此值越大将会延迟组重新平衡
         //ConsumerConfig.MAX_POLL_RECORDS_CONFIG // 此设置限制每次调用poll返回的消息数
         //ConsumerConfig.AUTO_OFFSET_RESET_CONFIG // 决定consumer如何reset offset
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
     }
 
 
@@ -38,6 +41,10 @@ public class ConsumerDemo {
      */
     @Test
     public void subscribe() {
+        topic = "count";
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "G_COUNT_2");
+        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class);
         Consumer<String, String> consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Lists.newArrayList(topic), new ConsumerRebalanceListener() {
             @Override
