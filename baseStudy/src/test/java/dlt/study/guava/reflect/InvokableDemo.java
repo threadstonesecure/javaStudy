@@ -14,8 +14,7 @@ public class InvokableDemo {
     public void invoke() throws Exception {
 
         Method getMethod = List.class.getMethod("get", int.class);
-        Invokable<List<String>, Object> invokable = new TypeToken<List<String>>() {
-        }.method(getMethod);
+        Invokable<List<String>, Object> invokable = new TypeToken<List<String>>() {}.method(getMethod);
         System.out.println(invokable.getReturnType().getRawType());
         Object result = invokable.invoke(Lists.newArrayList("denglt", "zyy", "dasdfasf"), 1);
         System.out.println(result);

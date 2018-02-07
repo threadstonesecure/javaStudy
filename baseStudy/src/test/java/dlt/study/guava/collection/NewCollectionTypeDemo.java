@@ -130,9 +130,9 @@ public class NewCollectionTypeDemo {
      * <p>
      * Multimap
      * |-----SetMultimap
-     * |------HashMultimap
+     * |---------HashMultimap
      * |-----ListMultimap
-     * |-----ArrayListMultimap
+     * |---------ArrayListMultimap
      */
 
 
