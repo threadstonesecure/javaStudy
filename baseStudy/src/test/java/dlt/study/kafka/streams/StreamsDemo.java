@@ -1,6 +1,7 @@
 package dlt.study.kafka.streams;
 
 
+import com.beust.jcommander.internal.Lists;
 import dlt.study.log4j.Log;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
@@ -8,6 +9,8 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
+import org.apache.kafka.streams.processor.Processor;
+import org.apache.kafka.streams.processor.ProcessorSupplier;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -26,6 +29,7 @@ public class StreamsDemo {
 
     /**
      * 转换topic 到另一个topic
+     *
      * @throws Exception
      */
     @Test
@@ -42,19 +46,28 @@ public class StreamsDemo {
         streams.cleanUp();
     }
 
-    public void table(){
+    @Test
+    public void flatMap() {
         StreamsConfig config = new StreamsConfig(props);
         KStreamBuilder builder = new KStreamBuilder();
-        //builder.table("denglt").to();
+        // builder.stream("").flatMap( k,v -> Lists.newArrayList(k,v) ).groupBy().count().toStream().to("");
+
+        // builder.table("").filter().toStream().to("");
+
     }
 
     @Test
-    public void process(){
+    public void process() {
         StreamsConfig config = new StreamsConfig(props);
         KStreamBuilder builder = new KStreamBuilder();
-       // builder.stream("denglt").process();
-       // builder.table()
+        builder.stream("denglt").process(new ProcessorSupplier() {
+            public WordCountProcessor get() {
+                return new WordCountProcessor();
+            }
+        }, "denglt");
+
+        builder.stream("denglt").process(WordCountProcessor::new, "denglt");
+
     }
 
-   // private class MyProcess implements Processor
 }
