@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class DrugDescInXSSFDemo {
     public static void main(String[] args) throws Exception {
-        XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream("/Users/denglt/mywork/脚本/药品说明书-dlt.xlsx"));
+        XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream("D:\\myprograme\\javaStudy\\脚本\\药品说明书-dlt.xlsx"));
         XSSFSheet sheet = wb.getSheetAt(0);
         XSSFRow header = sheet.getRow(0);
         Map<Integer, String> fieldNames = Maps.newHashMap();
@@ -31,12 +31,10 @@ public class DrugDescInXSSFDemo {
                 row.forEach(cell -> table.put(row.getRowNum(), cell.getColumnIndex(), cell.getStringCellValue()));
             }
         });
-
-
-        String url = "jdbc:mysql://127.0.0.1:3306/med2?zeroDateTimeBehavior=convertToNull";
+        String url = "jdbc:mysql://112.124.33.7:3306/med2?zeroDateTimeBehavior=convertToNull";
         String name = "com.mysql.jdbc.Driver";
-        String user = "root";
-        String password = "denglt";
+        String user = "med";
+        String password = "medicalcore01";
         Class.forName(name);//指定连接类型
         Connection conn = DriverManager.getConnection(url, user, password);//获取连接
         conn.setAutoCommit(false);
@@ -58,11 +56,22 @@ public class DrugDescInXSSFDemo {
                 // 明细
                 fieldNames.forEach((colIndex, fieldName) -> {
                     try {
-                        ps2.setInt(1, rowNum);
-                        ps2.setString(2, fieldName);
-                        ps2.setString(3, table.get(rowNum, colIndex));
-                        ps2.setInt(4, colIndex + 1);
-                        ps2.executeUpdate();
+                        if (colIndex > 0) {
+                            ps2.setInt(1, rowNum);
+                            // 合并： 药品通用名、商品名为 药品名称
+                            if (colIndex == 1) {
+                                ps2.setString(2, "药品名称");
+                                String value = "药品通用名:"+ table.get(rowNum,0);
+                                if  (!StringUtils.isEmpty(table.get(rowNum,1)))
+                                    value = value + "\n商品名:" + table.get(rowNum,1);
+                                ps2.setString(3, value);
+                            } else {
+                                ps2.setString(2, fieldName);
+                                ps2.setString(3, table.get(rowNum, colIndex));
+                            }
+                            ps2.setInt(4, colIndex);
+                            ps2.executeUpdate();
+                        }
                     } catch (SQLException e) {
                         System.out.println("错误数据：" + rowNum);
                         e.printStackTrace();
