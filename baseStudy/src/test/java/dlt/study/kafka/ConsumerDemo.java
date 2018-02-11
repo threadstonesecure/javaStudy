@@ -43,7 +43,6 @@ public class ConsumerDemo {
     public void subscribe() {
         topic = "count";
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "G_COUNT_2");
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class);
         Consumer<String, String> consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Lists.newArrayList(topic), new ConsumerRebalanceListener() {
@@ -71,6 +70,7 @@ public class ConsumerDemo {
 
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(1000);
+           // consumer.pause();consumer.resume();
             for (ConsumerRecord<String, String> record : records)
                 Log.info(String.format("topic = %s, partition = %d, offset = %d, key = %s, value = %s", record.topic(), record.partition(), record.offset(), record.key(), record.value()));
 

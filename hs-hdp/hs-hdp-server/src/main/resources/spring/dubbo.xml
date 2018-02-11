@@ -16,6 +16,9 @@
     <dubbo:registry address="${dubbo.registry.address2}"
                     file="${dubbo.cache.file}" />
 
+	<dubbo:registry address="${dubbo.registry.address3}"
+					file="${dubbo.cache.file}" />
+
 	<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}"
 		accesslog="${dubbo.protocol.accesslog}" />
 
