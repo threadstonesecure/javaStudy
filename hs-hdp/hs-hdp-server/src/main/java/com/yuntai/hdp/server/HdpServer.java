@@ -151,11 +151,9 @@ public final class HdpServer {
             @Override
             public void run() {
                 try {
-                    log.info("close netty start...");
                     workerGroup.shutdownGracefully();
                     bossGroup.shutdownGracefully();
                     businessExecutor.shutdownGracefully();
-                    log.info("close netty end!");
                     if (System.getProperty("hdp.restart") != null && System.getProperty("hdp.restart").equals("1"))
                         HdpHelper.start();
                 }catch (Exception e){
@@ -217,7 +215,6 @@ public final class HdpServer {
             Channel monitorChannel = startStringCmdMonitor(bossGroup, workerGroup, serverChannelClass);
             channel.closeFuture().sync();
             monitorChannel.close();
-            log.info("Hdp Server stop.");
         } finally {
             workerGroup.shutdownGracefully();
             bossGroup.shutdownGracefully();

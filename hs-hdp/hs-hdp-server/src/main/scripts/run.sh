@@ -29,6 +29,18 @@ start(){
     fi
 }
 
+new(){
+    echo -n "Starting $SERVERAPP :"
+    $JAVACMD >/dev/null 2>&1 &
+    sleep 2
+    PID=`pgrep -f  "$MAINCLASS"`
+    if [ -n "$PID" ]; then
+        printf "$MAINCLASS is  running with pid $PID.\n "
+    else
+        echo "failed."
+    fi
+}
+
 stop(){
     echo -n "Stoping  $SERVERAPP :"
     PID=`pgrep -f  "$MAINCLASS"`
@@ -94,6 +106,11 @@ case "$1" in
     restartpid)
         kill -9 $2
         start
+        RETVAL=$?
+        ;;
+
+    new)
+        new
         RETVAL=$?
         ;;
 

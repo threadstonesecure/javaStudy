@@ -7,7 +7,7 @@ import java.util.concurrent.Executors;
 public class RuntimeDemo {
     public static void main(String[] args) throws Exception {
 
-        ProcessBuilder pb = new ProcessBuilder("/Users/denglt/myprograme/javaStudy/hs-hdp/hs-hdp-server/target/hs-hdp-server/bin/run.sh", "restart");
+        ProcessBuilder pb = new ProcessBuilder("sh","/Users/denglt/myprograme/javaStudy/hs-hdp/hs-hdp-server/target/hs-hdp-server/bin/run.sh", "stop");
 /*        Map<String, String> env = pb.environment();
         env.put("VAR1", "myValue");
         env.remove("OTHERVAR");

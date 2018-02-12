@@ -11,6 +11,7 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
 import org.apache.kafka.streams.kstream.KTable;
+import org.apache.kafka.streams.kstream.ValueJoiner;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -76,12 +77,18 @@ public class KTableDemo {
     }
 
     @Test
-    public leftJoin(){
+    public void leftJoin() {
         StreamsConfig config = new StreamsConfig(props);
         KStreamBuilder builder = new KStreamBuilder();
         KTable<String, String> left = builder.table("intpu-left");
         KTable<String, String> right = builder.table("intpu-right");
-        left.leftJoin(right)
+        KTable<String, String> all = left.leftJoin(right, new ValueJoiner<String, String, String>() {
+            @Override
+            public String apply(String value1, String value2) {
+                return value1 + "--" + value2;
+            }
+        });
+        all.print();
     }
 
 }

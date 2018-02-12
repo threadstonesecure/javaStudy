@@ -174,10 +174,9 @@ public class HdpHelper {
 
     public static void start() throws Exception{
         String shellFile = System.getProperty("user.dir") + File.separator + "bin" + File.separator + "run.sh";
-        ProcessBuilder pb = new ProcessBuilder("sh",shellFile, "start");
+        ProcessBuilder pb = new ProcessBuilder("sh",shellFile, "new");
         Process p = pb.start();
         int exitCode = p.waitFor();
-        System.out.println(exitCode);
         assert exitCode == 0;
     }
 
@@ -192,7 +191,6 @@ public class HdpHelper {
         ProcessBuilder pb = new ProcessBuilder("sh",shellFile, "restartpid", pid.toString());
         Process p = pb.start();
         int exitCode = p.waitFor();
-        System.out.println(exitCode);
         assert exitCode == 0;
     }
 

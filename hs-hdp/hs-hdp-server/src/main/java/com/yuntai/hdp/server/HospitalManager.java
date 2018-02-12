@@ -107,7 +107,6 @@ public class HospitalManager {
      * @param cmd  先预留,后期可能会根据业务类型进行重定向
      * @return 返回重定向的前置机hosId,如果没有重定向配置返回null
      */
-    // TODO: 2017/7/10  denglt   支持一家医院三个以上的前置机，及重定向配置为数组的情况
     public static String getRedirectHosId(String from_hosId, String cmd) {
         String redirectStr = hdpRedirectHospitals.get(from_hosId);
         if (redirectStr != null) {
