@@ -41,9 +41,9 @@ public class ConsumerDemo {
      */
     @Test
     public void subscribe() {
-        topic = "count";
+        topic = "intpu-right";
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "G_COUNT_2");
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class);
+       // props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, IntegerDeserializer.class);
         Consumer<String, String> consumer = new KafkaConsumer<>(props);
         consumer.subscribe(Lists.newArrayList(topic), new ConsumerRebalanceListener() {
             @Override
@@ -70,10 +70,14 @@ public class ConsumerDemo {
 
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(1000);
-           // consumer.pause();consumer.resume();
-            for (ConsumerRecord<String, String> record : records)
-                Log.info(String.format("topic = %s, partition = %d, offset = %d, key = %s, value = %s", record.topic(), record.partition(), record.offset(), record.key(), record.value()));
-
+            // consumer.pause();consumer.resume();
+            for (ConsumerRecord<String, String> record : records) {
+                long timestamp = record.timestamp();
+                String s = record.timestampType().toString();
+                String timeStr = s + ":" + timestamp;
+                Log.info(String.format("topic = %s, partition = %d, offset = %d, key = %s, value = %s , time = %s",
+                        record.topic(), record.partition(), record.offset(), record.key(), record.value(), timeStr));
+            }
         }
 
         // Manual Offset Control
@@ -207,7 +211,7 @@ public class ConsumerDemo {
 
 
     @Test
-    public void infoTopic(){
+    public void infoTopic() {
         topic = "denglt";
         Consumer<String, String> consumer = new KafkaConsumer<>(props);
         List<PartitionInfo> partitionInfos = consumer.partitionsFor(topic);

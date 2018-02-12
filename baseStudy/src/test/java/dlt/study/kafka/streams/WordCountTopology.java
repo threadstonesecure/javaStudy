@@ -30,10 +30,10 @@ public class WordCountTopology {
                 .addStateStore(Stores.create("Counts").withStringKeys().withIntegerValues().persistent().build())
                 .connectProcessorAndStateStores("WordCountProcessor", "Counts")
                 .addSink("sink", "count", new StringSerializer(), new IntegerSerializer(),"WordCountProcessor"); // 流程
-        KafkaStreams stream = new KafkaStreams(builder, props);
-        stream.start();
+        KafkaStreams streams = new KafkaStreams(builder, props);
+        streams.start();
         System.in.read();
-        stream.close();
-        stream.cleanUp();
+        streams.close();
+        streams.cleanUp();
     }
 }

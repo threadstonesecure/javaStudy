@@ -17,6 +17,14 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ KTable和KStream是Kafka Stream中非常重要的两个概念，它们是Kafka实现各种语义的基础。
+ KStream是一个数据流，可以认为所有记录都通过Insert only的方式插入进这个数据流里。
+ 而KTable代表一个完整的数据集，可以理解为数据库中的表。
+ 由于每条记录都是Key-Value对，这里可以将Key理解为数据库中的Primary Key，而Value可以理解为一行记录。
+ 可以认为KTable中的数据都是通过Update only的方式进入的。
+ 也就意味着，如果KTable对应的Topic中新进入的数据的Key已经存在，那么从KTable只会取出同一Key对应的最后一条数据，相当于新的数据更新了旧的数据。
+ */
 public class KTableDemo {
     private static Map<String, Object> props = new HashMap<>();
 
@@ -37,11 +45,12 @@ public class KTableDemo {
      */
     @Test
     public void table() throws Exception {
-        produce();
+        //produce();
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-study-tables_2");
         String topic = "study";
         StreamsConfig config = new StreamsConfig(props);
         KStreamBuilder builder = new KStreamBuilder();
-        builder.table(topic).toStream().foreach((k, v) -> Log.info(k + "->" + v)); // 只有denglt->3 一条记录
+        builder.table(topic).toStream().print(); //.foreach((k, v) -> Log.info(k + "->" + v)); // 只有denglt->3 一条记录
         KafkaStreams streams = new KafkaStreams(builder, config);
         streams.setStateListener(((newState, oldState) -> Log.info("状态改变：" + oldState + "->" + newState)));
         streams.start();
@@ -65,7 +74,7 @@ public class KTableDemo {
         props.put(ProducerConfig.LINGER_MS_CONFIG, "1");
         Producer<String, String> producer = new KafkaProducer<>(props);
 
-        String key = "denglt";
+        String key = "denglt";  // key 不能为null
         String value = "1";
         producer.send(new ProducerRecord<>(topic, key, value));
 
@@ -76,19 +85,52 @@ public class KTableDemo {
 
     }
 
+    /**
+     * Join records of this KTable with another KTable's records using non-windowed inner equi join
+     * 无窗口，每次使用最新的数据
+     * 任意一边有更新，结果KTable都会更新
+     * @throws Exception
+     */
     @Test
-    public void leftJoin() {
+    public void join() throws Exception {
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-study-tables");
         StreamsConfig config = new StreamsConfig(props);
         KStreamBuilder builder = new KStreamBuilder();
         KTable<String, String> left = builder.table("intpu-left");
         KTable<String, String> right = builder.table("intpu-right");
-        KTable<String, String> all = left.leftJoin(right, new ValueJoiner<String, String, String>() {
+        KTable<String, String> all = left.join(right, new ValueJoiner<String, String, String>() {
             @Override
             public String apply(String value1, String value2) {
                 return value1 + "--" + value2;
             }
         });
         all.print();
+        KafkaStreams streams = new KafkaStreams(builder, config);
+        streams.start();
+        System.in.read();
+        streams.close();
+        streams.cleanUp();
+    }
+
+    @Test
+    public void produceJoinData() throws Exception{
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+        props.put(ProducerConfig.ACKS_CONFIG, "1");
+        props.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "gzip");
+        props.put(ProducerConfig.RETRIES_CONFIG, "0");
+        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, "33554432");
+        props.put(ProducerConfig.BATCH_SIZE_CONFIG, "16384");
+        props.put(ProducerConfig.LINGER_MS_CONFIG, "1");
+        Producer<String, String> producer = new KafkaProducer<>(props);
+
+        String key = "zyy";
+        int value = 1;
+        producer.send(new ProducerRecord<>("intpu-left", "zyy", "6"));
+        Thread.sleep(10000);
+        producer.send(new ProducerRecord<>("intpu-right", "denglt", "3"));
+
+        Thread.sleep(10000);
     }
 
 }
