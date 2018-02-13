@@ -1,0 +1,48 @@
+消费组【GroupOverview(my-study-tables,consumer)】:
+topic[intpu-left]:partition[0]:offset[4]:owner[no runner]
+topic[intpu-left]:partition[1]:offset[6]:owner[no runner]
+topic[intpu-left]:partition[2]:offset[14]:owner[no runner]
+
+topic[intpu-right]:partition[0]:offset[5]:owner[no runner]
+topic[intpu-right]:partition[1]:offset[8]:owner[no runner]
+topic[intpu-right]:partition[2]:offset[11]:owner[no runner]
+
+一个消费者：
+消费组【GroupOverview(my-study-tables,consumer)】:
+topic[intpu-right]:partition[2]:offset[11]:owner[my-study-tables-febed831-338d-4b55-a392-f8862de608c8-StreamThread-1-consumer-37fc7fac-7f3a-42f9-89a2-b6861a0c54a7]
+topic[intpu-left]:partition[2]:offset[14]:owner[my-study-tables-febed831-338d-4b55-a392-f8862de608c8-StreamThread-1-consumer-37fc7fac-7f3a-42f9-89a2-b6861a0c54a7]
+topic[study]:partition[0]:offset[3]:owner[no runner]
+topic[intpu-right]:partition[1]:offset[8]:owner[my-study-tables-febed831-338d-4b55-a392-f8862de608c8-StreamThread-1-consumer-37fc7fac-7f3a-42f9-89a2-b6861a0c54a7]
+topic[intpu-left]:partition[0]:offset[4]:owner[my-study-tables-febed831-338d-4b55-a392-f8862de608c8-StreamThread-1-consumer-37fc7fac-7f3a-42f9-89a2-b6861a0c54a7]
+topic[study]:partition[1]:offset[24]:owner[no runner]
+topic[intpu-right]:partition[0]:offset[5]:owner[my-study-tables-febed831-338d-4b55-a392-f8862de608c8-StreamThread-1-consumer-37fc7fac-7f3a-42f9-89a2-b6861a0c54a7]
+topic[intpu-left]:partition[1]:offset[6]:owner[my-study-tables-febed831-338d-4b55-a392-f8862de608c8-StreamThread-1-consumer-37fc7fac-7f3a-42f9-89a2-b6861a0c54a7]
+
+两个消费者：
+消费组【GroupOverview(my-study-tables,consumer)】:
+topic[intpu-left]:partition[0]:offset[4]:owner[my-study-tables-febed831-338d-4b55-a392-f8862de608c8-StreamThread-1-consumer-37fc7fac-7f3a-42f9-89a2-b6861a0c54a7]
+topic[intpu-right]:partition[0]:offset[5]:owner[my-study-tables-febed831-338d-4b55-a392-f8862de608c8-StreamThread-1-consumer-37fc7fac-7f3a-42f9-89a2-b6861a0c54a7]
+
+topic[intpu-right]:partition[1]:offset[8]:owner[my-study-tables-bb4414c9-fa6f-4969-9dc3-1a5e3b15fa6c-StreamThread-1-consumer-b1a1be9c-f68e-4761-859f-763349227675]
+topic[intpu-left]:partition[1]:offset[6]:owner[my-study-tables-bb4414c9-fa6f-4969-9dc3-1a5e3b15fa6c-StreamThread-1-consumer-b1a1be9c-f68e-4761-859f-763349227675]
+
+topic[intpu-right]:partition[2]:offset[11]:owner[my-study-tables-febed831-338d-4b55-a392-f8862de608c8-StreamThread-1-consumer-37fc7fac-7f3a-42f9-89a2-b6861a0c54a7]
+topic[intpu-left]:partition[2]:offset[14]:owner[my-study-tables-febed831-338d-4b55-a392-f8862de608c8-StreamThread-1-consumer-37fc7fac-7f3a-42f9-89a2-b6861a0c54a7]
+
+三个消费者
+消费组【GroupOverview(my-study-tables,consumer)】：
+
+topic[intpu-left]:partition[0]:offset[4]:owner[my-study-tables-febed831-338d-4b55-a392-f8862de608c8-StreamThread-1-consumer-37fc7fac-7f3a-42f9-89a2-b6861a0c54a7]
+topic[intpu-right]:partition[0]:offset[5]:owner[my-study-tables-febed831-338d-4b55-a392-f8862de608c8-StreamThread-1-consumer-37fc7fac-7f3a-42f9-89a2-b6861a0c54a7]
+
+topic[intpu-right]:partition[1]:offset[8]:owner[my-study-tables-bb4414c9-fa6f-4969-9dc3-1a5e3b15fa6c-StreamThread-1-consumer-b1a1be9c-f68e-4761-859f-763349227675]
+topic[intpu-left]:partition[1]:offset[6]:owner[my-study-tables-bb4414c9-fa6f-4969-9dc3-1a5e3b15fa6c-StreamThread-1-consumer-b1a1be9c-f68e-4761-859f-763349227675]
+
+topic[intpu-right]:partition[2]:offset[11]:owner[my-study-tables-1f4dc58a-ea93-4687-8faa-41a05dc19ced-StreamThread-1-consumer-ee489c18-673f-47a8-b5a7-bb3e4689a4df]
+topic[intpu-left]:partition[2]:offset[14]:owner[my-study-tables-1f4dc58a-ea93-4687-8faa-41a05dc19ced-StreamThread-1-consumer-ee489c18-673f-47a8-b5a7-bb3e4689a4df]
+
+从上面的结果看是，两个不同topic的相同分区分配给了同一个Consumer。符合join 条件的。
+对于Join操作，如果要得到正确的计算结果，需要保证参与Join的KTable或KStream中Key相同的数据被分配到同一个Task
+       1. 参与Join的KTable或KStream的Key类型相同（实际上，业务含意也应该相同）
+       2. 参与Join的KTable或KStream对应的Topic的Partition数相同
+       3. Partitioner策略的最终结果等效（实现不需要完全一样，只要效果一样即可），也即Key相同的情况下，被分配到ID相同的Partition内

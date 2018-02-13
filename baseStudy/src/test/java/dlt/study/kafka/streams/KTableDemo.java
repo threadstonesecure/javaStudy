@@ -18,6 +18,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ java.lang.UnsatisfiedLinkError: C:\Users\denglt\AppData\Local\Temp\librocksdbjni 5827299809774087783.dll: Can't find dependent libraries
+
+ I think you might need the Visual C++ runtime for Visual Studio 2015 installed,
+  you can find it here https://www.microsoft.com/en-us/download/details.aspx?id=48145.
+ */
+
+/**
  KTable和KStream是Kafka Stream中非常重要的两个概念，它们是Kafka实现各种语义的基础。
  KStream是一个数据流，可以认为所有记录都通过Insert only的方式插入进这个数据流里。
  而KTable代表一个完整的数据集，可以理解为数据库中的表。
@@ -45,7 +52,7 @@ public class KTableDemo {
      */
     @Test
     public void table() throws Exception {
-        //produce();
+        produce();
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-study-tables_2");
         String topic = "study";
         StreamsConfig config = new StreamsConfig(props);
@@ -126,10 +133,30 @@ public class KTableDemo {
 
         String key = "zyy";
         int value = 1;
-        producer.send(new ProducerRecord<>("intpu-left", "zyy", "6"));
+        producer.send(new ProducerRecord<>("intpu-left", "zyy", "８"));
         Thread.sleep(10000);
-        producer.send(new ProducerRecord<>("intpu-right", "denglt", "3"));
+        producer.send(new ProducerRecord<>("intpu-right", "denglt", "９"));
+        Thread.sleep(10000);
+    }
 
+    @Test
+    public void produceJoinErrorData() throws Exception {
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+        props.put(ProducerConfig.ACKS_CONFIG, "1");
+        props.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "gzip");
+        props.put(ProducerConfig.RETRIES_CONFIG, "0");
+        props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, "33554432");
+        props.put(ProducerConfig.BATCH_SIZE_CONFIG, "16384");
+        props.put(ProducerConfig.LINGER_MS_CONFIG, "1");
+        Producer<String, String> producer = new KafkaProducer<>(props);
+
+        String key = "hello world2";
+        int value = 1;
+        producer.send(new ProducerRecord<>("intpu-left", 0, key, "8")); // 不同的分区
+
+        producer.send(new ProducerRecord<>("intpu-right", 1, key, "99"));
+        producer.send(new ProducerRecord<>("intpu-right", 0, key, "8")); // join 结果: hello world2,(8--8<-null)
         Thread.sleep(10000);
     }
 
