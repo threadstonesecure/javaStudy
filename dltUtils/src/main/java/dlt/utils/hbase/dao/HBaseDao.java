@@ -404,13 +404,9 @@ public class HBaseDao implements IHBaseDao {
 	@Override
 	public <T> T execute(String tableName, HBaseCallback<T> action)
 			throws IOException {
-		HTable hTable = getHTable(tableName);
-		try {
+		try(HTable hTable = getHTable(tableName)){
 			return doExecute(hTable, action);
-		} finally {
-			hTable.close();
 		}
-
 	}
 
 	protected <T> T doExecute(HTable hTable, HBaseCallback<T> action)

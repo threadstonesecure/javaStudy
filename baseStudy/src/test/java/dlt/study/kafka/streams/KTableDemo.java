@@ -17,12 +17,6 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- java.lang.UnsatisfiedLinkError: C:\Users\denglt\AppData\Local\Temp\librocksdbjni 5827299809774087783.dll: Can't find dependent libraries
-
- I think you might need the Visual C++ runtime for Visual Studio 2015 installed,
-  you can find it here https://www.microsoft.com/en-us/download/details.aspx?id=48145.
- */
 
 /**
  KTable和KStream是Kafka Stream中非常重要的两个概念，它们是Kafka实现各种语义的基础。

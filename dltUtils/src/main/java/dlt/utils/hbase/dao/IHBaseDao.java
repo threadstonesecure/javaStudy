@@ -16,12 +16,12 @@ import dlt.utils.hbase.ByteTo;
  * @author dlt
  *
  */
-public interface IHBaseDao {
+ interface IHBaseDao {
 
-	public boolean tableExists(String tableName) throws IOException;
+	 boolean tableExists(String tableName) throws IOException;
 	
 
-	public HTableDescriptor getDefine(String tableName) throws IOException;
+	 HTableDescriptor getDefine(String tableName) throws IOException;
 
 	/**
 	 * 创建表
@@ -58,7 +58,7 @@ public interface IHBaseDao {
 	 * @param familyName
 	 * @throws java.io.IOException
 	 */
-	public void addFamily(String tableName, String familyName)
+	 void addFamily(String tableName, String familyName)
 			throws IOException;
 
 	/**
@@ -77,13 +77,13 @@ public interface IHBaseDao {
 	void deleteColumn(String tableName, String rowID, String family,
                       String qualifier) throws IOException;
 
-	public void deleteColumn(String tableName, String[] rowIDs, String family,
+	 void deleteColumn(String tableName, String[] rowIDs, String family,
                              String qualifier) throws IOException;
 
-	public void deleteColumn(String tableName, byte[] rowID, String family,
+	 void deleteColumn(String tableName, byte[] rowID, String family,
                              String qualifier) throws IOException;
 
-	public void deleteColumn(String tableName, byte[][] rowID, String family,
+	 void deleteColumn(String tableName, byte[][] rowID, String family,
                              String qualifier) throws IOException;
 
 	/**
@@ -96,13 +96,13 @@ public interface IHBaseDao {
 	 * @param value
 	 * @throws java.io.IOException
 	 */
-	public void putData(String tableName, String rowID, String family,
+	 void putData(String tableName, String rowID, String family,
                         String qualifier, String value) throws IOException;
 
-	public void putData(String tableName, byte[] rowID, String family,
+	 void putData(String tableName, byte[] rowID, String family,
                         String qualifier, byte[] value) throws IOException;
 
-	public void putData(String tableName, final List<KeyValue> keyValues)
+	 void putData(String tableName, final List<KeyValue> keyValues)
 			throws IOException;
 
 	/**
@@ -117,25 +117,25 @@ public interface IHBaseDao {
 	 * @throws java.io.IOException
 	 */
 
-	public Map<String, String> scanColumn(String tableName, String family,
+	 Map<String, String> scanColumn(String tableName, String family,
                                           String qualifier) throws IOException;
 
-	public Map<String, String> scanColumn(String tableName, String family,
+	 Map<String, String> scanColumn(String tableName, String family,
                                           String qualifier, String startRow, String endRow)
 			throws IOException;
 
-	public <V> Map<String, V> scanColumn(String tableName, String family,
+	 <V> Map<String, V> scanColumn(String tableName, String family,
                                          String qualifier, ByteTo<V> valueConver) throws IOException;
 
-	public <V> Map<String, V> scanColumn(String tableName, String family,
+	 <V> Map<String, V> scanColumn(String tableName, String family,
                                          String qualifier, String startRow, String endRow,
                                          ByteTo<V> valueConver) throws IOException;
 
-	public <T, V> Map<T, V> scanColumn(String tableName, String family,
+	 <T, V> Map<T, V> scanColumn(String tableName, String family,
                                        String qualifier, ByteTo<T> rowKeyConver, ByteTo<V> valueConver)
 			throws IOException;
 
-	public <T, V> Map<T, V> scanColumn(String tableName, String family,
+	 <T, V> Map<T, V> scanColumn(String tableName, String family,
                                        String qualifier, byte[] startRow, byte[] endRow,
                                        ByteTo<T> rowKeyConver, ByteTo<V> valueConver) throws IOException;
 
@@ -150,16 +150,16 @@ public interface IHBaseDao {
 	 * @return
 	 * @throws java.io.IOException
 	 */
-	public Map<String, Result> scanFamily(String tableName, String family)
+	 Map<String, Result> scanFamily(String tableName, String family)
 			throws IOException;
 
-	public Map<String, Result> scanFamily(String tableName, String family,
+	 Map<String, Result> scanFamily(String tableName, String family,
                                           String startRow, String endRow) throws IOException;
 
-	public <T> Map<T, Result> scanFamily(String tableName, String family,
+	 <T> Map<T, Result> scanFamily(String tableName, String family,
                                          ByteTo<T> rowKeyConver) throws IOException;
 
-	public <T> Map<T, Result> scanFamily(String tableName, String family,
+	 <T> Map<T, Result> scanFamily(String tableName, String family,
                                          byte[] startRow, byte[] endRow, ByteTo<T> rowKeyConver)
 			throws IOException;
 
@@ -170,15 +170,15 @@ public interface IHBaseDao {
 	 * @return
 	 * @throws java.io.IOException
 	 */
-	public Map<String, Result> scanRow(String tableName) throws IOException;
+	 Map<String, Result> scanRow(String tableName) throws IOException;
 
-	public Map<String, Result> scanRow(String tableName, String startRow,
+	 Map<String, Result> scanRow(String tableName, String startRow,
                                        String endRow) throws IOException;
 
-	public <T> Map<T, Result> scanRow(String tableName, ByteTo<T> rowKeyConver)
+	 <T> Map<T, Result> scanRow(String tableName, ByteTo<T> rowKeyConver)
 			throws IOException;
 
-	public <T> Map<T, Result> scanRow(String tableName, byte[] startRow,
+	 <T> Map<T, Result> scanRow(String tableName, byte[] startRow,
                                       byte[] endRow, ByteTo<T> rowKeyConver) throws IOException;
 
 	/**
@@ -193,16 +193,16 @@ public interface IHBaseDao {
 	 * @throws java.io.IOException
 	 */
 
-	public String getCellValue(String tableName, String rowID, String family,
+	 String getCellValue(String tableName, String rowID, String family,
                                String qualifier) throws IOException;
 
-	public String getCellValue(String tableName, byte[] rowID, String family,
+	 String getCellValue(String tableName, byte[] rowID, String family,
                                String qualifier) throws IOException;
 
-	public <T> T getCellValue(String tableName, String rowID, String family,
+	 <T> T getCellValue(String tableName, String rowID, String family,
                               String qualifier, ByteTo<T> valueConver) throws IOException;
 
-	public <T> T getCellValue(String tableName, byte[] rowID, String family,
+	 <T> T getCellValue(String tableName, byte[] rowID, String family,
                               String qualifier, ByteTo<T> valueConver) throws IOException;
 
 	/**
@@ -214,10 +214,10 @@ public interface IHBaseDao {
 	 * @return
 	 * @throws java.io.IOException
 	 */
-	public Result getFamily(String tableName, String rowID, String family)
+	 Result getFamily(String tableName, String rowID, String family)
 			throws IOException;
 
-	public Result getFamily(String tableName, byte[] rowID, String family)
+	 Result getFamily(String tableName, byte[] rowID, String family)
 			throws IOException;
 
 	/**
@@ -228,9 +228,9 @@ public interface IHBaseDao {
 	 * @return
 	 * @throws java.io.IOException
 	 */
-	public Result getRow(String tableName, String rowID) throws IOException;
+	 Result getRow(String tableName, String rowID) throws IOException;
 
-	public Result getRow(String tableName, byte[] rowID) throws IOException;
+	 Result getRow(String tableName, byte[] rowID) throws IOException;
 
 	/**
 	 *
@@ -239,6 +239,6 @@ public interface IHBaseDao {
 	 * @return
 	 * @throws java.io.IOException
 	 */
-	public <T> T execute(String tableName, HBaseCallback<T> action)
+	 <T> T execute(String tableName, HBaseCallback<T> action)
 			throws IOException;
 }
