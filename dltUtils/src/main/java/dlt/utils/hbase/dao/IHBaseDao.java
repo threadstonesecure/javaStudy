@@ -16,7 +16,7 @@ import dlt.utils.hbase.ByteTo;
  * @author dlt
  *
  */
- interface IHBaseDao {
+ public interface IHBaseDao {
 
 	 boolean tableExists(String tableName) throws IOException;
 	
