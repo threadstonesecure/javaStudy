@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class RocksDBDemo {
 
-    private String dbName = "D:\\rocksdb\\mystudy3";
+    private String dbName = "D:\\rocksdb\\mystudy";
 
     @Test
     public void openAndCreateDB() throws Exception {
@@ -39,21 +39,25 @@ public class RocksDBDemo {
                                      .setHeight(4)
                                      .setBranchingFactor(4)
                                      .setBucketCount(2000000)).setAllowConcurrentMemtableWrite(false)
-                     .setTableFormatConfig(new PlainTableConfig());
-             RocksDB myDb = RocksDB.open(options, dbName)) {
+                       .setMergeOperator( new StringAppendOperator());
+                    // .setMergeOperator(new CassandraValueMergeOperator(1));
+             // .setTableFormatConfig(new PlainTableConfig());
+             RocksDB myDb=RocksDB.open(options,dbName)){
             WriteOptions wOpts = new WriteOptions().setDisableWAL(false).setSync(false);
             myDb.put("1".getBytes(), "denglt".getBytes(StandardCharsets.UTF_8));
             myDb.put("2".getBytes(), "zyy".getBytes(StandardCharsets.UTF_8));
             myDb.put(wOpts, "3".getBytes(), "鼎鼎大名ddddd".getBytes(StandardCharsets.UTF_8));
-            // myDb.put();
-            // myDb.merge("3".getBytes(), "denglt".getBytes(StandardCharsets.UTF_8));
+            myDb.merge("3".getBytes(), "denglt".getBytes(StandardCharsets.UTF_8));
+            System.out.println(new String(myDb.get("3".getBytes()), StandardCharsets.UTF_8));
             // myDb.merge("4".getBytes(), "hello world".getBytes(StandardCharsets.UTF_8));
         }
     }
 
     @Test
     public void read() throws Exception {
-        try (RocksDB myDb = RocksDB.open(dbName)) {
+
+        try (Options options = new Options().setMergeOperator(new StringAppendOperator());
+             RocksDB myDb = RocksDB.open(options, dbName)) {
             ReadOptions rOpts = new ReadOptions();
             System.out.println(new String(myDb.get("1".getBytes()), StandardCharsets.UTF_8));
             System.out.println(new String(myDb.get("2".getBytes()), StandardCharsets.UTF_8));
@@ -66,7 +70,8 @@ public class RocksDBDemo {
 
     @Test
     public void iterator() throws Exception {
-        try (RocksDB myDb = RocksDB.open(dbName)) {
+        try (Options options = new Options().setMergeOperator(new StringAppendOperator());
+             RocksDB myDb = RocksDB.open(options, dbName)) {
             RocksIterator iterator = myDb.newIterator();
             for (iterator.seekToFirst(); iterator.isValid(); iterator.next()) {
                 //  iterator.status();
@@ -77,7 +82,7 @@ public class RocksDBDemo {
 
     @Test
     public void openOnColumnFamily() throws Exception {
-        try (ColumnFamilyOptions cfOpts = new ColumnFamilyOptions().optimizeUniversalStyleCompaction()) {
+        try (ColumnFamilyOptions cfOpts = new ColumnFamilyOptions().optimizeUniversalStyleCompaction()/*.setMergeOperator(new StringAppendOperator())*/) {
             // list of column family descriptors, first entry must always be default column family
             final List<ColumnFamilyDescriptor> cfDescriptors = Lists.newArrayList(
                     new ColumnFamilyDescriptor(RocksDB.DEFAULT_COLUMN_FAMILY, cfOpts),
