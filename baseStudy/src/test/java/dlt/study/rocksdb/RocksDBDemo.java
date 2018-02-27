@@ -26,7 +26,7 @@ public class RocksDBDemo {
     @Test
     public void openAndCreateDB() throws Exception {
         try (//Statistics stats = new Statistics();
-             Options options = new Options().setCreateIfMissing(true)
+             Options options = new Options().setCreateIfMissing(true).setComparator(BuiltinComparator.BYTEWISE_COMPARATOR)//.useFixedLengthPrefixExtractor()
                      // .setStatistics(stats)
                      .setWriteBufferSize(8 * SizeUnit.KB) // default 4M
                      .setMaxWriteBufferNumber(3) // default 2
@@ -39,10 +39,10 @@ public class RocksDBDemo {
                                      .setHeight(4)
                                      .setBranchingFactor(4)
                                      .setBucketCount(2000000)).setAllowConcurrentMemtableWrite(false)
-                       .setMergeOperator( new StringAppendOperator());
-                    // .setMergeOperator(new CassandraValueMergeOperator(1));
+                     .setMergeOperator(new StringAppendOperator());
+             // .setMergeOperator(new CassandraValueMergeOperator(1));
              // .setTableFormatConfig(new PlainTableConfig());
-             RocksDB myDb=RocksDB.open(options,dbName)){
+             RocksDB myDb = RocksDB.open(options, dbName)) {
             WriteOptions wOpts = new WriteOptions().setDisableWAL(false).setSync(false);
             myDb.put("1".getBytes(), "denglt".getBytes(StandardCharsets.UTF_8));
             myDb.put("2".getBytes(), "zyy".getBytes(StandardCharsets.UTF_8));
@@ -50,6 +50,15 @@ public class RocksDBDemo {
             myDb.merge("3".getBytes(), "denglt".getBytes(StandardCharsets.UTF_8));
             System.out.println(new String(myDb.get("3".getBytes()), StandardCharsets.UTF_8));
             // myDb.merge("4".getBytes(), "hello world".getBytes(StandardCharsets.UTF_8));
+/*            ColumnFamilyOptions cfOpts = new ColumnFamilyOptions().optimizeUniversalStyleCompaction();
+            ColumnFamilyDescriptor cfDescriptor = new ColumnFamilyDescriptor("my-first-columnfamily".getBytes(), cfOpts);
+            ColumnFamilyHandle columnFamily = myDb.createColumnFamily(cfDescriptor);
+            myDb.put(columnFamily, "1".getBytes(), "denglt_family".getBytes(StandardCharsets.UTF_8));
+            ColumnFamilyHandle columnFamily2 = myDb.createColumnFamily(cfDescriptor); // org.rocksdb.RocksDBException: Column family already exists
+            myDb.put(columnFamily, "1".getBytes(), "denglt_family2".getBytes(StandardCharsets.UTF_8));
+            System.out.println(new String(myDb.get(columnFamily, "1".getBytes()), StandardCharsets.UTF_8));
+            System.out.println(new String(myDb.get(columnFamily2, "1".getBytes()), StandardCharsets.UTF_8));*/
+
         }
     }
 
@@ -62,21 +71,44 @@ public class RocksDBDemo {
             System.out.println(new String(myDb.get("1".getBytes()), StandardCharsets.UTF_8));
             System.out.println(new String(myDb.get("2".getBytes()), StandardCharsets.UTF_8));
             System.out.println(new String(myDb.get(rOpts, "3".getBytes()), StandardCharsets.UTF_8));
+
+            ColumnFamilyOptions cfOpts = new ColumnFamilyOptions().optimizeUniversalStyleCompaction();
+            ColumnFamilyDescriptor cfDescriptor = new ColumnFamilyDescriptor("my-first-columnfamily".getBytes(), cfOpts);
+            ColumnFamilyHandle columnFamily = myDb.createColumnFamily(cfDescriptor);
+            System.out.println(new String(myDb.get(columnFamily, "1".getBytes()), StandardCharsets.UTF_8));
+
+
+
+
             //;myDb.multiGet();
             // myDb.close();
             //myDb.delete();
         }
     }
 
+    /**
+     * Snapshot API 允许应用程序创建数据库的时间点视图。
+     * Get 和 Iterator API 可用于从指定的快照读取数据。
+     * 在某种意义上，Snapshot 和 Iterator 都提供了数据库的时间点视图，但它们的实现是不同的。
+     * 短期扫描最好通过迭代器完成，而长时间运行的扫描最好通过快照完成。
+     * 迭代器对与数据库的该时间点视图相对应的所有底层文件保持引用计数 - 这些文件在 Iterator 被释放之前不会被删除。
+     * 另一方面，快照不会防止文件被删除; 但在压缩过程中，压缩程序能够判断快照的存在，它不会删除在任何现有快照中可见的 key。
+     * 快照不会在数据库重新启动后保持持久化，因此重新加载 RocksDB 库（通过服务器重新启动）会释放所有预先存在的快照。
+     *
+     * @throws Exception
+     */
     @Test
     public void iterator() throws Exception {
         try (Options options = new Options().setMergeOperator(new StringAppendOperator());
              RocksDB myDb = RocksDB.open(options, dbName)) {
-            RocksIterator iterator = myDb.newIterator();
+            ReadOptions readOptions = new ReadOptions();//.setPrefixSameAsStart();
+            RocksIterator iterator = myDb.newIterator(readOptions);
+
             for (iterator.seekToFirst(); iterator.isValid(); iterator.next()) {
                 //  iterator.status();
                 System.out.println(new String(iterator.key(), StandardCharsets.UTF_8) + "->" + new String(iterator.value(), StandardCharsets.UTF_8));
             }
+            // iterator.seek();
         }
     }
 
@@ -92,6 +124,7 @@ public class RocksDBDemo {
             final List<ColumnFamilyHandle> columnFamilyHandleList = new ArrayList<>();
 
             try (final DBOptions options = new DBOptions()
+                    // .setCreateMissingColumnFamilies()
                     .setCreateIfMissing(true)
                     .setCreateMissingColumnFamilies(true);
                  final RocksDB myDb = RocksDB.open(options, "D:\\rocksdb\\myCF", cfDescriptors, columnFamilyHandleList)) {
