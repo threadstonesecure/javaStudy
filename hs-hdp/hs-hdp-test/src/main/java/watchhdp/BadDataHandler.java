@@ -10,6 +10,19 @@ import org.apache.commons.logging.LogFactory;
 public class BadDataHandler extends DataHandler {
     private static Log log = LogFactory.getLog(WatchHospital.class);
 
+
+    @Override
+    public boolean filter(Object msg) {
+        if (super.filter(msg)) {
+            if (msg instanceof RequestPack) {
+                RequestPack request = (RequestPack) msg;
+                return request.getCmd().equals(IAccessTypeConstants.ACCESSS_RemainQueryBusiness)
+                        || request.getCmd().equals(IAccessTypeConstants.ACCESSS_TimeSlotRemainQueryBusiness);
+            }
+        }
+        return false;
+    }
+
     @Override
     public ResultPack deal(Object msg) {
         //log.info( msg.getClass().getSimpleName() + ":" + JsonUtils.toJson(msg));

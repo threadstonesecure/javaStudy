@@ -10,21 +10,25 @@ public class LookupDataHandler extends DataHandler {
     private static Log log = LogFactory.getLog(LookupDataHandler.class);
 
     @Override
-    public ResultPack deal(Object msg) {
-        if (msg instanceof RequestPack) {
-            RequestPack request = (RequestPack) msg;
-            if (request.getHosId().equals("226")) {
-                if (request.getCmd().equals(IAccessTypeConstants.ACCESSS_RemainQueryBusiness)) {
-                    log.info("请求->" + JsonUtils.toJson(msg));
-                }
-
-                if (request.getCmd().equals(IAccessTypeConstants.ACCESSS_TimeSlotRemainQueryBusiness)) {
-                    log.info("请求->" + JsonUtils.toJson(msg));
-                }
+    public boolean filter(Object msg) {
+        if (super.filter(msg)) {
+            if (msg instanceof RequestPack) {
+                RequestPack request = (RequestPack) msg;
+                return request.getHosId().equals("226");
             }
-
+            if (msg instanceof ResultPack) {
+                ResultPack resultPack = (ResultPack) msg;
+                return resultPack.getHosId().equals("226");
+            }
         }
+        return false;
+    }
 
+    @Override
+    public ResultPack deal(Object msg) {
+        String data = JsonUtils.toJson(msg);
+        if (data.contains("003451") || data.contains("RealTimeSchQuery"))
+            log.info((msg instanceof RequestPack ? "request->" : "result->") + data);
         return null; // 返回null将不发送数据到server
     }
 }

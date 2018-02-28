@@ -30,8 +30,8 @@ public class WatchHospital {
         hdpWatchClient = new HdpWatchClient()
                 .remoteAddress(ip, port).hosId(hosId).accessToken(accessToken)
                 .reconnectDelay(10).ssl(true)
-                .dataHandler(new BadDataHandler())
-                //.dataHandler(new LookupDataHandler())
+                //.dataHandler(new BadDataHandler())
+                .dataHandler(new LookupDataHandler())
                 .businessThreadPoolSize(2).connect();
         RequestPack requestPack = new RequestPack();
         requestPack.setCmd("$$HDP_COMMAND$$");
