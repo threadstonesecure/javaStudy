@@ -27,7 +27,7 @@ public class ShutdownDemo {
                 System.out.println("run first shutdownHook !");
             }
         })); // 后加入的先运行
-        Thread.currentThread().join();  // 先结束main thread，在执行Hook中的run()方法
+        Thread.currentThread().join();  // 先结束main thread，再执行Hook中的run()方法
         System.out.println("main end!");
     }
 
@@ -47,6 +47,7 @@ public class ShutdownDemo {
         synchronized (ShutdownDemo.class) {
             ShutdownDemo.class.wait();
         }
+        Thread.currentThread().join();
         System.out.println("main end!");
     }
 
