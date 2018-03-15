@@ -281,7 +281,7 @@
                 <groupId>com.oracle</groupId>
                 <artifactId>ojdbc</artifactId>
                 <version>8.0</version> <!-- D:\apache-maven-3.2.3\bin\mvn install:install-file
-                -DgroupId=com.oracle -DartifactId=ojdbc14 -Dversion=10.2.0.5.0 -Dpackaging=jar
+                -DgroupId=com.oracle -DartifactId=ojdbc -Dversion=8.0 -Dpackaging=jar
                 -Dfile=D:\10.2.0.5.0bak\ojdbc14-10.2.0.5.0.jar -->
             </dependency>
 
