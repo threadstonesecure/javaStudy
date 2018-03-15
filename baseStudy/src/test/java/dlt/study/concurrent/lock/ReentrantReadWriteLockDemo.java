@@ -44,7 +44,7 @@ public class ReentrantReadWriteLockDemo {
     public void rwOnSameThread(){
         lock.readLock().lock();
         lock.writeLock().lock(); // 无法同获取
-        System.out.println("同Thread 先获取到read lock，但无法获取到write lock");  // 同线程都不开，
+        System.out.println("同Thread 先获取到read lock，但无法获取到write lock");  // 同线程都不能，
         lock.readLock().unlock();
         lock.writeLock().unlock();
     }

@@ -4,6 +4,7 @@ import com.beust.jcommander.internal.Lists;
 import dlt.study.log4j.Log;
 import org.junit.Test;
 import rx.Observable;
+import rx.Observer;
 import rx.Subscriber;
 import rx.functions.Func0;
 import rx.schedulers.Schedulers;
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * Observer：接收源，英文释义“观察者”，没错！就是观察者模式中的“观察者”，可接收Observable、Subject发射的数据；
  * <p>
- * Subject：Subject是一个比较特殊的对象，既可充当发射源，也可充当接收源，为避免初学者被混淆，本章将不对Subject做过多的解释和使用，重点放在Observable和Observer上，先把最基本方法的使用学会，后面再学其他的都不是什么问题；
+ * Subject：Subject是一个比较特殊的对象，既可充当发射源，也可充当接收源，
  * <p>
  * Subscriber：“订阅者”，也是接收源，那它跟Observer有什么区别呢？Subscriber实现了Observer接口，比Observer多了一个最重要的方法unsubscribe( )，用来取消订阅，当你不再想接收数据了，可以调用unsubscribe( )方法停止接收，Observer 在 subscribe() 过程中,最终也会被转换成 Subscriber 对象，一般情况下，建议使用Subscriber作为接收源；
  * <p>
@@ -41,10 +42,15 @@ public class RxJavaDemo {
         integerObservable.subscribe(new MySubscriber(4));
 
         integerObservable.filter((t) -> t % 2 == 0).subscribe(new MySubscriber(0));
+        Observable<Integer> doOnUnsubscribe = integerObservable.doOnUnsubscribe(() -> System.out.println("doOnUnsubscribe"));
+
+        doOnUnsubscribe.subscribe(new MySubscriber(2));
+
 /*        MySubscriber all = new MySubscriber(2);
         all.add(new MySubscriber(4));
         all.add(new MySubscriber(2));
         integerObservable.subscribe(all);*/
+        Thread.currentThread().join();
     }
 
     @Test
@@ -52,11 +58,11 @@ public class RxJavaDemo {
         Integer[] numbers = {1, 2, 3, 4, 5, 6, 7};
         List<Integer> lists = Arrays.asList(numbers);
         Observable<Integer> integerObservable = Observable.from(numbers);
-        Observable<Integer> syncIntegerObservable = integerObservable.observeOn(Schedulers.io()); //integerObservable.subscribeOn(Schedulers.io());
+        Observable<Integer> asyncIntegerObservable = integerObservable.observeOn(Schedulers.io()); //integerObservable.subscribeOn(Schedulers.io());
         integerObservable.subscribe(new MySubscriber(2));
-        syncIntegerObservable.subscribe(new MySubscriber(4));
-        syncIntegerObservable.filter((t) -> t % 2 == 0).subscribe(new MySubscriber(0));
-        syncIntegerObservable.subscribe(new MySubscriber(0));
+        asyncIntegerObservable.subscribe(new MySubscriber(4));
+        asyncIntegerObservable.filter((t) -> t % 2 == 0).subscribe(new MySubscriber(0));
+        asyncIntegerObservable.subscribe(new MySubscriber(0));
         Thread.currentThread().join();
 
     }
@@ -122,17 +128,41 @@ public class RxJavaDemo {
 
     @Test
     public void test2() throws Exception {
-        Observable.create(new Observable.OnSubscribe<String>() {
+        Observable<String> stringObservable = Observable.create(new Observable.OnSubscribe<String>() {
             @Override
             public void call(Subscriber<? super String> subscriber) {
+                System.out.println(subscriber);
                 Log.info("发送数据create1");
                 subscriber.onNext("create1");
                 Log.info("发送数据create2");
                 subscriber.onNext("create2");
-                Log.info("发送数据");
+                Log.info("发送数据Exception");
+               // subscriber.onError(new Exception());
+                Log.info("发送数据create3");
+                subscriber.onNext("create3");
+                Log.info("发送数据完成!");
                 subscriber.onCompleted();
             }
-        }).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()).subscribe((t) -> Log.info(" 收到" + t));
+        }).subscribeOn(Schedulers.io()).observeOn(Schedulers.io()); // subscribeOn(发射线程),observeOn(接受线程)
+        //stringObservable.subscribe((t) -> Log.info(" 收到 ->" + t));
+        stringObservable.subscribe(new Observer<String>() {
+            @Override
+            public void onCompleted() {
+                System.out.println(this);
+                Log.info("收到2 -> onCompleted");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.info("收到2 -> " + e);
+            }
+
+            @Override
+            public void onNext(String s) {
+                Log.info("收到2 -> " + s);
+            }
+        });
+
         Thread.currentThread().join();
     }
 
