@@ -7,6 +7,7 @@ import rx.schedulers.Schedulers;
 import rx.subjects.AsyncSubject;
 import rx.subjects.BehaviorSubject;
 import rx.subjects.PublishSubject;
+import rx.subjects.ReplaySubject;
 
 public class SubjectDemo {
 
@@ -134,6 +135,8 @@ public class SubjectDemo {
         });
         publishSubject.onNext("publishSubject3");
         publishSubject.onNext("publishSubject4");
+        publishSubject.onCompleted();
+        publishSubject.onNext("publishSubject5");
         Thread.currentThread().join();
     }
 
@@ -142,7 +145,33 @@ public class SubjectDemo {
      */
     @Test
     public void replaySubject() {
-
+        ReplaySubject<String> replaySubject = ReplaySubject.create();
+        replaySubject.onNext("subject1");
+        replaySubject.onNext("subject2");
+        replaySubject.subscribe(System.out::println);
+        replaySubject.onNext("subject3");
+        replaySubject.onNext("subject4");
+        //replaySubject.onCompleted();
+        replaySubject.subscribe(new MyObserver());
+        System.out.println("first ->" + replaySubject.observeOn(Schedulers.io()).toBlocking().last()); // toBlocking().last()//wait onCompleted
+        replaySubject.onNext("subject5");
+        //replaySubject.onCompleted();
     }
 
+    private static class MyObserver implements Observer<String> {
+        @Override
+        public void onCompleted() {
+            Log.info("MyObserver -> onCompleted");
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.info("MyObserver -> onError");
+        }
+
+        @Override
+        public void onNext(String o) {
+            Log.info("MyObserver -> " + o);
+        }
+    }
 }

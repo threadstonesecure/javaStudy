@@ -28,6 +28,7 @@ public class SemaphoreDemo {
     public void zero2() throws Exception{
         Semaphore semaphore = new Semaphore(0);
         semaphore.release();
+        Log.info(semaphore.availablePermits());
         semaphore.acquire();
     }
 }

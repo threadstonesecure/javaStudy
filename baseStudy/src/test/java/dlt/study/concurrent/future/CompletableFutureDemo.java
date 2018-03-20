@@ -27,7 +27,7 @@ public class CompletableFutureDemo {
         cf.whenCompleteAsync((u, e) -> Log.info("result async ->" + u));
         cf.whenComplete((u, e) -> Log.info("result sync 1 ->" + u));
         //cf.whenComplete((u,t) -> Log.info("result sync 2->" + u));
-        CompletableFuture<Integer> cfExcep = cf.exceptionally((e) -> {
+        CompletableFuture<Integer> cfExcep = cf.exceptionally((e) -> { // 错误
             Log.info("exception -> " + e);
             return -1;
         });
