@@ -1,6 +1,7 @@
 package dlt.study.netflix.hystrix;
 
 import com.netflix.hystrix.HystrixRequestCache;
+import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.hystrix.strategy.concurrency.HystrixConcurrencyStrategyDefault;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
 import org.junit.Before;
@@ -134,4 +135,12 @@ public class HystrixDemo {
     public void circuitBreaker() throws Exception{
         new CommandHelloWorld("hello world!").execute();
     }
+
+    @Test
+    public void plugin() throws Exception{
+        HystrixPlugins.getInstance().registerCommandExecutionHook(LogCommandExecutionHook.get());
+        new CommandHelloWorld("hello world!").execute();
+        new CommandHelloWorld("hello world2!").execute();
+    }
+
 }

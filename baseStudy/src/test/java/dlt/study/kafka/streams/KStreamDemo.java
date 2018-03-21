@@ -12,6 +12,7 @@ import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
 import org.apache.kafka.streams.kstream.ValueJoiner;
 import org.apache.kafka.streams.processor.ProcessorSupplier;
+import org.apache.kafka.streams.state.Stores;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -71,19 +72,22 @@ public class KStreamDemo {
         builder.stream("denglt").process((ProcessorSupplier) WordCountProcessor::new, "denglt");
 
         builder.addSource("source", "words")
-                .addProcessor("WordCountProcessor", WordCountProcessor::new, "source");
+                .addProcessor("WordCountProcessor", WordCountProcessor::new, "source")
+                .addStateStore(Stores.create("Counts").withStringKeys().withIntegerValues().persistent().build())
+                .connectProcessorAndStateStores("WordCountProcessor", "Counts");
 
     }
 
 
     /**
      * 对于Join操作，如果要得到正确的计算结果，需要保证参与Join的KTable或KStream中Key相同的数据被分配到同一个Task
-       1. 参与Join的KTable或KStream的Key类型相同（实际上，业务含意也应该相同）
-       2. 参与Join的KTable或KStream对应的Topic的Partition数相同
-       3. Partitioner策略的最终结果等效（实现不需要完全一样，只要效果一样即可），也即Key相同的情况下，被分配到ID相同的Partition内
-     如果上述条件不满足，可通过调用如下方法使得它满足上述条件。
-       1、KStream<K, V> through(Serde<K> keySerde, Serde<V> valSerde, StreamPartitioner<K, V> partitioner, String topic)
-       2、selectKey
+     * 1. 参与Join的KTable或KStream的Key类型相同（实际上，业务含意也应该相同）
+     * 2. 参与Join的KTable或KStream对应的Topic的Partition数相同
+     * 3. Partitioner策略的最终结果等效（实现不需要完全一样，只要效果一样即可），也即Key相同的情况下，被分配到ID相同的Partition内
+     * 如果上述条件不满足，可通过调用如下方法使得它满足上述条件。
+     * 1、KStream<K, V> through(Serde<K> keySerde, Serde<V> valSerde, StreamPartitioner<K, V> partitioner, String topic)
+     * 2、selectKey
+     *
      * @throws Exception
      */
     @Test
@@ -93,19 +97,19 @@ public class KStreamDemo {
         KStreamBuilder builder = new KStreamBuilder();
         KStream<String, String> left = builder.stream("intpu-left");
         KStream<String, String> right = builder.stream("intpu-right");
-        KStream<String, String> all = left.filter((k,v)-> v.split("[,.]")[1].equals("a") ).selectKey((key, value) -> value.split("[,.]")[1])
+        KStream<String, String> all = left.filter((k, v) -> v.split("[,.]")[1].equals("a")).selectKey((key, value) -> value.split("[,.]")[1])
                 .leftJoin(right.selectKey((key, value) -> value.split("[,.]")[0]), new ValueJoiner<String, String, String>() {
                     @Override
                     public String apply(String value1, String value2) {
                         return value1 + "--" + value2;
                     }
                 }, JoinWindows.of(30000)); // 这儿的时间窗口，是以记录产生的时间点来比较
-                /**  SELECT * FROM stream1, stream2
-                      WHERE
-                       stream1.key = stream2.key
-                        AND
-                        stream1.ts - before <= stream2.ts AND stream2.ts <= stream1.ts + after
-                    */
+        /**  SELECT * FROM stream1, stream2
+         WHERE
+         stream1.key = stream2.key
+         AND
+         stream1.ts - before <= stream2.ts AND stream2.ts <= stream1.ts + after
+         */
 
         all.print();
         KafkaStreams streams = new KafkaStreams(builder, config);

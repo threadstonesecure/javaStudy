@@ -43,7 +43,7 @@ public class RocksDBDemo {
              // .setMergeOperator(new CassandraValueMergeOperator(1));
              // .setTableFormatConfig(new PlainTableConfig());
              RocksDB myDb = RocksDB.open(options, dbName)) {
-            WriteOptions wOpts = new WriteOptions().setDisableWAL(false).setSync(false);
+            WriteOptions wOpts = new WriteOptions().setDisableWAL(false)/*process crashes*/.setSync(false)/*machine crashes*/;
             myDb.put("1".getBytes(), "denglt".getBytes(StandardCharsets.UTF_8));
             myDb.put("2".getBytes(), "zyy".getBytes(StandardCharsets.UTF_8));
             myDb.put(wOpts, "3".getBytes(), "鼎鼎大名ddddd".getBytes(StandardCharsets.UTF_8));

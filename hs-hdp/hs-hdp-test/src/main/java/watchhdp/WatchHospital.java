@@ -5,7 +5,9 @@ import com.yuntai.hdp.access.ResultPack;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
+import org.rocksdb.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -25,20 +27,22 @@ public class WatchHospital {
         int port = 8088;
         String hosId = "_";
         String accessToken = "98608d4679a28b719815ee03f7c404e0";
-        hosId = "_" + 226 + "_";
-        accessToken = "eece77d113a908a1bed958b3bbcc0c68";
+        //  hosId = "_" + 226 + "_";
+        //  accessToken = "eece77d113a908a1bed958b3bbcc0c68";
         hdpWatchClient = new HdpWatchClient()
                 .remoteAddress(ip, port).hosId(hosId).accessToken(accessToken)
                 .reconnectDelay(10).ssl(true)
                 //.dataHandler(new BadDataHandler())
-                .dataHandler(new LookupDataHandler())
+                //.dataHandler(new LookupDataHandler())
+                .dataHandler(new StatsDataHandler("/tmp/hdpStatDB"))
                 .businessThreadPoolSize(2).connect();
         RequestPack requestPack = new RequestPack();
         requestPack.setCmd("$$HDP_COMMAND$$");
         requestPack.setBody("{ hdpcmd : \"allInfo\"}");
         ResultPack resultPack = hdpWatchClient.sendData(requestPack, 30);
         System.out.println(resultPack.getBody());
-        System.in.read();
+
+        Thread.currentThread().join();
     }
 
     @Test
@@ -61,7 +65,7 @@ public class WatchHospital {
         request.setBody(s);
         ExecutorService executorService = Executors.newFixedThreadPool(20);
 
-        for (int i=0; i < 100; i ++) {
+        for (int i = 0; i < 100; i++) {
             executorService.execute(new Runnable() {
                 @Override
                 public void run() {
@@ -73,5 +77,48 @@ public class WatchHospital {
         }
         System.out.println("ok");
         System.in.read();
+    }
+
+
+    @Test
+    public void iteratorStatsDB() throws Exception {
+        try (RocksDB myDb = RocksDB.openReadOnly("/tmp/hdpStatDB")) {
+            RocksIterator iterator = myDb.newIterator();
+            int i = 0;
+            int totalRequestNum = 0;
+            for (iterator.seekToFirst(); iterator.isValid(); iterator.next()) {
+
+                String key = new String(iterator.key(), StandardCharsets.UTF_8);
+                Integer value = deserialize(iterator.value());
+                if (key.contains("2018032116")) {
+                    i++;
+                    totalRequestNum = totalRequestNum + value;
+                    System.out.println(key + " : " + value);
+                }
+            }
+            System.out.println("一共有记录 ：" + i);
+            System.out.println("总请求数：" + totalRequestNum);
+            System.out.println("平均每分钟请求数" + totalRequestNum / 60);
+        }
+    }
+
+
+    private Integer deserialize(byte[] data) {
+        if (data == null) {
+            return null;
+        } else if (data.length != 4) {
+            throw new RuntimeException("Size of data received by IntegerDeserializer is not 4");
+        } else {
+            int value = 0;
+            byte[] arr$ = data;
+            int len$ = data.length;
+
+            for (int i$ = 0; i$ < len$; ++i$) {
+                byte b = arr$[i$];
+                value <<= 8;
+                value |= b & 255;
+            }
+            return value;
+        }
     }
 }
