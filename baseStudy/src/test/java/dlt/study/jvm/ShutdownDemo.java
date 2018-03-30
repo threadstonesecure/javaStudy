@@ -7,7 +7,7 @@ import sun.misc.SignalHandler;
 public class ShutdownDemo {
 
     /**
-     * 在进程被kill的时候main函数就已经结束了，仅会运行shutdownHook中run()方法的代码。
+     * 在进程被kill -15 的时候main函数就已经结束了，仅会运行shutdownHook中run()方法的代码。
      * @throws Exception
      */
     @Test
@@ -17,7 +17,7 @@ public class ShutdownDemo {
         Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("run two shutdownHook !");
+                System.out.println("run second shutdownHook !");
             }
         }));
 
@@ -27,8 +27,8 @@ public class ShutdownDemo {
                 System.out.println("run first shutdownHook !");
             }
         })); // 后加入的先运行
-        Thread.currentThread().join();  // 先结束main thread，再执行Hook中的run()方法
-        System.out.println("main end!");
+        Thread.currentThread().join();  // kill -15 时 先结束main thread，再执行Hook中的run()方法
+        System.out.println("main end!"); // 不会运行
     }
 
     /**
@@ -47,7 +47,6 @@ public class ShutdownDemo {
         synchronized (ShutdownDemo.class) {
             ShutdownDemo.class.wait();
         }
-        Thread.currentThread().join();
         System.out.println("main end!");
     }
 
@@ -58,7 +57,6 @@ class SystemShutdown implements SignalHandler {
     @Override
     public void handle(Signal signal) {
         System.out.println(signal.getName() + "->" + signal.getNumber());
-        // Runtime.getRuntime().exit(0);
         synchronized (ShutdownDemo.class) {
             ShutdownDemo.class.notify();
         }

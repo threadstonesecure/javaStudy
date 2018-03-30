@@ -90,7 +90,7 @@ public class WatchHospital {
 
                 String key = new String(iterator.key(), StandardCharsets.UTF_8);
                 Integer value = deserialize(iterator.value());
-                if (key.contains("2018032116")) {
+                if (key.contains("2018032210")) {
                     i++;
                     totalRequestNum = totalRequestNum + value;
                     System.out.println(key + " : " + value);

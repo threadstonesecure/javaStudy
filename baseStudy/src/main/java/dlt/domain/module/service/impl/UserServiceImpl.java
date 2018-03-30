@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import dlt.domain.model.service.UService;
+import dlt.study.log4j.Log;
 import org.jboss.netty.util.internal.ConcurrentHashMap;
 import org.springframework.stereotype.Service;
 
 import dlt.domain.model.User;
 import dlt.domain.model.service.UserService;
 
-import javax.annotation.Resource;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public List<User> getUsers() {
-		
+		Log.info("UserServiceImpl -> getUsers()");
 		Collection<User> cs = mapUsers.values();
 		List<User> users = new ArrayList<User>(cs);
         if (uService != null){
