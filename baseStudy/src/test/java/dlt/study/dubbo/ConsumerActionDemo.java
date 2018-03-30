@@ -19,7 +19,7 @@ import java.util.List;
 public class ConsumerActionDemo {
 
     public static void main(String[] args) throws Throwable {
-        // 获取 注册中心 服务
+        // 获取 注册中心 服务    RegistryConfig
         RegistryFactory registryFactory = ExtensionLoader.getExtensionLoader(RegistryFactory.class).getAdaptiveExtension();
         URL registryURL = new URL("multicast", "224.5.6.7", 1234);  //multicast://224.5.6.7:1234
         Registry registry = registryFactory.getRegistry(registryURL);
@@ -33,7 +33,7 @@ public class ConsumerActionDemo {
         registryDirectory.setProtocol(ExtensionLoader.getExtensionLoader(Protocol.class).getAdaptiveExtension());
         URL serviceUrl = new URL("temp", "127.0.0.1", 80);
         registryDirectory.subscribe(serviceUrl.setServiceInterface("dlt.domain.model.service.UserService")); //订阅服务
-
+       // registry.subscribe(serviceUrl,registryDirectory);
 
         List<Invoker<UserService>> invokersForUserService = registryDirectory.list(new RpcInvocation("getUsers", new Class[]{Void.class}, null));
         invokersForUserService.forEach(System.out::println);
@@ -41,17 +41,17 @@ public class ConsumerActionDemo {
         Result result = invokersForUserService.get(0).invoke(new RpcInvocation("getUsers", new Class[]{}, new Object[]{}));
         System.out.println(result.recreate());
 
-        // 上面不好用， 是Proxy
+        // 上面不好用， 使用ProxyFactory生成UserSevice代理
         ProxyFactory proxyFactory = ExtensionLoader.getExtensionLoader(ProxyFactory.class).getAdaptiveExtension();
-        UserService proxy = proxyFactory.getProxy(invokersForUserService.get(0));
-        List<User> users = proxy.getUsers();
+        UserService userService = proxyFactory.getProxy(invokersForUserService.get(0));
+        List<User> users = userService.getUsers();
         System.out.println(users);
 
         // 上面没有使用Cluster
         Cluster cluster = ExtensionLoader.getExtensionLoader(Cluster.class).getAdaptiveExtension();
         Invoker<UserService> clusterInvoker = cluster.join(registryDirectory);
-        proxy = proxyFactory.getProxy(clusterInvoker);
-        users = proxy.getUsers();
+        userService = proxyFactory.getProxy(clusterInvoker);
+        users = userService.getUsers();
         System.out.println(users);
 
     }
