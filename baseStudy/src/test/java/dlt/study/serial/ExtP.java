@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+/**
+ * Serializable序列化时不会调用默认的构造器，而Externalizable序列化时会调用默认构造器的！！！
+ */
 public class ExtP extends P implements Externalizable {
 
     private String name;
