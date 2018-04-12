@@ -15,4 +15,4 @@ CREATE TABLE IF NOT EXISTS qh_order_detail(
   INDEX `idx_qhod_releasetime` (`release_time` ASC),
   INDEX `idx_qhod_regid` (`REG_ID` ASC))
 ENGINE = InnoDB
-COMMENT = '抢号订单详细信息表'
+COMMENT = '抢号订单详细信息表';

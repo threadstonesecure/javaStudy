@@ -88,7 +88,7 @@ public class WordCount {
     job.setJarByClass(WordCount.class);
     job.setMapperClass(TokenizerMapper.class);
     job.setCombinerClass(IntSumReducer.class); // 这儿的Reducer在Map阶段执行，使用的Output应该与MapTask的一样(与ReduceTask是有差别的)；也可以指定不同的Reducer。
-                                               //Combiner的Reducer的要求<KEYIN,VALUEIN>的类型应该与<KEYOUT,VALUEOUT>的类型一致
+                                               //Combiner的Reducer的要求<KEYIN,VALUEIN>的类型应该与Mapper<KEYOUT,VALUEOUT>的类型一致
     job.setReducerClass(IntSumReducer.class);
 
 /*  job.setMaxMapAttempts();;

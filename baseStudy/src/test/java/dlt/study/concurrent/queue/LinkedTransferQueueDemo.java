@@ -34,7 +34,9 @@ public class LinkedTransferQueueDemo  {
 
         queue.put("test");
         queue.put("test");
-
+       // queue.tryTransfer()
+       // queue.hasWaitingConsumer()
+       // queue.getWaitingConsumerCount()
         queue.transfer("test"); // blocked，until take or poll it;
 
         System.out.println("test is taked!");

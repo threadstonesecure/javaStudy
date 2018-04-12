@@ -6,4 +6,6 @@ package dlt.study.concurrent.queue;
  * 元素大小的评判可以通过元素本身的自然顺序（natural ordering），也可以通过构造时传入的比较器（Comparator）
  */
 public class PriorityQueueDemo {
+
+
 }

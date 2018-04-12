@@ -1,3 +1,15 @@
 #!/usr/bin/env bash
-scp -i /Users/denglt/mysh/privatekey/denglt.pem  /Users/denglt/Dropbox/myprograme/javaStudy/oracleDba/target/oracleDba/oracleDba-0.0.1-SNAPSHOT.jar centos@fortify.iask.in:/home/centos/oracleDba
-ssh -i /Users/denglt/mysh/privatekey/denglt.pem  centos@fortify.iask.in sudo /home/centos/oracleDba/bin/run.sh restart
+
+cd /Users/denglt/onGithub/javaStudy/oracleDba/target
+sshKey=/Users/denglt/Dropbox/privatekey/denglt.pem
+server=root@47.106.93.69
+jar=oracleDba.jar
+
+echo tar jar
+# tar  -cf  $jar   oracleDba
+# echo copy jar to server
+# scp -i $sshKey  $jar $server:/app
+#echo unzip jar on sever
+#ssh -i $sshKey  $server  tar -xf /app/oracleDba.jar -C /app
+echo run jar on sever
+ssh -i $sshKey  $server sh /app/oracleDba/bin/run.sh restart
