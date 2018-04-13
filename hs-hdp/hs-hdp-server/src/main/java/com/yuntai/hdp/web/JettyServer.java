@@ -2,6 +2,7 @@ package com.yuntai.hdp.web;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 import java.net.URL;
@@ -19,7 +20,7 @@ public class JettyServer {
 	}
 
 	public void start() throws Exception {
-		Server server = new Server();
+		Server server = new Server(new QueuedThreadPool(150));
 		ServerConnector connector = new ServerConnector(server);
 		connector.setPort(port);
 		server.addConnector(connector);

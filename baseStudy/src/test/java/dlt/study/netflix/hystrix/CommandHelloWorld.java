@@ -58,9 +58,10 @@ public class CommandHelloWorld extends HystrixCommand<String> {
 
     public CommandHelloWorld(String name, int runtime, int maxSemaphore) {
         super(Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("ExampleGroup"))
-                .andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("ExampleGroup"))
-                .andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter().withCoreSize(3))
+                //.andThreadPoolKey(HystrixThreadPoolKey.Factory.asKey("ExampleGroup"))
+                //.andThreadPoolPropertiesDefaults(HystrixThreadPoolProperties.Setter().withCoreSize(3))
                 .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+                        .withExecutionTimeoutEnabled(true)
                         .withExecutionTimeoutInMilliseconds(6000)
                         .withExecutionIsolationSemaphoreMaxConcurrentRequests(maxSemaphore) // default 10
                         .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE) //为SEMAPHORE时，在调用线程执行run(),性能更好点
@@ -100,7 +101,12 @@ public class CommandHelloWorld extends HystrixCommand<String> {
         try {
             Thread.sleep(runtime);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+           Log.error("CommandHelloWorld.run()->",e);
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e1) {
+               Log.error(e);
+            }
         }
         Log.info("CommandHelloWorld finish! on " + name);
         return "Hello " + name + "!";
@@ -114,12 +120,13 @@ public class CommandHelloWorld extends HystrixCommand<String> {
      */
     @Override
     protected String getFallback() {
-        Log.info("CommandHelloWorld -> getFallback ! on " + name);
+        Log.info("CommandHelloWorld -> getFallback ! on " + name + "。 Reason:" + getExecutionException() /*this.getFailedExecutionException()*/);
+        Log.info("getFallback()->",getExecutionException());
         return "Hello Failure " + name + "!";
     }
 
-    @Override
+   @Override
     protected String getCacheKey() {
-        return name;
-    }
+       return null;
+   }
 }

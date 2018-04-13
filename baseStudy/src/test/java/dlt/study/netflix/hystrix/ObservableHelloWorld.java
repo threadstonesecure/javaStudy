@@ -44,11 +44,15 @@ public class ObservableHelloWorld extends HystrixObservableCommand<String> {
     }
 
     public static void main(String[] args) throws Exception {
-        ObservableHelloWorld helloWorld = new ObservableHelloWorld("denglt");
+  /*      ObservableHelloWorld helloWorld = new ObservableHelloWorld("denglt");
         Observable<String> observe = helloWorld.observe();// 开始执行
         observe.subscribe(s -> Log.info(s));
         //System.out.println(observe.toBlocking().toFuture().get());
-        Log.info(observe.reduce((t1, t2) -> t1 + " " + t2).toBlocking().toFuture()/*等候完成*/.get());
-        //Thread.currentThread().join();
+        Log.info(observe.reduce((t1, t2) -> t1 + " " + t2).toBlocking().toFuture()*//*等候完成*//*.get());
+        //Thread.currentThread().join();*/
+        ObservableHelloWorld helloWorld = new ObservableHelloWorld("denglt");
+        Observable<String> observe = helloWorld.toObservable();
+        observe.toBlocking().toFuture();
+        Thread.currentThread().join();
     }
 }

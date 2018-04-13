@@ -4,6 +4,7 @@ import com.netflix.hystrix.HystrixRequestCache;
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.hystrix.strategy.concurrency.HystrixConcurrencyStrategyDefault;
 import com.netflix.hystrix.strategy.concurrency.HystrixRequestContext;
+import dlt.study.log4j.Log;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -90,17 +91,17 @@ public class HystrixDemo {
             System.out.println(HystrixRequestContext.getContextForCurrentThread());
 
             ExecutorService executorService = Executors.newFixedThreadPool(5);
-            for (int i = 0; i < 8; i++) {
+            for (int i = 0; i < 20; i++) {
                 String cmd = "cmd" + i;
                 executorService.execute(() -> new CommandHelloWorld(cmd, 100, 3).queue());
             }
             Thread.sleep(2000);
-            for (int i = 0; i < 5; i++) {
-                String cmd = "cmd" + i;
+            for (int i = 0; i < 5; i++) {  // 上面的执行次数足够大时，会触发熔断（java.lang.RuntimeException: Hystrix circuit short-circuited and is OPEN），下面执行将全部失败
+                String cmd = "cmd2->" + i;
                 executorService.execute(() -> new CommandHelloWorld(cmd, 100, 3).queue());
             }
 
-/*            new CommandHelloWorld("cmd1", 3000, 3).queue();
+          /*  new CommandHelloWorld("cmd1", 3000, 3).queue();   这个将会按照顺序执行，因为都在 main thread 运行
             new CommandHelloWorld("cmd2", 3000, 3).queue();
             new CommandHelloWorld("cmd3", 3000, 3).queue();
             new CommandHelloWorld("cmd4", 3000, 3).queue();*/
@@ -109,6 +110,37 @@ public class HystrixDemo {
         Thread.currentThread().join();
     }
 
+    /**
+     * 观察在Semaphore时，timeout行为
+     */
+    @Test
+    public void timeoutOnSemaphore(){
+        String result = new CommandHelloWorld("cmd2", 10000, 3).execute();
+        Log.info("result :" + result);
+/*      运行结果：
+        2018-04-13 21:43:54 [main] Log.java INFO CommandHelloWorld is running! on cmd2
+        2018-04-13 21:44:00 [HystrixTimer-1] Log.java INFO CommandHelloWorld -> getFallback ! on cmd2。 Reason:com.netflix.hystrix.exception.HystrixTimeoutException
+        2018-04-13 21:44:04 [main] Log.java INFO CommandHelloWorld finish! on cmd2
+        2018-04-13 21:44:04 [main] Log.java INFO result :Hello Failure cmd2!  // 虽然有超时有触发，但还是get()不会立即返回，需要等待run()执行完，但是thread 不会这样
+                                                                              // 在Semaphore时, 如果想timeout时get()，需要自己处理
+        */
+    }
+
+    /**
+     * 观察在Thread时，timeout行为
+     * @throws Exception
+     */
+    @Test
+    public void timeoutOnThread() throws Exception{
+        try {
+            String result = new CommandHelloWorld("cmd2", 10000, 3, 10).execute();
+            Log.info("result :" + result);
+        }catch (Exception e){
+            Log.error("timeoutOnThread()->",e);
+        }
+        Thread.currentThread().join();
+
+    }
     /**
      * isolation.strategy :Thread
      *
@@ -132,12 +164,12 @@ public class HystrixDemo {
     }
 
     @Test
-    public void circuitBreaker() throws Exception{
+    public void circuitBreaker() {
         new CommandHelloWorld("hello world!").execute();
     }
 
     @Test
-    public void plugin() throws Exception{
+    public void plugin() {
         HystrixPlugins.getInstance().registerCommandExecutionHook(LogCommandExecutionHook.get());
         new CommandHelloWorld("hello world!").execute();
         new CommandHelloWorld("hello world2!").execute();

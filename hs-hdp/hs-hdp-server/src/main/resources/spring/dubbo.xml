@@ -6,7 +6,7 @@
 
 	<dubbo:application name="hs-hdp" />
 
-    <dubbo:provider threads="${dubbo.server.threads}" threadpool="fixed" retries="0" queues="100"/>
+    <dubbo:provider threads="${dubbo.server.threads}"  threadpool="fixed" retries="0" queues="100"/>
 
 	<dubbo:consumer check="false" />
 

@@ -35,7 +35,6 @@ public class RxJavaDemo {
         Integer[] numbers = {1, 2, 3, 4, 5, 6, 7};
         List<Integer> lists = Arrays.asList(numbers);
         Observable<Integer> integerObservable = Observable.from(numbers);//.concatWith(Observable.error());
-
         //被观察者是惰性的，在没有订阅者监听之前它不会做任何事情。
         integerObservable.subscribe(new MySubscriber(2));
         // Thread.sleep(60000);
