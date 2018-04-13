@@ -37,6 +37,8 @@ public class NioServer {
 		// 将通道管理器和该通道绑定，并为该通道注册SelectionKey.OP_ACCEPT事件,注册该事件后，
 		// 当该事件到达时，selector.select()会返回，如果该事件没到达selector.select()会一直阻塞。
 		SelectionKey acceptKey = serverChannel.register(selector, SelectionKey.OP_ACCEPT);
+		Selector  selectorTemp = Selector.open();
+		serverChannel.register(selectorTemp, SelectionKey.OP_ACCEPT); // 可以注册多个Selector
 		//acceptKey.attach(obj);
 	}
 
