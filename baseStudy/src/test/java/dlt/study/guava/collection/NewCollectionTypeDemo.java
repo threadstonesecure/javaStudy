@@ -133,6 +133,8 @@ public class NewCollectionTypeDemo {
      * |---------HashMultimap
      * |-----ListMultimap
      * |---------ArrayListMultimap
+     *
+     * tool class : Multimaps
      */
 
 

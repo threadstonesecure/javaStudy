@@ -125,7 +125,7 @@ public class RedissonLockDemo extends JUnit4Spring {
     @Test
     public void semaphore() throws Exception{
         RSemaphore mySemaphore = redissonClient.getSemaphore("mySemaphore");
-        //mySemaphore.trySetPermits(10);
+        mySemaphore.trySetPermits(10);
         mySemaphore.acquire();
         mySemaphore.release();
     }

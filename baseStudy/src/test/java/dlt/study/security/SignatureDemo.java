@@ -1,5 +1,10 @@
 package dlt.study.security;
 
+import org.junit.Test;
+
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.Signature;
@@ -8,7 +13,11 @@ import java.security.interfaces.RSAPublicKey;
 
 public class SignatureDemo {
 
-    public static void main(String[] args) throws Exception {
+    /*
+      RSA
+     */
+    @Test()
+    public void rsaSigner() throws Exception {
 
         //KeyPairGenerator类用于生成公钥和私钥对，基于RSA算法生成对象
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
@@ -35,6 +44,17 @@ public class SignatureDemo {
         boolean flag = verifySign.verify(signData);
         System.out.println(flag);
 
+    }
 
+    /**
+     * 6HmacSHA512|HmacSHA384|HmacSHA25666666
+     */
+    @Test
+    public void macSigner() throws Exception {
+        Mac hmacSHA512 = Mac.getInstance("HmacSHA512");
+        SecretKey key = new SecretKeySpec("dengltzyy".getBytes(), "HmacSHA512");
+        hmacSHA512.init(key);
+        byte[] signData = hmacSHA512.doFinal("denglt".getBytes());
+        // Mac 没有verify方法，重新对数据签名，再进行比较
     }
 }

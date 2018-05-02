@@ -6,6 +6,9 @@ import sun.security.jca.ProviderList;
 import sun.security.jca.Providers;
 
 import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
@@ -73,6 +76,28 @@ public class CipherDemo {
         byte[] decryptBytes = cipher.doFinal(encryptBytes);
         System.out.println( new String(decryptBytes));
 
+    }
+
+    @Test
+    public void des() throws Exception{
+        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+        SecretKey key = new SecretKeySpec("dengltzy".getBytes(), "DES"); //密钥长度必须是8位
+        cipher.init(Cipher.ENCRYPT_MODE,key);
+        byte[] enc = cipher.doFinal("helloword".getBytes());
+
+        cipher.init(Cipher.DECRYPT_MODE,key);
+        System.out.println(new String(cipher.doFinal(enc)));
+    }
+
+    @Test
+    public void HmacSHA512() throws Exception{
+        Cipher cipher = Cipher.getInstance("HmacSHA512");
+        SecretKey key = new SecretKeySpec("dengltzy".getBytes(), "HmacSHA512");
+        cipher.init(Cipher.ENCRYPT_MODE,key);
+        byte[] enc = cipher.doFinal("helloword".getBytes());
+
+        cipher.init(Cipher.DECRYPT_MODE,key);
+        System.out.println(new String(cipher.doFinal(enc)));
     }
 
     @Test

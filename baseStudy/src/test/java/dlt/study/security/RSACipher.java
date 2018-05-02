@@ -120,7 +120,7 @@ public class RSACipher {
         String msg = "郭XX-精品相声";
         //KeyPairGenerator类用于生成公钥和私钥对，基于RSA算法生成对象
         KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA");
-        //初始化密钥对生成器，密钥大小为1024位
+        //初始化密钥对生成器，密钥大小为1024位，1024/8 = 128个字节 ，可加密的明文长度 128 - 11
         keyPairGen.initialize(1024);
         //生成一个密钥对，保存在keyPair中
         KeyPair keyPair = keyPairGen.generateKeyPair();
@@ -132,6 +132,7 @@ public class RSACipher {
         //用公钥加密
         byte[] srcBytes = msg.getBytes();
         byte[] resultBytes = rsa.encrypt2(publicKey, srcBytes);
+        System.out.println(resultBytes.length); // RSA 生成的密文长度总是固定的。
 
         //用私钥解密
         byte[] decBytes = rsa.decrypt2(privateKey, resultBytes);

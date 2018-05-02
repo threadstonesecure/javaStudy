@@ -11,6 +11,7 @@ public class SemaphoreDemo {
     public  void info() throws Exception{
         Semaphore semaphore = new Semaphore(3,true);
         Log.info(semaphore.availablePermits());
+       // Log.info(semaphore.drainPermits());
         semaphore.acquire();
         semaphore.acquire();
         Log.info(semaphore.availablePermits());
@@ -21,14 +22,15 @@ public class SemaphoreDemo {
     @Test
     public void zero() throws Exception{
         Semaphore semaphore = new Semaphore(0);
-        semaphore.acquire();
+        semaphore.acquire();  // blocked
     }
 
     @Test
     public void zero2() throws Exception{
         Semaphore semaphore = new Semaphore(0);
         semaphore.release();
-        Log.info(semaphore.availablePermits());
+        semaphore.release();
+        Log.info(semaphore.availablePermits());//2
         semaphore.acquire();
     }
 }

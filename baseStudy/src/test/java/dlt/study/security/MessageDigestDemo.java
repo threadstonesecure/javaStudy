@@ -29,6 +29,7 @@ public class MessageDigestDemo {
 
     }
 
+
     @Test
     public void md52() throws Exception {
         MessageDigest messageDigest = MessageDigest.getInstance("MD5");

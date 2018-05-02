@@ -90,7 +90,7 @@ public class WatchHospital {
 
                 String key = new String(iterator.key(), StandardCharsets.UTF_8);
                 Integer value = deserialize(iterator.value());
-                if (key.contains("2018032210")) {
+                if (key.contains("2018041809")) {
                     i++;
                     totalRequestNum = totalRequestNum + value;
                     System.out.println(key + " : " + value);
@@ -98,7 +98,7 @@ public class WatchHospital {
             }
             System.out.println("一共有记录 ：" + i);
             System.out.println("总请求数：" + totalRequestNum);
-            System.out.println("平均每分钟请求数" + totalRequestNum / 60);
+            System.out.println("平均每分钟请求数:" + totalRequestNum / 60);
         }
     }
 

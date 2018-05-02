@@ -122,6 +122,7 @@ public class HystrixDemo {
         2018-04-13 21:44:00 [HystrixTimer-1] Log.java INFO CommandHelloWorld -> getFallback ! on cmd2。 Reason:com.netflix.hystrix.exception.HystrixTimeoutException
         2018-04-13 21:44:04 [main] Log.java INFO CommandHelloWorld finish! on cmd2
         2018-04-13 21:44:04 [main] Log.java INFO result :Hello Failure cmd2!  // 虽然有超时有触发，但还是get()不会立即返回，需要等待run()执行完，但是thread 不会这样
+                                                                              // https://github.com/Netflix/Hystrix/issues/835
                                                                               // 在Semaphore时, 如果想timeout时get()，需要自己处理
         */
     }
