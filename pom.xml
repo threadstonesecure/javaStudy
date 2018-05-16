@@ -13,6 +13,7 @@
         <module>redisSentinel</module>
         <module>jtaDemo</module>
         <module>oracleDba</module>
+        <module>instrumentation</module>
     </modules>
     <name>javastudy</name>
     <url>http://maven.apache.org</url>
