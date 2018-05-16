@@ -43,7 +43,7 @@ import java.nio.channels.SocketChannel;
 
     @OnMethod(
         clazz="java.net.ServerSocket",
-        method="<init>" 
+        method="<init>"
     )
     public static void onServerSocket(@Self ServerSocket self,
         int p, int backlog, InetAddress bindAddr) {

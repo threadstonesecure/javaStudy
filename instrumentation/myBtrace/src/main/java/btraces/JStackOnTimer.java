@@ -40,13 +40,15 @@ import static com.sun.btrace.BTraceUtils.Threads.jstackAll;
 public class JStackOnTimer {
 
     static {
-        deadlocks(false);
-        jstackAll();
-        println("=============================================");
+        _jstack();
     }
 
     @OnTimer(30000)
     public static void jstack() {
+        _jstack();
+    }
+
+    private static  void _jstack(){
         deadlocks(false);
         jstackAll();
         println("=============================================");
