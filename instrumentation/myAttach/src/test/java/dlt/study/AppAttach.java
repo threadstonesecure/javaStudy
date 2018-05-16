@@ -20,8 +20,9 @@ public class AppAttach {
             System.out.println("找到target vm:" + optional.get());
             VirtualMachine targetVM = VirtualMachine.attach(optional.get());
             //System.out.println(targetVM.getClass());
-            targetVM.loadAgentPath(attachJar);
-            Thread.sleep(60000);
+            //targetVM.loadAgent(attachJar,"add");
+            targetVM.loadAgent(attachJar,"delete");
+            //Thread.sleep(60000);
             targetVM.detach();
         }
 

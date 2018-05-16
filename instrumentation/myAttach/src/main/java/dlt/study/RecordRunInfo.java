@@ -11,6 +11,16 @@ import java.lang.instrument.IllegalClassFormatException;
 import java.security.ProtectionDomain;
 
 public class RecordRunInfo implements ClassFileTransformer {
+
+    private static RecordRunInfo recordRunInfo = new RecordRunInfo();
+
+    private RecordRunInfo(){}
+
+    public static RecordRunInfo get() {
+        return recordRunInfo;
+    }
+
+
     @Override
     public byte[] transform(ClassLoader loader,
                             String className,
@@ -19,7 +29,7 @@ public class RecordRunInfo implements ClassFileTransformer {
                             byte[] classfileBuffer) throws IllegalClassFormatException {
         if (className.startsWith("dlt/study")) {
             try {
-                CtClass ctclass = ClassPool.getDefault().makeClass(new ByteArrayInputStream(classfileBuffer));
+                CtClass ctclass = ClassPool.getDefault().makeClass(new ByteArrayInputStream(classfileBuffer), false);
                 for (CtMethod ctMethod : ctclass.getMethods()) {
                     if (isNative(ctMethod)) continue;
                     System.out.println(ctMethod.getName());
@@ -38,4 +48,6 @@ public class RecordRunInfo implements ClassFileTransformer {
     public boolean isNative(CtMethod method) {
         return Modifier.isNative(method.getModifiers());
     }
+
+
 }
