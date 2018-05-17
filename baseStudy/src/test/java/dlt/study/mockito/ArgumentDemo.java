@@ -2,14 +2,9 @@ package dlt.study.mockito;
 
 import com.beust.jcommander.internal.Lists;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.internal.matchers.Any;
-import org.mockito.internal.progress.ArgumentMatcherStorage;
-import org.mockito.internal.progress.MockingProgress;
 import org.mockito.internal.progress.ThreadSafeMockingProgress;
 
 import java.util.List;

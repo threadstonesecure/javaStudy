@@ -1,16 +1,13 @@
 package dlt.study.mockito;
 
-import com.beust.jcommander.internal.Lists;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.internal.matchers.Any;
-
-import static org.mockito.Mockito.*;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 public class MockitoDemo {
 
