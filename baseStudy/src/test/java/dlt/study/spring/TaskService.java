@@ -26,24 +26,27 @@ public class TaskService implements ITask{
     }
 
 
-
-
     //@Async
     public void doTask(){
         try {
             Object proxy = AopContext.currentProxy();  //ProxyConfig.setExposeProxy(true);
 
-            System.out.println("Proxy Object:" + proxy + ":" + proxy.getClass());
+           // System.out.println("Proxy Object:" + proxy + ":" + proxy.getClass());
         }catch(Exception ex){
 
         }
-        System.out.println("Target Object:" + this);
+        log.info("Target Object:" + this);
         try {
             Thread.sleep(10000);
         }catch (Exception ex){
 
         }
         log.info("doTask by " + taskName);
+        doSubTask();
+    }
+
+    public void doSubTask(){
+        log.info("doSubTask by " + taskName);
     }
 
     //@MyAop

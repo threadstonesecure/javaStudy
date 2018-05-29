@@ -14,11 +14,11 @@ public class MyAopMethodInterceptor2 implements MethodInterceptor {
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
-        log.info("MyAop begin...");
-        log.info("MethodInvocation:" + invocation.getClass());
-        log.info("Target Object: "+ invocation.getThis());
+        log.info("MyAop2 begin...");
+        log.info("MethodInvocation2:" + invocation.getClass());
+        log.info("Target Object 2: "+ invocation.getThis());
         Object result = invocation.proceed();
-        log.info("MyAop end !");
+        log.info("MyAop2 end !");
         return result;
     }
 }

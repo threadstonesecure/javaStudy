@@ -32,8 +32,30 @@ public class MethodInvocationDemo {
 
     @Test
     public void cglibMethodInvocation() {
-        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "/logs/cglib/class");
+        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "/tmp/logs/cglib/class");
         TaskService taskService = (TaskService) Enhancer.create(TaskService.class, new org.springframework.cglib.proxy.MethodInterceptor() {
+            @Override
+            public Object intercept(Object obj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
+                MyAopMethodInterceptor interceptor = new MyAopMethodInterceptor();
+                MyAopMethodInterceptor2 interceptor2 = new MyAopMethodInterceptor2();
+                List<MethodInterceptor> interceptors = new ArrayList<>();
+                interceptors.add(interceptor);
+                interceptors.add(interceptor2);
+
+                MethodInvocation methodInvocation =  new  CglibMethodInvocation(obj,null,method,args,interceptors,methodProxy);
+                return methodInvocation.proceed();
+            }
+        });
+        taskService.doTask();
+    }
+
+
+    @Test
+    public void cglibMethodInvocation2() {
+        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "/tmp/logs/cglib/class");
+        Enhancer enhancer = new Enhancer();
+        enhancer.setSuperclass(TaskService.class);
+        enhancer.setCallback(new org.springframework.cglib.proxy.MethodInterceptor() {
             @Override
             public Object intercept(Object obj, Method method, Object[] args, MethodProxy methodProxy) throws Throwable {
                 MyAopMethodInterceptor interceptor = new MyAopMethodInterceptor();
@@ -45,6 +67,10 @@ public class MethodInvocationDemo {
                 return methodInvocation.proceed();
             }
         });
+
+        enhancer.setInterceptDuringConstruction(false);
+        TaskService taskService  = (TaskService)enhancer.create();
         taskService.doTask();
     }
+
 }

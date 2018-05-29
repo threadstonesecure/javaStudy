@@ -1,5 +1,6 @@
 package dlt.study.guava.collection;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import org.junit.Test;
 
@@ -25,5 +26,7 @@ public class ImmutableCollectDemo {
                         .addAll(COLOR_NAMES)
                         .add("black")
                         .build();
+
+       // ImmutableList.of
     }
 }

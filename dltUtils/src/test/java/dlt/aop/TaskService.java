@@ -24,8 +24,12 @@ public class TaskService {
     }
 
     public void doTask() {
-
         log.info("doTask by " + taskName);
+
+        doSubTask(); // cglib 的AOP在在这儿是生效的，jdk动态代理不行
     }
 
+    protected void  doSubTask(){
+        log.info("doSubTask by " + taskName);
+    }
 }

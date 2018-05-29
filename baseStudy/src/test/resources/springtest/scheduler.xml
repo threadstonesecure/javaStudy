@@ -6,7 +6,7 @@
 	                       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd"
 	   default-init-method="init-" default-destroy-method="destroy-">
 
-<!--	<task:annotation-driven executor="executor" scheduler="taskScheduler"  />
+    <!--<task:annotation-driven executor="executor" scheduler="taskScheduler"  />
 	<task:executor id="executor" pool-size="2-5" queue-capacity="100" rejection-policy="CALLER_RUNS" keep-alive="120"/>
 	<task:scheduler id="taskScheduler" pool-size="3" />-->
 </beans> 

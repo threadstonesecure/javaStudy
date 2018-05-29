@@ -49,6 +49,7 @@
 		<property name="repeatInterval" value="60000" />
 	</bean>
 
+
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
@@ -57,14 +58,16 @@
 				<ref bean="scanRedirectHospitalTrigger" />
 			</list>
 		</property>
-	</bean>-->
+		<property name="configLocation"  value="classpath:quartz.properties"/>
+	</bean>
+	-->
 
 	<!-- Run the job every 5 seconds only on Weekends <bean id="cronTrigger" 
 		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean"> <property 
 		name="jobDetail" ref="complexJobDetail" /> <property name="cronExpression" 
 		value="0/5 * * ? * SAT-SUN" /> </bean> -->
 
-	<task:annotation-driven executor="hdpExecutor" scheduler="hdpTaskScheduler" />
+	<task:annotation-driven executor="hdpExecutor" scheduler="hdpTaskScheduler"/>
 	<task:executor id="hdpExecutor" pool-size="2-5" queue-capacity="100" rejection-policy="CALLER_RUNS" keep-alive="120"/>
 	<task:scheduler id="hdpTaskScheduler" pool-size="3" />
 </beans> 

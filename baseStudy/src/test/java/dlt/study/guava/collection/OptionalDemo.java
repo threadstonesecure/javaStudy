@@ -10,5 +10,6 @@ public class OptionalDemo {
         Optional<Integer> possible = Optional.of(5);
         System.out.println(possible.isPresent()); // returns true
         System.out.println(possible.get());
+
     }
 }

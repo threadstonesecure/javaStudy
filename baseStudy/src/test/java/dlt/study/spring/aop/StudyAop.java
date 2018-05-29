@@ -30,7 +30,7 @@ public class StudyAop {
 
     @Before
     public void init(){
-        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "/logs/cglib/class");
+        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "/tmp/logs/cglib/class");
     }
 
     /**
@@ -135,10 +135,11 @@ public class StudyAop {
         AdvisedSupport advised = new AdvisedSupport();
         advised.setExposeProxy(true);
         Advisor advisor = new MyAopAdvisor();
+        //Advisor advisor1 = new MyAopAdvisor();
         advised.addAdvisor(advisor);
-
-        advised.setTarget(bean);
-        advised.setInterfaces(ITask.class);  // 将使用JDK动态代理
+    //    advised.addAdvisor(advisor1);
+        advised.setTarget(bean); // 设置目标对象，其实Cglib是可以不需要target对象的，见dlt.aop。MethodInvocationDemo
+       // advised.setInterfaces(ITask.class);  // 将使用JDK动态代理
         AopProxy aopProxy =  aopProxyFactory.createAopProxy(advised);
         Object aopBean = aopProxy.getProxy();
         if (aopBean instanceof ITask){
