@@ -1,6 +1,8 @@
-package com.yuntai.hdp.access;
+package com.yutai.hdp.gateway.accesshdpserver;
 
 import com.alibaba.dubbo.rpc.cluster.Merger;
+import com.yuntai.hdp.access.ResultKind;
+import com.yuntai.hdp.access.ResultPack;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -9,7 +9,8 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.stream.IntStream;
-// 令牌桶算法(Token Bucket)和 Leaky Bucket(漏桶) 效果一样但方向相反的算法,更加容易理解.随着时间流逝,系统会按恒定1/QPS时间间隔(如果QPS=100,则间隔是10ms)往桶里加入Token(想象和漏洞漏水相反,有个水龙头在不断的加水),如果桶已经满了就不再加了.新请求来临时,会各自拿走一个Token,如果没有Token可拿了就阻塞或者拒绝服务.
+// 令牌桶算法(Token Bucket)和 Leaky Bucket(漏桶) 效果一样但方向相反的算法,更加容易理解.
+// 随着时间流逝,系统会按恒定1/QPS时间间隔(如果QPS=100,则间隔是10ms)往桶里加入Token(想象和漏洞漏水相反,有个水龙头在不断的加水),如果桶已经满了就不再加了.新请求来临时,会各自拿走一个Token,如果没有Token可拿了就阻塞或者拒绝服务.
 
 /**
  * RateLimiter使用的是一种叫令牌桶的流控算法，RateLimiter会按照一定的频率往桶里扔令牌，线程拿到令牌才能执行，

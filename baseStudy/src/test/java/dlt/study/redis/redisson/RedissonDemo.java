@@ -51,13 +51,14 @@ public class RedissonDemo extends JUnit4Spring {
     RedissonClient redissonClient;
 
     @Test
-    public void config() throws Exception {
+    public void configCluster() throws Exception {
         Config config = new Config();
-        config.setUseLinuxNativeEpoll(true);
+        config.setUseLinuxNativeEpoll(false);
         config.useClusterServers()
                 .setPassword("")
                 //可以用"rediss://"来启用SSL连接
-                .addNodeAddress("redis://127.0.0.1:7181", "redis://127.0.0.1:7182");
+                //.addNodeAddress("redis://127.0.0.1:7181", "redis://127.0.0.1:7182");
+                .addNodeAddress("redis://127.0.0.1:6379");
 
 
 /*        config.useSentinelServers().addSentinelAddress()
@@ -68,6 +69,23 @@ public class RedissonDemo extends JUnit4Spring {
         System.out.println(config.toJSON());
         System.out.println(config.toYAML());
         System.out.println(config.toString());
+        RedissonClient redisson = Redisson.create(config);
+
+    }
+
+    @Test
+    public void configSingleServer() throws Exception {
+        Config config = new Config();
+        //config.setLockWatchdogTimeout()
+        config.setUseLinuxNativeEpoll(false);
+        config.useSingleServer()
+                //.setPassword("")
+                .setAddress("redis://127.0.0.1:6379");
+        System.out.println(config.toJSON());
+        System.out.println(config.toYAML());
+        System.out.println(config.toString());
+        RedissonClient redisson = Redisson.create(config);
+
     }
 
     @Test
@@ -164,10 +182,6 @@ public class RedissonDemo extends JUnit4Spring {
     }
 
 
-
-
-
-
     /**
      * Multimap的多值实现，使用指定的Multimap名称 + Map 的键值 作为redis里的对象(List or Set)的key.
      * eg: {multimap}:Baaymosk0bNsX3suSnn9bQ
@@ -261,7 +275,7 @@ public class RedissonDemo extends JUnit4Spring {
         System.in.read();
 
         RPatternTopic<String> patternTopic = redissonClient.getPatternTopic("topic*");
-       // patternTopic.addListener() PatternStatusListener
+        // patternTopic.addListener() PatternStatusListener
         int listenerId = patternTopic.addListener(new PatternMessageListener<String>() {
             @Override
             public void onMessage(String pattern, String channel, String msg) {
@@ -357,7 +371,7 @@ public class RedissonDemo extends JUnit4Spring {
     }
 
     @Test
-    public void sortedSet(){
+    public void sortedSet() {
         RSortedSet<String> mySortedSet = redissonClient.getSortedSet("mySortedSet", StringCodec.INSTANCE);
 /*        mySortedSet.trySetComparator()
         mySortedSet.add()  // 会加个分布式lock*/
