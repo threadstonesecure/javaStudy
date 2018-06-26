@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.yuntai.hdp.access.ResultKind;
+import com.yuntai.hdp.server.NodeConfig;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -13,11 +14,14 @@ import com.yuntai.hdp.access.RequestPack;
 import com.yuntai.hdp.access.ResultPack;
 import com.yuntai.hdp.access.service.UpdataHandler;
 
+import javax.annotation.Resource;
+
 /**
  * @Description UpdataHandler管理者，代理UpdataHandler
  * @author denglt@hundsun.com
  * @CopyRight: 版权归Hundsun 所有
  */
+
 
 public class UpdataHandlerManager implements UpdataHandler {
 
@@ -27,6 +31,12 @@ public class UpdataHandlerManager implements UpdataHandler {
 
 	private ReentrantLock lock = new ReentrantLock();
 
+	@Resource
+	private NodeConfig nodeConfig;
+
+	@Resource(name="hdpServer2HdpServer")
+	private UpdataHandler hdpServer2HdpServer;
+
 	@Override
 	public boolean checkData(RequestPack data) {
 		return true;
@@ -34,11 +44,14 @@ public class UpdataHandlerManager implements UpdataHandler {
 
 	@Override
 	public ResultPack process(RequestPack request) {
-        //log.info(String.format("===>收到调用云服务请求:%s", request.toKeyString()));
 		String cmdCode = request.getCmd();
 		if (cmdCode == null || cmdCode.equals("")) {
 			log.error("RequestPack cmd is null。");
 			return null;
+		}
+
+		if (nodeConfig.isToYunServiceByCascade()){
+			return hdpServer2HdpServer.process(request);
 		}
 		CommandProvider provider = null;
 		try {

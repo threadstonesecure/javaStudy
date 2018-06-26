@@ -1,4 +1,4 @@
-package com.yuntai.hdp.server.updata.dynamic;
+package com.yuntai.hdp.server.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,6 +9,8 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import com.yuntai.hdp.server.updata.Command;
+import com.yuntai.hdp.server.updata.Registry;
 import org.springframework.stereotype.Service;
 
 /**

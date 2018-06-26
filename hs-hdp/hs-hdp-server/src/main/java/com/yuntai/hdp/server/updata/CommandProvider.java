@@ -6,7 +6,6 @@ import org.apache.commons.logging.LogFactory;
 import com.yuntai.hdp.access.RequestPack;
 import com.yuntai.hdp.access.ResultPack;
 import com.yuntai.hdp.access.service.UpdataHandler;
-import com.yuntai.hdp.server.updata.dynamic.Command;
 
 /**
  * @Description 指令提供者类 建立指令编码与UpdataHander的对应关系

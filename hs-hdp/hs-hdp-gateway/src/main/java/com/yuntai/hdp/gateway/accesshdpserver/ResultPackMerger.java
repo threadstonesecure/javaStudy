@@ -1,4 +1,4 @@
-package com.yutai.hdp.gateway.accesshdpserver;
+package com.yuntai.hdp.gateway.accesshdpserver;
 
 import com.alibaba.dubbo.rpc.cluster.Merger;
 import com.yuntai.hdp.access.ResultKind;

@@ -1,4 +1,4 @@
-package com.yuntai.hdp.server.updata.dynamic;
+package com.yuntai.hdp.server.updata;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,6 +8,8 @@ import javax.annotation.Resource;
 
 import com.alibaba.dubbo.rpc.service.EchoService;
 import com.google.common.collect.Ordering;
+import com.yuntai.hdp.server.NodeConfig;
+import com.yuntai.hdp.server.dao.HdpDao;
 import com.yuntai.util.HdpHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,8 +20,6 @@ import com.alibaba.dubbo.config.ApplicationConfig;
 import com.alibaba.dubbo.config.ReferenceConfig;
 import com.alibaba.dubbo.config.RegistryConfig;
 import com.yuntai.hdp.access.service.UpdataHandler;
-import com.yuntai.hdp.server.updata.CommandProvider;
-import com.yuntai.hdp.server.updata.UpdataHandlerManager;
 
 /**
  * @author denglt
@@ -35,6 +35,9 @@ public class DiscoveryUpdataHandler {
 
     @Resource
     private HdpDao hdpDao;
+
+    @Resource
+    private NodeConfig nodeConfig;
 
     private UpdataHandlerManager updataHandlerManager;
 
@@ -166,6 +169,7 @@ public class DiscoveryUpdataHandler {
 
     @Scheduled(fixedDelay = 60000)
     public void discovery() {
+        if (nodeConfig.isToYunServiceByCascade()) return;
         try {
             // checkHealth();
             addRegistry();

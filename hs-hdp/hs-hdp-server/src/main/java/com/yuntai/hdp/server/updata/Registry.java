@@ -1,4 +1,4 @@
-package com.yuntai.hdp.server.updata.dynamic;
+package com.yuntai.hdp.server.updata;
 
 import com.alibaba.dubbo.config.RegistryConfig;
 import org.apache.commons.lang3.StringUtils;

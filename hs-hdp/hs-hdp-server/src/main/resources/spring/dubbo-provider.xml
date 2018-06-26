@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://code.alibabatech.com/schema/dubbo  http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    <dubbo:application name="hs-hdp-server"/>
+<!--    <dubbo:application name="hs-hdp-server"/>
 
     <dubbo:provider threads="${dubbo.server.threads}" threadpool="fixed" retries="0" queues="100"/>
 
@@ -15,12 +15,12 @@
                     accesslog="${dubbo.protocol.accesslog}"/>
 
 
-    <!-- 增加group配置是为hdp集群服务 ，hdp-gateway 需要同时配置 ，需要同时发布 -->
+    &lt;!&ndash; 增加group配置是为hdp集群服务 ，hdp-gateway 需要同时配置 ，需要同时发布 &ndash;&gt;
 
     <dubbo:service interface="com.yuntai.hdp.access.service.DowndataHandler" timeout="60000"
                    ref="downdataHandler" group="${hdp.server.name}"/>
 
     <dubbo:service interface="com.yuntai.hdp.access.service.AccessHospitalHandler"
-                   ref="accessHospitalHandler" timeout="60000" group="${hdp.server.name}"/>
+                   ref="accessHospitalHandler" timeout="60000" group="${hdp.server.name}"/>-->
 
 </beans>

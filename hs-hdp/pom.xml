@@ -258,6 +258,6 @@
         <module>hs-hdp-api</module>
         <module>hs-hdp-client</module>
         <module>hs-hdp-server</module>
-        <module>hs-hdp-gateway</module><!---->
+        <module>hs-hdp-gateway</module>
     </modules>
 </project>

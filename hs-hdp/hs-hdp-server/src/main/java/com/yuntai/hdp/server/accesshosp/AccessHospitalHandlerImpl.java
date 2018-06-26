@@ -2,8 +2,10 @@ package com.yuntai.hdp.server.accesshosp;
 
 import com.yuntai.hdp.access.ResultKind;
 import com.yuntai.hdp.server.HdpServer;
+import com.yuntai.hdp.server.HdpServer2HdpServer;
 import com.yuntai.hdp.server.HospitalManager;
 import com.yuntai.hdp.future.FutureResult;
+import com.yuntai.hdp.server.NodeConfig;
 import com.yuntai.util.HdpHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -26,6 +28,12 @@ public class AccessHospitalHandlerImpl implements AccessHospitalHandler {
 
     @Resource
     private SendRequest sender;
+
+    @Resource
+    private NodeConfig nodeConfig;
+
+    @Resource(name="hdpServer2HdpServer")
+    private AccessHospitalHandler  hdpServer2HdpServer;
 
     /**
      * 获取医院对接数据
@@ -67,6 +75,10 @@ public class AccessHospitalHandlerImpl implements AccessHospitalHandler {
             resultPack.setMsg(ResultKind.ERROR_MISS_KEYFIELD.getMessage("body"));
             log.error(String.format("===>请求失败,数据错误:%s", resultPack.toKeyString()));
             return resultPack;
+        }
+
+        if (nodeConfig.isToHosByCascade()){
+            return hdpServer2HdpServer.getHospitalResult(request, timeout);
         }
 
         String redirectHosid = HospitalManager.getRedirectHosId(request.getHosId(), request.getCmd());

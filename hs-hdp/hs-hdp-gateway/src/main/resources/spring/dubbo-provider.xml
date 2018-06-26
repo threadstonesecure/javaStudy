@@ -21,9 +21,9 @@
                     accesslog="${gateway.dubbo.protocol.accesslog}"/>
 
     <dubbo:service interface="com.yuntai.hdp.access.service.DowndataHandler" timeout="60000"
-                   ref="downdataHandler" registry="registry1,registry2,registry3"/>
+                   ref="accessHospitalImpl" registry="registry1,registry2,registry3"/>
 
     <dubbo:service interface="com.yuntai.hdp.access.service.AccessHospitalHandler"
-                   ref="accessHospitalHandler" timeout="60000" registry="registry1,registry2,registry3"/>
+                   ref="accessHospitalImpl" timeout="60000" registry="registry1,registry2,registry3"/>
 
 </beans>

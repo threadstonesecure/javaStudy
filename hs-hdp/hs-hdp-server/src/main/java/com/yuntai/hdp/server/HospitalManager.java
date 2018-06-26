@@ -14,6 +14,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 /**
@@ -31,11 +32,15 @@ public class HospitalManager {
     private static ConcurrentMap<String, RedirectHospital> cacheRedirectHospitals = new ConcurrentHashMap<>();
     private static RedisTemplate<String, String> redisTemplate;
 
+    @Resource
+    private NodeConfig nodeConfig;
+
+    @PostConstruct
     public void init() {
         //  init HdpAcessTokens
-
+        if (nodeConfig.isToHosByCascade()) return;
         HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
-        Map<String,String> redisHdpAccessTokens = opsForHash.entries(HDP_ACCESS_TOKEN_KEY);
+        Map<String, String> redisHdpAccessTokens = opsForHash.entries(HDP_ACCESS_TOKEN_KEY);
         if (redisHdpAccessTokens != null) {
             for (Map.Entry<String, String> entry : redisHdpAccessTokens.entrySet()) {
                 hdpAccessTokens.put(entry.getKey(), entry.getValue());
@@ -51,6 +56,7 @@ public class HospitalManager {
      * 目前为了兼容已经上线的前置机,使用参数"HdpClientAccessMode"来控制校验方式:
      * HdpClientAccessMode = 1 (default):可以无Token登录;由是否配置了Token来决定
      * HdpClientAccessMode = 2 :必须有AccessToken才能登录
+     *
      * @param hosId
      * @param accessToken
      * @return
@@ -58,7 +64,7 @@ public class HospitalManager {
     public static boolean checkAccessToken(String hosId, String accessToken) {
         String pzAccessToken = hdpAccessTokens.get(hosId);
         String accessMode = hdpAccessTokens.get("HdpClientAccessMode");
-        accessMode = accessMode == null ? "1" :accessMode;
+        accessMode = accessMode == null ? "1" : accessMode;
         if (accessMode.equals("2") && pzAccessToken == null) return false;
         if (pzAccessToken != null && !pzAccessToken.equals(accessToken)) return false;
         return true;
@@ -103,9 +109,10 @@ public class HospitalManager {
 
     /**
      * 获取重定向的前置机hosId
+     *
      * @param from_hosId
-     * @param cmd  先预留,后期可能会根据业务类型进行重定向
-     * @return 返回重定向的前置机hosId,如果没有重定向配置返回null
+     * @param cmd        先预留,后期可能会根据业务类型进行重定向
+     * @return 返回重定向的前置机hosId, 如果没有重定向配置返回null
      */
     public static String getRedirectHosId(String from_hosId, String cmd) {
         String redirectStr = hdpRedirectHospitals.get(from_hosId);
@@ -118,7 +125,7 @@ public class HospitalManager {
                     cacheRedirectHospitals.put(redirectStr, redirectHospital);
                 }
                 return redirectHospital.redirectCmds == null ? redirectHospital.redirectHosId :
-                         redirectHospital.redirectCmds.contains(cmd) ? redirectHospital.redirectHosId : null;
+                        redirectHospital.redirectCmds.contains(cmd) ? redirectHospital.redirectHosId : null;
             } catch (Exception ex) {
                 HdpServer.log.error(String.format("Hospital[%s] Redirect Info is error!", from_hosId), ex);
             }
@@ -129,6 +136,7 @@ public class HospitalManager {
 
     /**
      * 根据hosId,IP,port 删除退出的前置机连接信息
+     *
      * @param hosId
      * @param ip
      * @param port
@@ -152,6 +160,7 @@ public class HospitalManager {
 
     /**
      * 根据hosId获取Connection
+     *
      * @param hosId
      * @return
      */
@@ -182,9 +191,9 @@ public class HospitalManager {
     }
 
     /**
-     *  读取redis中AccessToken的配置信息
+     * 读取redis中AccessToken的配置信息
      */
-    @Scheduled(fixedDelay = 60000 )
+    @Scheduled(fixedDelay = 60000)
     public void scanHosAccessToken() {
         HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
         Map<String, String> regdisHdpAccessTokens = opsForHash.entries(HDP_ACCESS_TOKEN_KEY);
@@ -208,7 +217,7 @@ public class HospitalManager {
      * 关闭Token不符合要求的前置机连接
      *
      * @param hosId
-     * @param accessToken  : new accessToken
+     * @param accessToken : new accessToken
      */
     private static void closeHospital(String hosId, String accessToken) {
         Set<IpAndPort> iaps = hospitals.get(hosId);
@@ -228,14 +237,15 @@ public class HospitalManager {
     }
 
     /**
-     *  读取redis中重定向前置机信息
+     * 读取redis中重定向前置机信息
      */
     @Scheduled(fixedDelay = 60000)
-    public void scanRedirectHospital(){
+    public void scanRedirectHospital() {
+        if (nodeConfig.isToHosByCascade()) return;
         HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
         Map<String, String> redisHdpRedirectHospital = opsForHash.entries(HDP_REDIRECT_HOSPITAL_KEY);
-        if (redisHdpRedirectHospital != null){
-            for (Map.Entry<String, String> entry : redisHdpRedirectHospital.entrySet()){
+        if (redisHdpRedirectHospital != null) {
+            for (Map.Entry<String, String> entry : redisHdpRedirectHospital.entrySet()) {
                 hdpRedirectHospitals.put(entry.getKey(), entry.getValue());
             }
         }
@@ -269,7 +279,7 @@ public class HospitalManager {
         return hosps;
     }
 
-    public static Map<String,String> getAccessTokenInfo() {
+    public static Map<String, String> getAccessTokenInfo() {
         return hdpAccessTokens;
     }
 
@@ -298,7 +308,7 @@ public class HospitalManager {
         return oldToken;
     }
 
-    public static Map<String,String> getRedirectHospitalInfo(){
+    public static Map<String, String> getRedirectHospitalInfo() {
 
         return hdpRedirectHospitals;
     }
@@ -366,7 +376,7 @@ public class HospitalManager {
 
     }
 
-    private static class  RedirectHospital{
+    private static class RedirectHospital {
         public String redirectHosId; // 目标前置机配置的通道id（一般配置hosId）
         public List<String> redirectCmds; // 要转发的对接指令列表。（当为空时，转发所有指令）
     }

@@ -1,19 +1,17 @@
 package com.yuntai.hdp.server;
 
 import com.yuntai.hdp.server.updata.UpdataHandlerManager;
-import com.yuntai.hdp.server.updata.dynamic.DiscoveryUpdataHandler;
+import com.yuntai.hdp.server.updata.DiscoveryUpdataHandler;
 import com.yuntai.hdp.web.JettyServer;
 import com.yuntai.util.spring.PropertyConfigurer;
 import com.yuntai.util.spring.SpringContextUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.Set;
-
 public class StartHdpServer {
     private static Log log = LogFactory.getLog(StartHdpServer.class);
 
-    public static void main(String[] args)  {
+    public static void main(String[] args) {
 
 /*
         Netty的EventLoopGroup线程interrupt()不成功
@@ -69,6 +67,7 @@ public class StartHdpServer {
                     }
                 }
             }).start();
+            SpringContextUtils.getAllBeans().forEach((k, v) -> System.out.println(k + "=" + v));
             new HdpServer().updataHandler(updataHandler)
                     .ssl(ssl.equals("1"))
                     .discoveryUpdataHandler(discoveryUpdataHandler)

@@ -1,4 +1,4 @@
-package com.yuntai.hdp.server.updata.dynamic;
+package com.yuntai.hdp.server.updata;
 
 /**
  * @Description hdp_updatahandler表的PO
