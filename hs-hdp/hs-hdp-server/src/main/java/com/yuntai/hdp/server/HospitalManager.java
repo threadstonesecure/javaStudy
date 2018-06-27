@@ -195,6 +195,7 @@ public class HospitalManager {
      */
     @Scheduled(fixedDelay = 60000)
     public void scanHosAccessToken() {
+        if (nodeConfig.isToHosByCascade()) return;
         HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
         Map<String, String> regdisHdpAccessTokens = opsForHash.entries(HDP_ACCESS_TOKEN_KEY);
         Map<String, String> alterTokens = new HashMap<>();

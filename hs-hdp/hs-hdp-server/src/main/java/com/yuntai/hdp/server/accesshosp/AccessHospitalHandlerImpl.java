@@ -2,7 +2,6 @@ package com.yuntai.hdp.server.accesshosp;
 
 import com.yuntai.hdp.access.ResultKind;
 import com.yuntai.hdp.server.HdpServer;
-import com.yuntai.hdp.server.HdpServer2HdpServer;
 import com.yuntai.hdp.server.HospitalManager;
 import com.yuntai.hdp.future.FutureResult;
 import com.yuntai.hdp.server.NodeConfig;

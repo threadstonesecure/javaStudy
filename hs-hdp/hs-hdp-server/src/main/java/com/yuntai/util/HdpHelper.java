@@ -283,7 +283,7 @@ public class HdpHelper {
     static {
         accessHospitalHandler = SpringContextUtils.getBean("accessHospitalHandler");
         discoveryUpdataHandler = SpringContextUtils.getBean("discoveryUpdataHandler");
-        HDP_SERVER_VERSION = "3.2";
+        HDP_SERVER_VERSION = "3.3 gateway  cascade";
     }
 
 

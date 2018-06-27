@@ -26,14 +26,14 @@
 
     </redisson:client>
 
-<!--    <redisson:rpc-server api-class="com.yuntai.hdp.access.service.AccessHospitalHandler"
+    <redisson:rpc-server api-class="com.yuntai.hdp.access.service.AccessHospitalHandler"
                          remote-service-ref="hdpServerForGateway"
                          bean="accessHospitalHandler"
-                         concurrent-workers="10"/>
+                         concurrent-workers="10"/> <!-- HdpGateway 访问 HdpServer 使用 redis 方式时，concurrent 需要增大 -->
 
     <redisson:rpc-server api-class="com.yuntai.hdp.access.service.DowndataHandler"
                          remote-service-ref="hdpServerForGateway"
                          bean="downdataHandler"
-                         concurrent-workers="2"/>-->
+                         concurrent-workers="2"/>
 
 </beans>

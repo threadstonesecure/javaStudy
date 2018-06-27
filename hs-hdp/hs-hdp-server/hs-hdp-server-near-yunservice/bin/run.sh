@@ -3,17 +3,17 @@
 SERVERDIR=$(cd `dirname $0`;cd ..;pwd)
 cd $SERVERDIR
 #DEBUG_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
-GC_OPTS=" -Xloggc:hdpServer_gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps  -XX:+UseConcMarkSweepGC  -XX:+UseParNewGC -XX:+HeapDumpOnOutOfMemoryError  -XX:HeapDumpPath=hdpGateway_oom.hprof"
-JAVA_OPTS="-cp $SERVERDIR/conf:$SERVERDIR/*:$SERVERDIR/lib/* -server -Xms512m -Xmx512m -Xss256k -Djavax.net.debug=ssl,handshake $GC_OPTS $DEBUG_OPTS "
+GC_OPTS=" -Xloggc:hdpServer_gc.log -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps  -XX:+UseConcMarkSweepGC  -XX:+UseParNewGC -XX:+HeapDumpOnOutOfMemoryError  -XX:HeapDumpPath=hdpserver_oom.hprof"
+JAVA_OPTS="-cp $SERVERDIR/conf:$SERVERDIR/*:$SERVERDIR/lib/* -server -Xms512m -Xmx1024m -Xss256k -Djavax.net.debug=ssl,handshake $GC_OPTS $DEBUG_OPTS "
 
 JAVACMD="$JAVA_HOME/bin/java"
-MAINCLASS=com.yuntai.hdp.gateway.StartHdpGateway
-SERVERAPP=HdpGateway
+MAINCLASS=com.yuntai.hdp.server.StartHdpServer
+SERVERAPP=HdpServer
 JAVACMD="$JAVACMD $JAVA_OPTS  $MAINCLASS"
 
 start(){
     echo -n "Starting $SERVERAPP :"
-    PID=`pgrep -f  "$MAINCLASS"`
+    PID=`pgrep -f  "hdpserver_near_yunservice"`
     if [ -n "$PID" ]; then
         printf "$MAINCLASS is already running with pid $PID. \n"
         return 0
