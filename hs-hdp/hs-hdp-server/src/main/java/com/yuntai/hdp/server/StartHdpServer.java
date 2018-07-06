@@ -76,6 +76,7 @@ public class StartHdpServer {
                     .run(ip, port);
         } catch (Exception ex) {
             log.error("启动HdpServer发生意外，程序退出：", ex);
+            System.exit(-1);
         }
 
     }

@@ -14,6 +14,7 @@
         <module>jtaDemo</module>
         <module>oracleDba</module>
         <module>instrumentation</module>
+        <module>springmvc</module>
     </modules>
     <name>javastudy</name>
     <url>http://maven.apache.org</url>
@@ -224,6 +225,7 @@
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
                 <version>${servlet-api-version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <dependency>

@@ -1,0 +1,267 @@
+<html>
+<head>
+   <meta charset="UTF-8" >
+   <script type="text/javascript"  src="json/json.js" ></script>
+   <script type="text/javascript" src="jquery/jquery-2.1.1.js"></script>
+</head>
+<body>
+<script id="foo" type="text/x-handlebars-template">
+    <div>
+        <h1>{{title}}</h1>
+        <div>
+            {{greeting}}
+        </div>
+    </div>
+</script>
+
+<a href="javascript:showScript()"> showScript</a><br>
+
+<script  type="text/javascript">
+    function showScript(){
+        var templateSection = $("#foo");
+        var sourceCode = templateSection.html()
+        alert(sourceCode);
+        templateSection.replaceWith("<div id='foo'><h1>denglt</h1></div>");
+    };
+
+</script>
+<h1>Extjs列子</h1>
+<a href="extjs_app.html"> Hello World </a>
+<br>
+
+<h1>展现js对象属性</h1>
+<a href="showObjectProperty.html"> 查询js对象属性 </a>
+<br>
+
+<h1>User列子（servlet实现）</h1>
+<a href="act/appuser">获取用户信息（json格式数据）</a>
+<br>
+
+<h1>Spring Web  用例</h1>
+<table border="1">
+	<tr>
+		<th><h2>Spring Web 内部信息</h2></th>	
+		<th><h2>User 用例</h2></th>
+		<th><h2>Hello World </h2></th>
+		<th><h2>Demo 数据库操作 </h2></th>
+		<th><h2>Web Service </h2></th>
+	</tr>
+	<tr>
+	  
+	  <td valign="top">
+	    <a href="main/act/springweb/infoRequest?username=邓隆通">	1、ServletRequest (参数类型 ：ServletRequest) </a><br>
+		<a href="main/act/springweb/servletContext">2、获取ServletContext信息 </a><br>
+	    <a href="main/act/springweb/requestHeader?userName=denglt">3、获取Request Header Body 信息  （ 通过  参数类型：HttpEntity 和  返回类型：ResponseEntity） </a><br>
+	    <form action="main/act/springweb/requestHeader" method="post" >
+	       <div class="f_left"><input name="userName" value="邓隆通"/></div>  
+	       <div class="f_left"><input name="age" value="30"/></div> 
+	       <div><input type="submit" value="提交表单"/></div>
+	    </form>
+		<a href="main/act/springweb/appContext">4、获取WebApplicationContext信息</a><br>
+		<a href="main/act/springweb/beanNames">5、获取Context中的Bean的名称(by DispatcherServlet)</a><br>
+		<a href="main/act/springweb/requestMappingHandlerAdapter">6、获取RequestMappingHandlerAdapter信息 </a><br>	 
+		<a href="main/act/springweb/dispatcherServlet">6、获取DispatcherServlet信息 </a><br> 
+	  </td>
+	  	
+	  <td>
+		<a href="main/act/user/listuser?username=邓隆通">1、获取用户信息(json格式数据)（通过对象）</a>
+		<br>
+		<a href="main/act/user/listuserjson">2、获取用户信息(json格式数据) (直接字符串返回)</a><br>
+		<a href="main/act/user/logon?userName=denglt ">3、登陆 跳转 @SessionAttributes @ModelAttribute  设置cookie</a>  
+		 <a href="main/act/user/logoff "> 注销 （失败） </a>
+		 <a href="main/act/logout "> 注销（成功） </a><br>
+		 <br>
+		<a href="main/act/user/paramObject?userName=denglt&age=20"> 4、参数类型 ： User 和 java.io.Writer(数据绑定) </a><br>
+		<form action="main/act/user/paramObject" method="POST" >
+			<table border="1">
+			  <tr>
+			    <th>本人信息</th>
+			    <th>妻子信息</th>
+			    <th>小孩信息</th>
+			  </tr>
+			  <tr>
+			    <td>
+			        <div class="f_left">姓名:</div>  
+			        <div class="f_left"><input name="userName" value="邓隆通"/></div>  
+			        <div class="clear"></div> 
+			        <div class="f_left">密码:</div>  
+			        <div class="f_left"><input type="password" name="password" value="123456"/></div>  
+			        <div class="clear"></div>  
+			        <div class="f_left">年龄:</div>  
+			        <div class="f_left"><input name="age" value="30"/></div>  
+			        <div class="clear"></div>  
+			        <div class="f_left">收入:</div>  
+			        <div class="f_left"><input name="income" value="100000"/></div>  
+			        <div class="clear"></div>  
+			        <div class="f_left">结婚:</div>  
+			        <div class="f_left">  
+				        <input type="radio" name="married" value="true" checked="checked"/>是  
+				        <input type="radio" name="married" value="false"/>否
+				     </div>  
+			        <div class="clear"></div>  
+			        <div class="f_left">兴趣:</div>  
+			        <div class="f_left">  
+				        <input type="checkbox" name="interests" value="听歌" checked="checked"/>听歌  
+				        <input type="checkbox" name="interests" value="书法" checked="checked"/>书法  
+				        <input type="checkbox" name="interests" value="看电影" checked="checked"/>看电影  
+			        </div>      
+			    </td>
+			    <td>
+			        <div class="f_left">姓名:</div> 
+			        <div class="f_right"><input name="wife.userName" value="zyy"/></div>
+			        <div class="f_left">年龄:</div>  
+			        <div class="f_left"><input name="wife.age" value="26"/></div>  
+			        <div class="f_left">  
+				        <input type="radio" name="wife.married" value="true" checked="checked"/>是  
+				        <input type="radio" name="wife.married" value="false"/>否
+				     </div>      
+			    </td>
+			    <td>
+			        <div class="f_left">小孩信息</div>
+			        <div class="f_left">姓名:</div> 
+			        <div class="f_right"><input name="childs[0].userName" value="dzy"/></div>
+			        <div class="f_left">年龄:</div>  
+			        <div class="f_left"><input name="childs[0].age" value="9"/></div>  
+			        <div class="f_left">  
+				        <input type="radio" name="childs[0].married" value="true" />是  
+				        <input type="radio" name="childs[0].married" value="false" checked="checked"/>否
+				     </div> 	 
+			        <div class="f_right"><input name="childs[1].userName" value="dwx"/></div>
+			        <div class="f_left">年龄:</div>  
+			        <div class="f_left"><input name="childs[1].age" value="2"/></div>  
+			        <div class="f_left">  
+				        <input type="radio" name="childs[1].married" value="true" />是  
+				        <input type="radio" name="childs[1].married" value="false" checked="checked"/>否
+				     </div>     
+			    </td>
+			  </tr>
+			  <tr align="center">
+			     <td colspan="3">
+			        <div><input type="submit" value="提交表单"/></div>
+			     </td>    
+			  </tr>
+			</table>             
+		       
+		</form>
+		<br>
+		<a href="javascript:ajaxString()"> 5、Ajax POST "userName=denglt&age=20" （返回json类型）</a><br>
+		<a href="javascript:ajaxJson()"> 6、Ajax POST JSON字符串 （返回json类型） for @RequestBody </a><br>
+		<a href="#">7、Radio and CheckBox </a><br>
+		<form action="main/act/user/checkusers" method="post"> 
+		    <div class="f_left">  
+		      <input type="radio" name="isMarried" value="true" />是  
+		      <input type="radio" name="isMarried" value="false" checked="checked"/>否</div>  
+		    <div class="clear"></div>  
+		    <div class="f_left">姓名:</div>  
+		    <div class="f_left">  
+		    <input type="checkbox" name="usernames" value="denglt" checked="checked"/>denglt  
+		    <input type="checkbox" name="usernames" value="zyy" checked="checked"/>zyy
+		    <input type="checkbox" name="usernames" value="dzy" checked="checked"/>dzy
+		    <input type="checkbox" name="usernames" value="dzy" checked="checked"/>dwx
+		    </div>  
+		    <div class="clear"></div>  
+		    <div><input type="submit" value="提交表单"/></div>  
+		</form> 
+		<a href="main/act/user/asyncRequest?userName=denglt">8、Asynchronous Request Processing </a><br>	  
+	  </td>
+
+	  <td valign="top">
+	     <a href="main/act/helloWorld/helloWorld?findUserName=denglt&helloName=xxxx&userName=why??">1、 @ModelAttribute 和  参数类型 : Model </a><br>
+         <a href="main/act/helloWorld/writerHtml">2、参数 类型 : java.io.Writer</a><br>
+         <a href="#">3、@RequestBody  列子不成功！</a><br>
+	         <form action="main/act/helloWorld/requestBody" method="POST">
+		       <div class="f_left">姓名: <input name="userName" value="邓隆通"/></div>  
+		       <div class="f_left">年龄: <input name="age" value="30"/></div> 
+		       <div><input type="submit" value="提交表单"/></div>
+		    </form>
+		 <a href="main/act/helloWorld/cookie">4、 @CookieValue</a>  <br>
+		 <a href="#">5、Customizing WebDataBinder</a> <br>
+		 <form action="main/act/helloWorld/customDataBinder">
+		    <div class="f_left">  
+		        <div class="f_left">时间: <input name="createDate" value="2014-09-10 10:10:10" /></div>
+				<div class="f_left">收入: <input name="money" value="10.09"/></div>
+				<div><input type="submit" value="提交表单"/></div>  
+		    </div> 
+		 </form>
+		 
+		  <a href="main/act/helloWorld/viewResolver">5、ViewResolver 、 View </a> <br>
+		  <a href="main/act/helloWorld/viewResolver2">6、ViewResolver 、 View (方法 二)</a> <br>
+		  <a href="main/act/helloWorld/buildUrl">7、Building URIs to Controllers and methods</a> <br>
+		  <a href="main/act/helloWorld/buildUrl">7、上传文件</a> <br>
+			<form action="main/act/helloWorld/uploadFile" method="post" enctype="multipart/form-data">
+		       <input type="file" name="file"/>
+		       <input type="file" name="file"/>
+		       <div><input type="submit" value="提交表单"/></div>
+		    </form>
+	  </td>
+	  <td valign="top">
+	     <a href="main/act/demo/listByDept?deptid=-1&start=0&limit=0">1、 查询demo数据 </a> <br>
+	     <a href="#">2、 新增加demo数据 </a> <br>
+	         <form action="main/act/demo/saveOrUpdate" method="POST">
+		       <div class="f_left">id: <input name="id" value="" disabled="disabled"/></div>  
+		       <div class="f_left">编码: <input name="sn" value="denglt01"/></div> 
+		       <div class="f_left">时间: <input name="date" value="2014-09-10 10:10:10"/></div> 
+		       <div class="f_left">部门: <input name="appDept" value="-1"/></div> 
+		       <div><input type="submit" value="提交表单"/></div>
+		    </form>	     
+	     <a href="#">3、 修改数据demo数据 </a> <br>
+	         <form action="main/act/demo/saveOrUpdate" method="POST">
+		       <div class="f_left">id: <input name="id" value="5b93de34b1f446238b9bd5b001aceabf"/></div>  
+		       <div class="f_left">编码: <input name="sn" value="denglt01"/></div> 
+		       <div class="f_left">时间: <input name="date" value="2014-09-10 10:10:10"/></div> 
+		       <div class="f_left">部门: <input name="appDept" value="-1"/></div> 
+		       <div><input type="submit" value="提交表单"/></div>
+		    </form>	 		    
+	  </td>	  
+	  <td valign="top">
+	     web service 
+	  </td>
+	  
+	</tr>
+</table>
+
+<script id="myscprit" type="text/javascript">
+  function ajaxString(){
+	$.ajax({
+		type : "POST",
+		url : "main/act/user/ajaxString",
+		dataType : "json",  //返回数据类型
+		//contentType : "application/json",  //发送数据格式
+		data : "userName=denglt&age=20",
+		success : function(data) {
+			alert(data);
+			alert(data.userName);
+		}
+	});
+  };
+	
+	function ajaxJson(){
+		var saveDataAry = [];
+		var data1 = {
+			"userName" : "test",
+			"age" : "20"
+		};
+		var data2 = {
+			"userName" : "ququ",
+			"age" : "23"
+		};
+		saveDataAry.push(data1);
+		saveDataAry.push(data2);
+//		alert(JSON.stringify(saveDataAry));
+		$.ajax({
+			type : "POST",
+			url : "main/act/user/ajaxJson",
+			dataType : "html", //"json","html"  //返回数据类型   // RequestMapping.produces  (Accept)
+			contentType : "application/json", //发送数据格式    //  RequestMapping.consumables  ( Content-Type)
+			data : JSON.stringify(saveDataAry),  //注意这儿应该是json字符串
+			success : function(data) {
+				alert(data);
+			}
+		});
+     };
+
+
+
+</script>
+</body>
+</html>

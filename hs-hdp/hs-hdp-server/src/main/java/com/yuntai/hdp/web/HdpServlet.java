@@ -1,6 +1,7 @@
 package com.yuntai.hdp.web;
 
 import com.yuntai.hdp.server.HospitalManager;
+import com.yuntai.util.HdpCmdHelper;
 import com.yuntai.util.HdpHelper;
 
 import javax.servlet.ServletException;
@@ -47,7 +48,7 @@ public class HdpServlet extends HttpServlet {
                     String name =  names.nextElement();
                     params.put(name, req.getParameter(name));
                 }
-                String result = HdpHelper.hdpCmd(cmd, params);
+                String result = HdpCmdHelper.deal(cmd, params).getBody();
                 out.println(result);
                 out.flush();
                 out.close();

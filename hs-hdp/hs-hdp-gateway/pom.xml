@@ -41,6 +41,12 @@
                 <env>local</env>
             </properties>
         </profile>
+        <profile>
+            <id>uat</id>
+            <properties>
+                <env>uat</env>
+            </properties>
+        </profile>
     </profiles>
     <dependencies>
         <dependency>

@@ -44,6 +44,7 @@ public class AccessHospitalImpl implements AccessHospitalHandler, DowndataHandle
         try {
             log.info(String.format("===>转发云服务对接请求到HdpServer:%s", request.toKeyString()));
             hospitalResult = accessHospitalHandler.getHospitalResult(request, timeout);
+            log.info(String.format("===>收到HdpServer返回结果:%s",hospitalResult.toKeyString()));
         } catch (Exception ex) {
             log.error("访问HdpServer.AccessHospitalHandler接口服务错误", ex);
             hospitalResult = newResult(request);

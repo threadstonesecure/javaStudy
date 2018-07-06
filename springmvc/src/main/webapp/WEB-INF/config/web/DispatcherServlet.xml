@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <context:component-scan base-package="dlt.web.controller"></context:component-scan>
+
+    <bean id="mutlSpringContextUtils" class="dlt.utils.spring.MutlSpringContextUtils"/>
+
+    <!-- cors 跨域资源访问-->
+    <mvc:cors>
+        <mvc:mapping path="/**"></mvc:mapping>
+    </mvc:cors>
+
+    <!-- 配置MessageConverter -->
+    <bean id="byteArrayHttpMessageConverter"
+          class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+    <bean id="stringHttpMessageConverter"
+          class="org.springframework.http.converter.StringHttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/plain; charset=UTF-8</value>
+            </list>
+        </property>
+        <!-- <property name="writeAcceptCharset" value="false" /> -->
+    </bean>
+
+    <bean id="resourceHttpMessageConverter"
+          class="org.springframework.http.converter.ResourceHttpMessageConverter"/>
+    <bean id="sourceHttpMessageConverter"
+          class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+    <bean id="allEncompassingFormHttpMessageConverter"
+          class="org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter"/>
+    <bean id="jaxb2RootElementHttpMessageConverter"
+          class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/>
+    <bean id="dlt.study.jacksonMessageConverter"
+          class="dlt.utils.spring.Jackson2HttpMessageConverter"/>
+
+    <bean id="castorMarshaller" class="org.springframework.oxm.castor.CastorMarshaller"/>
+    <bean id="marshallingHttpMessageConverter"
+          class="org.springframework.http.converter.xml.MarshallingHttpMessageConverter"> <!-- 转换为 XML -->
+        <property name="marshaller" ref="castorMarshaller"/>
+        <property name="unmarshaller" ref="castorMarshaller"/>
+    </bean>
+
+
+    <bean id="requestMappingHandlerAdapter"
+          class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <ref bean="byteArrayHttpMessageConverter"/>
+                <ref bean="stringHttpMessageConverter"/>
+                <ref bean="resourceHttpMessageConverter"/>
+                <ref bean="sourceHttpMessageConverter"/>
+                <ref bean="allEncompassingFormHttpMessageConverter"/>
+                <ref bean="jaxb2RootElementHttpMessageConverter"/>
+                <ref bean="dlt.study.jacksonMessageConverter"/>
+                <!-- <ref bean="marshallingHttpMessageConverter" />-->
+            </list>
+        </property>
+
+        <property name="webBindingInitializer">
+            <bean class="dlt.utils.spring.CustomBindingInitializer"/>
+        </property>
+
+    </bean>
+
+    <!--  bean="handlerMapping"，因为<mvc:annotation-driven>的配置故没有生效。 去掉 <mvc:annotation-driven>将ok  -->
+
+    <bean id="handlerMapping"
+          class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <ref bean="officeHoursInterceptor"/>
+            </list>
+        </property>
+
+    </bean>
+
+    <!-- 配置请求中断 -->
+    <bean id="officeHoursInterceptor"
+          class="dlt.web.interceptor.TimeBasedAccessInterceptor">
+        <property name="openingTime" value="9"/>
+        <property name="closingTime" value="22"/>
+    </bean>
+
+    <bean id="onlineInterceptor" class="dlt.web.interceptor.OnlineInterceptor">
+        <property name="sessionAttributeName" value="currentUser"/>
+    </bean>
+
+    <bean id="studyInterceptor" class="dlt.web.interceptor.StudyInterceptor"/>
+
+    <!-- 该配置不受<mvc:annotation-driven >的配置的影响 -->
+    <mvc:interceptors>
+        <ref bean="studyInterceptor"/>
+        <mvc:interceptor>
+            <mvc:mapping path="/user/logon"/>
+            <ref bean="officeHoursInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/user/logon"/>
+            <mvc:exclude-mapping path="/async/**"/>
+            <ref bean="onlineInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- 配置自定义的 View 和 ViewResolver -->
+    <!-- 默认内部ViewResolver   默认viewClass=org.springframework.web.servlet.view.InternalResourceView-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">  <!-- 处理 ：redirect:(RedirectView)、forward:(InternalResourceView)；其他的给 viewClass指定的view处理 -->
+        <property name="viewClass">
+            <value>org.springframework.web.servlet.view.JstlView</value>
+        </property>
+        <property name="prefix" value="/WEB-INF/view"/>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+
+    <bean id="businessViewResolver" class="dlt.web.view.BusinessViewResolver">
+        <property name="order" value="1"/>  <!-- 一定要设置，否则被 InternalResourceViewResolver 处理了-->
+        <property name="views">
+            <list>
+                <ref bean="messageView"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="messageView" class="dlt.web.view.MessageView"></bean>
+
+    <!-- 上传文件配置 -->
+    <!-- 需要 commons-fileupload包  id必须为"multipartResolver"-->
+    <!-- 	<bean id="multipartResolver"
+            class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+            <property name="maxUploadSize" value="100000" />
+        </bean> -->
+
+    <!-- Servlet 3.0  不需要 commons-fileupload包    需要在 -->
+    <!-- you need to mark the DispatcherServlet with a "multipart-config" section in web.xml -->
+    <!-- id必须为"multipartResolver" -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.support.StandardServletMultipartResolver">
+    </bean>
+
+    <bean id="ky.requestFactory" class="org.springframework.http.client.SimpleClientHttpRequestFactory">
+        <property name="readTimeout" value="10000"/>
+        <property name="connectTimeout" value="5000"/>
+    </bean>
+
+    <bean id="simpleRestTemplate" class="org.springframework.web.client.RestTemplate">
+        <constructor-arg ref="ky.requestFactory"/>
+        <property name="messageConverters">
+            <list>
+                <ref bean="byteArrayHttpMessageConverter"/>
+                <ref bean="stringHttpMessageConverter"/>
+                <ref bean="resourceHttpMessageConverter"/>
+                <ref bean="sourceHttpMessageConverter"/>
+                <ref bean="allEncompassingFormHttpMessageConverter"/>
+                <ref bean="jaxb2RootElementHttpMessageConverter"/>
+                <ref bean="dlt.study.jacksonMessageConverter"/>
+            </list>
+        </property>
+    </bean>
+
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <ref bean="byteArrayHttpMessageConverter"/>
+            <ref bean="stringHttpMessageConverter"/>
+            <ref bean="resourceHttpMessageConverter"/>
+            <ref bean="sourceHttpMessageConverter"/>
+            <ref bean="allEncompassingFormHttpMessageConverter"/>
+            <ref bean="jaxb2RootElementHttpMessageConverter"/>
+            <ref bean="dlt.study.jacksonMessageConverter"/>
+            <ref bean="marshallingHttpMessageConverter"/>
+        </mvc:message-converters>
+        <mvc:async-support default-timeout="40000" task-executor="myExecutor"/>
+    </mvc:annotation-driven>
+</beans>

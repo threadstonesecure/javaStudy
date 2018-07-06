@@ -71,6 +71,7 @@ public class HdpServer2HdpServer implements AccessHospitalHandler, UpdataHandler
         try {
             log.info(String.format("===>转发云服务对接请求到级联HdpServer:%s", request.toKeyString()));
             hospitalResult = remoteAccessHospitalHandler.getHospitalResult(request, timeout);
+            log.info(String.format("===>收到级联HdpServer返回结果:%s",hospitalResult.toKeyString()));
         } catch (Exception ex) {
             log.error("hdpServer级联模式，访问远程AccessHospitalHandler接口服务错误", ex);
             hospitalResult = HdpHelper.newResult(request);
@@ -87,6 +88,7 @@ public class HdpServer2HdpServer implements AccessHospitalHandler, UpdataHandler
         try {
             log.info(String.format("===>转发前置机对接请求到级联HdpServer:%s", request.toKeyString()));
             yunServiceResult = remoteUpdataHandler.process(request);
+            log.info(String.format("===>收到级联HdpServer返回结果:%s", yunServiceResult.toKeyString()));
         } catch (Exception ex) {
             log.error("hdpServer级联模式，访问远程UpdataHandler接口服务错误", ex);
             yunServiceResult = HdpHelper.newResult(request);

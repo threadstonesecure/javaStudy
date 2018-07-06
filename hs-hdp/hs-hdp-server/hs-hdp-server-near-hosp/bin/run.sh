@@ -13,14 +13,14 @@ JAVACMD="$JAVACMD $JAVA_OPTS  $MAINCLASS"
 
 start(){
     echo -n "Starting $SERVERAPP :"
-    PID=`pgrep -f  "$MAINCLASS"`
+    PID=`pgrep -f  "hhhhhhhhhhhhhhhhhh"`
     if [ -n "$PID" ]; then
         printf "$MAINCLASS is already running with pid $PID. \n"
         return 0
     else
         $JAVACMD >/dev/null 2>&1 &
         sleep 2
-        PID=`pgrep -f  "$MAINCLASS"`
+        PID=`pgrep -f  "sdfsdfsdfsdfsdfds"`
         if [ -n "$PID" ]; then
             printf "$MAINCLASS is  running with pid $PID.\n "
         else

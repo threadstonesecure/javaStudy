@@ -41,6 +41,18 @@
                 <env>local</env>
             </properties>
         </profile>
+        <profile>
+            <id>yun</id>
+            <properties>
+                <env>yun</env>
+            </properties>
+        </profile>
+        <profile>
+            <id>hos</id>
+            <properties>
+                <env>hos</env>
+            </properties>
+        </profile>
     </profiles>
     <dependencies>
         <dependency>
@@ -276,7 +288,7 @@
                 <!-- 打包 插件 -->
                 <version>2.4.1</version>
                 <configuration>
-                    <finalName>hs-hdp-server</finalName>
+                    <finalName>hs-hdp-server-${env}</finalName>
                     <descriptors> <!-- create a zip -->
                         <descriptor>src/main/assembly/assembly.xml</descriptor>
                     </descriptors>

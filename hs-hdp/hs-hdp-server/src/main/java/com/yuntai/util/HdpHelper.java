@@ -18,7 +18,6 @@ import sun.misc.SharedSecrets;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
-import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
@@ -143,7 +142,7 @@ public class HdpHelper {
     }
 
     public static String version() {
-        return "HdpServer Version:" + HDP_SERVER_VERSION;
+        return "HdpServer Version:" + HDP_SERVER_VERSION + NEWLINE;
     }
 
     public static String memory() {
@@ -259,22 +258,7 @@ public class HdpHelper {
         return buf.toString();
     }
 
-    public static String hdpCmd(String cmd, Map<String, String> params) throws Exception {
 
-        Method method;
-        String result;
-        try {
-            method = HdpHelper.class.getDeclaredMethod(cmd, Map.class);
-            method.setAccessible(true);
-            result = (String) method.invoke(HdpHelper.class, params);
-        } catch (NoSuchMethodException ex) {
-            method = HdpHelper.class.getDeclaredMethod(cmd);
-            method.setAccessible(true);
-            result = (String) method.invoke(HdpHelper.class);
-        }
-
-        return result;
-    }
 
     private static final AccessHospitalHandler accessHospitalHandler;
     private static final DiscoveryUpdataHandler discoveryUpdataHandler;

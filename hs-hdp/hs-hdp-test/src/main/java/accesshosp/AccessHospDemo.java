@@ -15,11 +15,11 @@ import java.util.concurrent.Executors;
 public class AccessHospDemo {
 	public static void main(String[] args) {
 
-		SpringContextUtils.init(new String[] { "base.xml", "dubbo-client.xml" ,"redis.xml"});
+		SpringContextUtils.init(new String[] { "base.xml", "dubbo2gateway.xml" ,"redis.xml"});
 		final AccessHospitalHandler accessHospitalHandler = SpringContextUtils
 				.getBean("accessHospitalHandler");
-		ExecutorService tpe = Executors.newFixedThreadPool(3);
-		for (int i = 0; i < 0; i++) {
+		ExecutorService tpe = Executors.newFixedThreadPool(310);
+		for (int i = 0; i < 310; i++) {
 			tpe.execute(new Runnable() {
 				@Override
 				public void run() {

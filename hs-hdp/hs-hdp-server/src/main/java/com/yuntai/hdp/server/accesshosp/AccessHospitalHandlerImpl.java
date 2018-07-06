@@ -5,6 +5,7 @@ import com.yuntai.hdp.server.HdpServer;
 import com.yuntai.hdp.server.HospitalManager;
 import com.yuntai.hdp.future.FutureResult;
 import com.yuntai.hdp.server.NodeConfig;
+import com.yuntai.util.HdpCmdHelper;
 import com.yuntai.util.HdpHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
@@ -43,6 +44,10 @@ public class AccessHospitalHandlerImpl implements AccessHospitalHandler {
      */
     @Override
     public ResultPack getHospitalResult(RequestPack request, int timeout) {
+
+        if (HdpCmdHelper.isHdpCmdRequest(request))
+            return HdpCmdHelper.deal(request);
+
         request.setHdpSeqno(HdpHelper.getUUID());
         request.setCallMode(1);
         if (timeout >= 60) {

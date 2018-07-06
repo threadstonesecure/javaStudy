@@ -48,6 +48,10 @@ public class NodeConfig {
         }
     }
 
+    public boolean isCascade() {
+        return isCascade;
+    }
+
     public boolean isToHosByCascade() {
         return isCascade && isNearYun;
     }
@@ -102,5 +106,17 @@ public class NodeConfig {
         }
 
         private String position;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("NodeConfig{");
+        sb.append("nodeType='").append(nodeType).append('\'');
+        sb.append(", nodePosition='").append(nodePosition).append('\'');
+        sb.append(", isCascade=").append(isCascade);
+        sb.append(", isNearYun=").append(isNearYun);
+        sb.append(", isNearHosp=").append(isNearHosp);
+        sb.append('}');
+        return sb.toString();
     }
 }

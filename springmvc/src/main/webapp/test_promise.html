@@ -1,0 +1,28 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Hello Ext</title>
+</head>
+<script id="myscprit" type="text/javascript">
+
+    if (typeof(Promise) === "function") {
+        alert("支持Promise");
+    } else {
+        alert("不支持Promise");
+    }
+
+    function wait(duration) {
+        return new Promise(function (resolve, reject) {
+            window.setTimeout(resolve, duration);
+        })
+    }
+
+    wait(5000).then(function () {
+        alert('hello')
+    }).then(function () {
+        alert('world')
+    })
+
+
+</script>
+</html>
