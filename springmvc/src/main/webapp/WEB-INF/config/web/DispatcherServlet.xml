@@ -175,6 +175,6 @@
             <ref bean="dlt.study.jacksonMessageConverter"/>
             <ref bean="marshallingHttpMessageConverter"/>
         </mvc:message-converters>
-        <mvc:async-support default-timeout="40000" task-executor="myExecutor"/>
+        <mvc:async-support default-timeout="40000" task-executor="myExecutor"/> <!-- 这个 在 AsyncController 的 asysc 中没有生效，？？？？ -->
     </mvc:annotation-driven>
 </beans>
