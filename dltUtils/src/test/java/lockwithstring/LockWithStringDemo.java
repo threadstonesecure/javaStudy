@@ -40,7 +40,7 @@ class PatReg implements Runnable {
             lock.lock(patKey + "--" + schId);
             log.info(String.format("患者[%s]开始进行排班[%d]预约。。。", patKey, schId));
 
-            Thread.sleep(1000 * 30);
+            Thread.sleep(1000 * 3);
 
             log.info(String.format("患者[%s]完成排班[%d]预约！", patKey, schId));
         } catch (Exception ex) {
@@ -48,5 +48,6 @@ class PatReg implements Runnable {
         } finally {
             lock.unlock(patKey + "--" + schId);
         }
+
     }
 }

@@ -30,7 +30,7 @@ public class LockWithString {
             lock.lock();
             ConditionWapper condition = conditionMap.get(lockKey);
             if (condition == null) {
-                condition = newCondition();
+                condition = newCondition(lockKey);
                 conditionMap.put(lockKey, condition);
             }
             condition.await();
@@ -69,18 +69,20 @@ public class LockWithString {
         }
     }
 
-    private ConditionWapper newCondition() {
+    private ConditionWapper newCondition(String lockKey) {
         Condition condition = lock.newCondition();
-        return new ConditionWapper(condition);
+        return new ConditionWapper(lockKey, condition);
     }
 
-    private ConditionWapper emptyCondition = new ConditionWapper(null);
+    private ConditionWapper emptyCondition = new ConditionWapper(null, null);
 
     private class ConditionWapper {
         private Condition condition;
+        private String lockKey;
         private int count = 0;
 
-        public ConditionWapper(Condition condition) {
+        public ConditionWapper(String key, Condition condition) {
+            this.lockKey = key;
             this.condition = condition;
         }
 
@@ -99,6 +101,7 @@ public class LockWithString {
         public void signal() {
             if (count > 0)
                 count--;
+            if (count == 0 && lockKey != null) conditionMap.remove(lockKey);
             condition.signal();
         }
     }
