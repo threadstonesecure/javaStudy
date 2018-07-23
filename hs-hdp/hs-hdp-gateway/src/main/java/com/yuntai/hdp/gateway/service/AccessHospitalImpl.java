@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.UUID;
 
 @Service("accessHospitalImpl")
 public class AccessHospitalImpl implements AccessHospitalHandler, DowndataHandler {
@@ -42,6 +43,7 @@ public class AccessHospitalImpl implements AccessHospitalHandler, DowndataHandle
 
         ResultPack hospitalResult;
         try {
+            request.setHdpSeqno(UUID.randomUUID().toString().replace("-", ""));
             log.info(String.format("===>转发云服务对接请求到HdpServer:%s", request.toKeyString()));
             hospitalResult = accessHospitalHandler.getHospitalResult(request, timeout);
             log.info(String.format("===>收到HdpServer返回结果:%s",hospitalResult.toKeyString()));

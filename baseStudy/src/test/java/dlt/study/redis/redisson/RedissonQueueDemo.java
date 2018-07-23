@@ -49,6 +49,11 @@ public class RedissonQueueDemo extends JUnit4Spring {
             User value = myqueue.take(); // myqueue.poll(10,TimeUnit.SECONDS);
             Log.info("take -> " + value);
         }
+        /*   异步
+        RFuture<User> userRFuture = myqueue.takeAsync();
+        userRFuture.getNow();
+        userRFuture.get();
+        */
 
     }
 

@@ -95,6 +95,19 @@ select a.*,b.doc_name,b.pat_name,b.hos_id,b.status from `agent_reg_order_detail`
 	<array/>
 	<key>queryHistory</key>
 	<array>
+		<string>select * from sch_scheduling where sch_id in ( 955712778437,955712805043)</string>
+		<string>-- 查询代挂号信息
+select a.*,b.doc_name,b.pat_name,b.hos_id,b.status from `agent_reg_order_detail` a , agent_reg_order b
+   where a.update_time &gt; '2018-07-19' 
+     and a.aro_id = b.aro_id
+     order by a.update_time desc</string>
+		<string>select a.*,b.doc_name,b.pat_name,b.hos_id,b.status from `agent_reg_order_detail` a , agent_reg_order b
+   where a.update_time &gt; '2018-07-19' 
+     and a.aro_id = b.aro_id
+     order by a.update_time desc</string>
+		<string>select * from sch_scheduling where sch_id = 955712778437</string>
+		<string>select * from agent_reg_order where aro_id = 537</string>
+		<string>select * from   agent_reg_order_detail where aro_id =    537</string>
 		<string>-- 查询代挂号信息
 select a.*,b.doc_name,b.pat_name,b.hos_id,b.status from `agent_reg_order_detail` a , agent_reg_order b
    where a.update_time &gt; '2018-06-08' 
@@ -129,12 +142,6 @@ select a.*,b.doc_name,b.pat_name,b.hos_id，b.status from `agent_reg_order_detai
 		<string>select * from `agent_reg_order` t where t.update_time is not null</string>
 		<string>select * from `reg_register` where reg_id = 14887969</string>
 		<string>select * from agent_reg_order_detail where status = 2 and update_time is not null</string>
-		<string>select * from `reg_register` where reg_id = 14887966</string>
-		<string>select * from agent_reg_order where aro_id = 363</string>
-		<string>select * from agent_reg_order where aro_id = 380</string>
-		<string>select * from agent_reg_order where aro_id = 377</string>
-		<string>select * from agent_reg_order_detail where aro_id = 373</string>
-		<string>select * from `sch_scheduling` where hos_id = 226 and doc_id32 in ('3bf241025f0a4dff85b91a8b963e6754','9bedb5e36d4a4a52a87526aa9ac61307')  order by  sch_date  desc</string>
 	</array>
 	<key>rdbms_type</key>
 	<string>mysql</string>

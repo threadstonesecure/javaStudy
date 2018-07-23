@@ -1,15 +1,18 @@
 package com.yuntai.hdp.server;
 
+import com.google.common.util.concurrent.RateLimiter;
 import com.yuntai.hdp.access.RequestPack;
 import com.yuntai.hdp.access.ResultKind;
 import com.yuntai.hdp.access.ResultPack;
 import com.yuntai.hdp.access.service.AccessHospitalHandler;
 import com.yuntai.hdp.access.service.UpdataHandler;
+import com.yuntai.redisson.RemoteServiceHelper;
 import com.yuntai.util.HdpHelper;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.redisson.api.RRemoteService;
 import org.redisson.api.RedissonClient;
+import org.redisson.api.RemoteInvocationOptions;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -48,18 +51,28 @@ public class HdpServer2HdpServer implements AccessHospitalHandler, UpdataHandler
 
         if (nodeConfig.isToHosByCascade()) {
             // 注册发布 UpdataHander 服务
-            RRemoteService remoteServer = redissonClient.getRemoteService("HdpServer2HdpServer");
+            RRemoteService remoteServer = RemoteServiceHelper.getRemoteService(redissonClient, "HdpServer2HdpServer");
             remoteServer.register(UpdataHandler.class, updataHandler, updataHandlerWorkers);
             // 创建 AccessHospitalHandler 客户端，
-            remoteAccessHospitalHandler = remoteServer.get(AccessHospitalHandler.class, 60, TimeUnit.SECONDS, 3, TimeUnit.SECONDS);
+           // remoteAccessHospitalHandler = remoteServer.get(AccessHospitalHandler.class, 60, TimeUnit.SECONDS, Math.max(accessHospitalHandlerWorkers / 60, 3), TimeUnit.SECONDS);
+            remoteAccessHospitalHandler = remoteServer.get(AccessHospitalHandler.class,
+                  RemoteInvocationOptions.defaults().noAck().expectResultWithin(60, TimeUnit.SECONDS));
+            rateLimiter = RateLimiter.create(accessHospitalHandlerWorkers);
+
         }
 
         if (nodeConfig.isToYunServiceByCascade()) {
             // 注册发布 AccessHospitalHandler 服务
-            RRemoteService remoteServer = redissonClient.getRemoteService("HdpServer2HdpServer");
+            RRemoteService remoteServer = RemoteServiceHelper.getRemoteService(redissonClient, "HdpServer2HdpServer");
             remoteServer.register(AccessHospitalHandler.class, accessHospitalHandler, accessHospitalHandlerWorkers);
             // 创建 UpdataHander 客户端
-            remoteUpdataHandler = remoteServer.get(UpdataHandler.class, 60, TimeUnit.SECONDS, 3, TimeUnit.SECONDS);
+            //remoteUpdataHandler = remoteServer.get(UpdataHandler.class, 60, TimeUnit.SECONDS, Math.max(accessHospitalHandlerWorkers / 60, 3), TimeUnit.SECONDS);
+
+            remoteUpdataHandler = remoteServer.get(UpdataHandler.class,
+                  RemoteInvocationOptions.defaults().noAck().expectResultWithin(60, TimeUnit.SECONDS));
+
+            rateLimiter = RateLimiter.create(updataHandlerWorkers);
+
         }
 
     }
@@ -69,9 +82,10 @@ public class HdpServer2HdpServer implements AccessHospitalHandler, UpdataHandler
     public ResultPack getHospitalResult(RequestPack request, int timeout) {
         ResultPack hospitalResult;
         try {
+            rateLimiter.acquire();
             log.info(String.format("===>转发云服务对接请求到级联HdpServer:%s", request.toKeyString()));
             hospitalResult = remoteAccessHospitalHandler.getHospitalResult(request, timeout);
-            log.info(String.format("===>收到级联HdpServer返回结果:%s",hospitalResult.toKeyString()));
+            log.info(String.format("===>收到级联HdpServer返回结果:%s", hospitalResult.toKeyString()));
         } catch (Exception ex) {
             log.error("hdpServer级联模式，访问远程AccessHospitalHandler接口服务错误", ex);
             hospitalResult = HdpHelper.newResult(request);
@@ -86,6 +100,7 @@ public class HdpServer2HdpServer implements AccessHospitalHandler, UpdataHandler
     public ResultPack process(RequestPack request) {
         ResultPack yunServiceResult;
         try {
+            rateLimiter.acquire();
             log.info(String.format("===>转发前置机对接请求到级联HdpServer:%s", request.toKeyString()));
             yunServiceResult = remoteUpdataHandler.process(request);
             log.info(String.format("===>收到级联HdpServer返回结果:%s", yunServiceResult.toKeyString()));
@@ -106,6 +121,8 @@ public class HdpServer2HdpServer implements AccessHospitalHandler, UpdataHandler
     private AccessHospitalHandler remoteAccessHospitalHandler;
 
     private UpdataHandler remoteUpdataHandler;
+
+    private RateLimiter rateLimiter;
 
 
 }

@@ -2,33 +2,15 @@ package dlt.study.redis.redisson;
 
 import com.alibaba.fastjson.JSON;
 import com.beust.jcommander.internal.Lists;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import dlt.domain.model.User;
 import dlt.study.log4j.Log;
 import dlt.study.spring.JUnit4Spring;
 import dlt.utils.ByteUtils;
-import dlt.utils.ConfigUtils;
 import dlt.utils.JsonUtils;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.ByteBufOutputStream;
 import io.netty.buffer.ByteBufUtil;
-import io.netty.channel.EventLoopGroup;
 import io.netty.util.concurrent.Future;
 import io.netty.util.concurrent.FutureListener;
-import io.netty.util.internal.PlatformDependent;
-
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
-import javax.annotation.Resource;
-
 import org.junit.Test;
 import org.reactivestreams.Publisher;
 import org.redisson.Redisson;
@@ -40,10 +22,14 @@ import org.redisson.client.codec.Codec;
 import org.redisson.client.codec.StringCodec;
 import org.redisson.client.protocol.Decoder;
 import org.redisson.client.protocol.Encoder;
-import org.redisson.codec.CodecProvider;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
-import org.redisson.config.SingleServerConfig;
+
+import javax.annotation.Resource;
+import java.io.OutputStream;
+import java.util.BitSet;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class RedissonDemo extends JUnit4Spring {
 
@@ -90,9 +76,9 @@ public class RedissonDemo extends JUnit4Spring {
 
     @Test
     public void info() {
-        CodecProvider codecProvider = redissonClient.getCodecProvider();
+      /*  CodecProvider codecProvider = redissonClient.getCodecProvider();
         System.out.println(codecProvider);
-
+*/
         Codec codec = redissonClient.getConfig().getCodec(); // 默认 Codec (JsonJacksonCodec)
         System.out.println(codec);
 

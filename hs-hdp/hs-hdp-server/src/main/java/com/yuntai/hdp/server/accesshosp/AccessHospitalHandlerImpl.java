@@ -48,7 +48,8 @@ public class AccessHospitalHandlerImpl implements AccessHospitalHandler {
         if (HdpCmdHelper.isHdpCmdRequest(request))
             return HdpCmdHelper.deal(request);
 
-        request.setHdpSeqno(HdpHelper.getUUID());
+        if (request.getHdpSeqno() == null)
+            request.setHdpSeqno(HdpHelper.getUUID());
         request.setCallMode(1);
         if (timeout >= 60) {
             timeout = 60;
@@ -95,6 +96,7 @@ public class AccessHospitalHandlerImpl implements AccessHospitalHandler {
             ResultPack resultPack = HdpHelper.newResult(request);
             resultPack.setKind(ResultKind.ERROR_NOEXISTS_HOSP.getKind());
             resultPack.setMsg(ResultKind.ERROR_NOEXISTS_HOSP.getMessage(targetHosId));
+            resultPack.setBody(""+System.currentTimeMillis());
             log.error(String.format("===>请求对接失败:%s", resultPack.toKeyString()));
             return resultPack;
         }

@@ -247,14 +247,14 @@ public class HdpHelper {
     private static String list2String(String title, Iterable<String> contents) {
         StringBuilder buf = new StringBuilder(200);
         buf.append(title + NEWLINE);
-        Joiner.on(NEWLINE).appendTo(buf, contents);
+        Joiner.on(NEWLINE).appendTo(buf, contents).append(NEWLINE);
         return buf.toString();
     }
 
     private static String orderList2String(String title, Iterable<String> contents) {
         StringBuilder buf = new StringBuilder(200);
         buf.append(title + NEWLINE);
-        Joiner.on(NEWLINE).appendTo(buf, Ordering.natural().sortedCopy(contents));
+        Joiner.on(NEWLINE).appendTo(buf, Ordering.natural().sortedCopy(contents)).append(NEWLINE);
         return buf.toString();
     }
 

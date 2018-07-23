@@ -13,12 +13,16 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.concurrent.DefaultThreadFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 
 /**
  * Created by denglt on 2016/4/15.
  */
 public class DefaultNettyContext implements  NettyContext {
+
+    public static Log log = LogFactory.getLog(DefaultNettyContext.class);
     private static final DefaultNettyContext instance = new DefaultNettyContext();
 
     private final ByteBufAllocator _allocator;
@@ -49,6 +53,7 @@ public class DefaultNettyContext implements  NettyContext {
 
         if (Epoll.isAvailable())
         {
+            log.debug("HdpServer is workong on epoll!");
             _bossEventLoopGroup = new EpollEventLoopGroup(0,new DefaultThreadFactory("HdpBoss"));
             _workerEventLoopGroup = new EpollEventLoopGroup(0,new DefaultThreadFactory("HdpWorker"));
             _serverChannelClass = EpollServerSocketChannel.class;

@@ -23,7 +23,7 @@ public class MyBtrace {
                                           @ProbeMethodName String method,
                                           @Duration long duration) {
         println(className + "." + method + " -> parms:" + str(sleepTime));
-        println("duration:" + duration / 1000000 + " ms");
+        println("duration:" + duration / 1000 + " ms");
         println("self:" + classOf(target));
         println("self.cname:" + get(field("dlt.study.Trans", "cname"))); // 只能是static
         println("self.name:" + get(field("dlt.study.Trans", "name"), target));

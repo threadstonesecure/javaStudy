@@ -34,7 +34,7 @@ import static com.sun.btrace.BTraceUtils.Threads.*;
  * deadlocks (if any) once every 4 seconds.
  */ 
 @BTrace public class Deadlock {
-    @OnTimer(4000)
+    @OnTimer(1000)
     public static void print() {
         deadlocks();        
     }
