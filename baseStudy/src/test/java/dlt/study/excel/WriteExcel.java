@@ -36,7 +36,7 @@ public class WriteExcel {
 			// 在Excel工作簿中建一工作表，其名为缺省值
 			// 如要新建一名为"效益指标"的工作表，其语句为：
 			HSSFSheet sheet = workbook.createSheet("效益指标");
-			//wb.setSheetName(n, "中文",HSSFCell.ENCODING_UTF_16);
+			//workbook.setSheetName(n, "中文",HSSFCell.ENCODING_UTF_16);
 			// 在索引0的位置创建行（最顶端的行）
 			HSSFRow row = sheet.createRow((short) 0);
 			// 在索引0的位置创建单元格（左上端）

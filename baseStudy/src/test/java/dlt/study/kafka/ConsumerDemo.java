@@ -81,9 +81,9 @@ public class ConsumerDemo {
         }
 
         // Manual Offset Control
-/*        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
+/*
+        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         Consumer<String, String> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Lists.newArrayList(topic));
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(1000);
             for (TopicPartition topicPartition : records.partitions()) {
@@ -96,7 +96,11 @@ public class ConsumerDemo {
                 consumer.commitSync(Collections.singletonMap(topicPartition, new OffsetAndMetadata(lastOffset + 1)));
             }
 
-        }*/
+        }
+        consumer.subscribe(Lists.newArrayList(topic));
+*/
+
+        // consumer.commitAsync(); 异步确认
     }
 
     /**

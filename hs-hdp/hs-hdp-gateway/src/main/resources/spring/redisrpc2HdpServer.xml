@@ -8,7 +8,7 @@
       ">
 
     <!-- Redisson Config -->
-    <redisson:client id="redissonClient" threads="${redisson.use.threads:0}" netty-threads="1"
+    <redisson:client id="redissonClient" threads="${redisson.use.threads:0}" netty-threads="0"
                      use-linux-native-epoll="${redisson.use.linux.epoll:true}">
         <redisson:single-server client-name="hdpGateway" address="${redisson.server.host}"
                                 password="${redisson.server.password}"
@@ -37,7 +37,7 @@
                          api-class="com.yuntai.hdp.access.service.AccessHospitalHandler"
                          remote-service-ref="hdpServerForGateway">
         <redisson:remote-invocation-options>
-            <redisson:remote-ack within="30" time-unit="SECONDS"/>
+            <redisson:remote-ack within="3" time-unit="SECONDS"/>
             <redisson:remote-result within="60" time-unit="SECONDS"/>
         </redisson:remote-invocation-options>
     </redisson:rpc-client>
