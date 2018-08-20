@@ -378,16 +378,33 @@ public class CacheDemo {
     @Test
     public void weakRefWithStr() {
         String temp = "denglt";
-        WeakReference<String> weakReference = new WeakReference<>(temp); // WeakReference 对 String 不起作用
+        WeakReference<String> weakReference = new WeakReference<>(temp); //
         temp = null; // 这个必须
         System.gc();
-        System.out.println(weakReference.get());
+        System.out.println(weakReference.get());// 输出 denglt ； String intern
+
+       // temp.intern()
+        String temp1 = "denglt";
+        String temp2 = "denglt";
+
+        System.out.println(temp1 == temp2); // true
+    }
+
+    @Test
+    public void weakRefWithStr2() {
+        String temp = new String("denglt");
+        WeakReference<String> weakReference = new WeakReference<>(temp); //
+        temp = null; // 这个必须
+        System.gc();
+        System.out.println(weakReference.get()); // null
+
     }
 
     @Test
     public void weakRefWithInteger() {
         // int i =1000000;
-        Integer i = 127; // new Integer(100);
+        Integer i = 1000000000;// new Integer(100); // 127 ;
+        // Integer.valueOf()
         WeakReference<Integer> weakReference = new WeakReference<>(i);
         i = null;
         System.gc();
