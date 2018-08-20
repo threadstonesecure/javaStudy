@@ -66,4 +66,10 @@ public class City {
                 ", name='" + name + '\'' +
                 '}';
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        System.out.println("city finalize()");
+    }
 }

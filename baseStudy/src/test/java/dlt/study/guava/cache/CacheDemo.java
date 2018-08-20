@@ -412,21 +412,22 @@ public class CacheDemo {
     }
 
     @Test
-    public void weakRefWithInt() {
+    public void weakRefWithCity() {
         WeakReference<City> weakReference = new WeakReference<>(new City("asdfsd", "afdsf"));
         System.gc();
         System.out.println(weakReference.get());
     }
 
 
+
     @Test
     public void testString() {
         String a = new String("temp");
         String b = new String("temp");
-        System.out.println(a == b);
+        System.out.println(a == b); // false
 
         Integer i = new Integer(1);
         Integer i2 = new Integer(1);
-        System.out.println(i == i2);
+        System.out.println(i == i2); // false;
     }
 }
