@@ -1,14 +1,11 @@
 package dlt.study.lambda;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import dlt.domain.model.User;
 import org.junit.Test;
 
-import javax.transaction.NotSupportedException;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;

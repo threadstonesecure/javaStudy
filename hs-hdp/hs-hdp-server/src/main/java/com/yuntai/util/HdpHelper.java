@@ -5,6 +5,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
+import com.google.common.collect.Streams;
 import com.yuntai.hdp.access.RequestPack;
 import com.yuntai.hdp.access.ResultPack;
 import com.yuntai.hdp.access.service.AccessHospitalHandler;
@@ -18,10 +19,12 @@ import sun.misc.SharedSecrets;
 
 import java.io.File;
 import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryMXBean;
+import java.lang.management.ThreadMXBean;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static io.netty.util.internal.StringUtil.NEWLINE;
 
@@ -147,9 +150,9 @@ public class HdpHelper {
 
     public static String memory() {
         HashMap<String, String> memoryInfo = Maps.newLinkedHashMap();
-        memoryInfo.put("direct.max", "" + sun.misc.VM.maxDirectMemory() / 1024 / 1024);
-        memoryInfo.put("direct.used", "" + SharedSecrets.getJavaNioAccess().getDirectBufferPool().getMemoryUsed() / 1024 / 1024);
-        memoryInfo.put("direct.capacity", "" + SharedSecrets.getJavaNioAccess().getDirectBufferPool().getTotalCapacity() / 1024 / 1024);
+        memoryInfo.put("direct.max", sun.misc.VM.maxDirectMemory() / 1024 / 1024 + "M");
+        memoryInfo.put("direct.used", SharedSecrets.getJavaNioAccess().getDirectBufferPool().getMemoryUsed() / 1024 / 1024 + "M");
+        memoryInfo.put("direct.capacity", SharedSecrets.getJavaNioAccess().getDirectBufferPool().getTotalCapacity() / 1024 / 1024 + "M");
 
         Runtime runtime = Runtime.getRuntime();
         long maxMemory = runtime.maxMemory() / 1024 / 1024;
@@ -162,7 +165,12 @@ public class HdpHelper {
         memoryInfo.put("freeMemory", freeMemory + "M");
         memoryInfo.put("usedMemory", usedMemory + "M");
         memoryInfo.put("totalFreeMemory", totalFreeMemory + "M");
-        return list2String("Memory Info:", mapToIterable(memoryInfo, "="));
+
+        MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
+        memoryInfo.put("HeapMemory", memoryMXBean.getHeapMemoryUsage().toString());
+        memoryInfo.put("NonHeapMemory", memoryMXBean.getNonHeapMemoryUsage().toString());
+
+        return list2String("Memory Info:", mapToIterable(memoryInfo, " => "));
     }
 
     public static String jvm() {
@@ -171,23 +179,31 @@ public class HdpHelper {
                 orderList2String("Properties Info:", mapToIterable2(System.getProperties(), "="));
     }
 
-    public static void start() throws Exception{
+    public static String thread() {
+
+        return list2String("Thread Info:",
+                Iterables.transform(
+                        Stream.of(ManagementFactory.getThreadMXBean().dumpAllThreads(true, true)).collect(Collectors.toList()),
+                        thredInfo -> thredInfo.toString()));
+    }
+
+    public static void start() throws Exception {
         String shellFile = System.getProperty("user.dir") + File.separator + "bin" + File.separator + "run.sh";
-        ProcessBuilder pb = new ProcessBuilder("sh",shellFile, "new");
+        ProcessBuilder pb = new ProcessBuilder("sh", shellFile, "new");
         Process p = pb.start();
         int exitCode = p.waitFor();
         assert exitCode == 0;
     }
 
     public static void restart() throws Exception {
-        System.setProperty("hdp.restart","1");
+        System.setProperty("hdp.restart", "1");
         shutdown();
     }
 
     public static void restart_2() throws Exception {
         String shellFile = System.getProperty("user.dir") + File.separator + "bin" + File.separator + "run.sh";
         Integer pid = Integer.valueOf(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]).intValue();
-        ProcessBuilder pb = new ProcessBuilder("sh",shellFile, "restartpid", pid.toString());
+        ProcessBuilder pb = new ProcessBuilder("sh", shellFile, "restartpid", pid.toString());
         Process p = pb.start();
         int exitCode = p.waitFor();
         assert exitCode == 0;
@@ -225,22 +241,12 @@ public class HdpHelper {
 
     private static Iterable<String> mapToIterable(Map<String, String> map, final String separator) {
         return Iterables.transform(map.entrySet(),
-                new Function<Map.Entry<String, String>, String>() {
-                    @Override
-                    public String apply(Map.Entry<String, String> input) {
-                        return input.getKey() + separator + input.getValue();
-                    }
-                });
+                input -> input.getKey() + separator + input.getValue());
     }
 
     private static Iterable<String> mapToIterable2(Map<Object, Object> map, final String separator) {
         return Iterables.transform(map.entrySet(),
-                new Function<Map.Entry<Object, Object>, String>() {
-                    @Override
-                    public String apply(Map.Entry<Object, Object> input) {
-                        return input.getKey() + separator + input.getValue();
-                    }
-                });
+                input -> input.getKey() + separator + input.getValue());
     }
 
 
@@ -259,7 +265,6 @@ public class HdpHelper {
     }
 
 
-
     private static final AccessHospitalHandler accessHospitalHandler;
     private static final DiscoveryUpdataHandler discoveryUpdataHandler;
     private static final String HDP_SERVER_VERSION;
@@ -267,7 +272,7 @@ public class HdpHelper {
     static {
         accessHospitalHandler = SpringContextUtils.getBean("accessHospitalHandler");
         discoveryUpdataHandler = SpringContextUtils.getBean("discoveryUpdataHandler");
-        HDP_SERVER_VERSION = "3.4  optimize redisson";
+        HDP_SERVER_VERSION = "3.5  optimize show memory";
     }
 
 

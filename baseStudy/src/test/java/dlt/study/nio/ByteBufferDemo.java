@@ -4,11 +4,11 @@ import org.junit.Test;
 import sun.misc.SharedSecrets;
 import sun.nio.ch.DirectBuffer;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.OperatingSystemMXBean;
-import java.lang.management.RuntimeMXBean;
+import java.lang.management.*;
 import java.nio.ByteBuffer;
 import java.text.NumberFormat;
+import java.util.Arrays;
+import java.util.List;
 
 public class ByteBufferDemo {
 
@@ -57,32 +57,6 @@ public class ByteBufferDemo {
         System.in.read();
 
 
-    }
-
-    @Test
-    public void memoryInfo(){
-        Runtime runtime = Runtime.getRuntime();
-        NumberFormat format = NumberFormat.getInstance();
-        StringBuilder sb = new StringBuilder();
-        long maxMemory = runtime.maxMemory();
-        long allocatedMemory = runtime.totalMemory();
-        long freeMemory = runtime.freeMemory();
-
-        sb.append("Free memory: ");
-        sb.append(format.format(freeMemory / 1024 /1024));
-        sb.append("\n");
-        sb.append("Allocated memory: ");
-        sb.append(format.format(allocatedMemory / 1024 /1024));
-        sb.append("\n");
-        sb.append("Max memory: ");
-        sb.append(format.format(maxMemory / 1024/1024));
-        sb.append("\n");
-        sb.append("Total free memory: ");
-        sb.append(format.format((freeMemory + (maxMemory - allocatedMemory)) / 1024 /1024));
-        sb.append("\n");
-        sb.append("totalMemory:");
-
-        System.out.println(sb.toString());
     }
 
 /*
