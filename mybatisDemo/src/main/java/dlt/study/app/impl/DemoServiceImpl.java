@@ -25,7 +25,7 @@ public class DemoServiceImpl implements DemoService {
 	@Override
 	public Demo insert(Demo demo) {
 		demoMapper.insertDemoAutoID(demo);
-		//demoMapper.insertDemo(demo);
+		//demoMapper.insertDemo(app);
 		return demo;
 	}
 }

@@ -138,7 +138,7 @@ Build date: 2013-05-16 14:36:50 (f9be68accb407158ba2b1be2c226a6ce1f649314)
  * 
  * {@img Ext.chart.Chart/Ext.chart.Chart2.png Line Series}
  * 
- * See the [Line Charts Example](#!/example/charts/Charts.html) for a live demo.
+ * See the [Line Charts Example](#!/example/charts/Charts.html) for a live app.
  * 
  * ## Themes
  * 

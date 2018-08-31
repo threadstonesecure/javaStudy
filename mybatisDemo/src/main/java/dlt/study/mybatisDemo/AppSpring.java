@@ -23,8 +23,8 @@ public class AppSpring {
 		demo = new Demo();
 		demo.setSn("dltsn");
 		demo.setApp("dltApp");
-		//demoService.insert(demo);
-		System.out.println("insert demo success!" + demo.getId());
+		//demoService.insert(app);
+		System.out.println("insert app success!" + demo.getId());
 
 		System.out.println(demo);
 	}

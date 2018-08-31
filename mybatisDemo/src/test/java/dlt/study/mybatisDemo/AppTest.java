@@ -36,7 +36,7 @@ public class AppTest {
 			deleteCount = sqlSession.delete(
 					"dlt.study.dao.DemoMapper.deleteDemo", demoId);
 
-			System.out.println("delete from demo :" + deleteCount);
+			System.out.println("delete from app :" + deleteCount);
 		}
 	}
 
@@ -139,7 +139,7 @@ public class AppTest {
 			demo.setSn("dltsn");
 			demo.setApp("dltApp");
 			demoMapper.insertDemo(demo);
-			System.out.println("insert demo success!" + id);
+			System.out.println("insert app success!" + id);
 			sqlSession.commit();
 			Demo tempDemo = demoMapper.selectDemo(id);
 			System.out.println(demo);
@@ -157,7 +157,7 @@ public class AppTest {
 			demo.setSn("dltsn");
 			demo.setApp("dltApp");
 			demoMapper.insertDemoAutoID(demo);
-			System.out.println("insert demo success!" + demo.getId());
+			System.out.println("insert app success!" + demo.getId());
 			sqlSession.commit();
 			System.out.println(demo);
 		}
@@ -189,7 +189,7 @@ public class AppTest {
 			// 接口编程
 			System.out.println("接口编程结果：");
 			deleteCount = demoMapper.deleteDemo(demoId);
-			System.out.println("delete from demo :" + deleteCount);
+			System.out.println("delete from app :" + deleteCount);
 
 			// sqlSession.commit();
 		}
@@ -206,7 +206,7 @@ public class AppTest {
 			demo.setId(demoId);
 			demo.setName("denglt");
 			deleteCount = demoMapper.deleteDemo2(demo);
-			System.out.println("delete from demo :" + deleteCount);
+			System.out.println("delete from app :" + deleteCount);
 
 			// sqlSession.commit();
 		}
@@ -224,7 +224,7 @@ public class AppTest {
 			System.out.println(demo);
 
 			deleteCount = demoMapper2.deleteDemo(demoId);
-			System.out.println("delete from demo :" + deleteCount);
+			System.out.println("delete from app :" + deleteCount);
 			// sqlSession.commit();
 		}
 	}

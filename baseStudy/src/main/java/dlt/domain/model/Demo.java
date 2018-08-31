@@ -16,7 +16,7 @@ import org.hibernate.annotations.Proxy;
 
 
 /**
- * SQL> desc demo
+ * SQL> desc app
 Name     Type           Nullable Default Comments 
 -------- -------------- -------- ------- -------- 
 ID       VARCHAR2(32)                             

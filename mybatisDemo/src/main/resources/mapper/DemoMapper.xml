@@ -126,7 +126,7 @@
 
 <!-- 同上
 	<insert id="insertDemoAutoID" parameterType="dlt.study.model.Demo" useGeneratedKeys="true" keyProperty="id" databaseId="mysql">
-		insert into demo (sn,app,code)
+		insert into app (sn,app,code)
 		values(#{sn,jdbcType=VARCHAR},#{app,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR})
 	</insert>
 --><update id="updateDemo" parameterType="dlt.study.model.Demo">

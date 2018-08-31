@@ -25,7 +25,7 @@ public class NioClient implements Runnable {
 		// 用channel.finishConnect();才能完成连接
 		channel.connect(new InetSocketAddress(ip, port));
 		// 将通道管理器和该通道绑定，并为该通道注册SelectionKey.OP_CONNECT事件。
-		channel.register(selector, SelectionKey.OP_CONNECT);
+		channel.register(selector, SelectionKey.OP_CONNECT); // 可以注册多个channel到selector
 
 	}
 

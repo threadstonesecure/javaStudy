@@ -12,3 +12,8 @@ create table  olt_dp_lack_drug (
    dp_ids varchar(50) comment '医生对应药商id列表',
    PRIMARY KEY (id)
 )ENGINE=InnoDB comment = '缺药登记表';
+
+
+
+create index idx_olt_prescription_med_detail_pid on olt_prescription_med_detail(PSCRIPT_ID);
+create index idx_olt_prescription_med_detail_dp_id on olt_prescription_med_detail(dp_id);

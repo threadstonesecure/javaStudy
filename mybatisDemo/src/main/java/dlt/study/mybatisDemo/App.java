@@ -44,14 +44,14 @@ public class App {
 			System.out.println("page:" + SqlUtil.getLocalPage());
 			Page p1 =  SqlUtil.getPageFromObject(demos);
 /*			deleteCount = demoMapper.deleteDemo(demoId);
-			System.out.println("delete from demo :" + deleteCount);
+			System.out.println("delete from app :" + deleteCount);
 
 			DemoMapper2 demoMapper2 = sqlSession.getMapper(DemoMapper2.class);
-			demo = demoMapper2.selectDemo(demoId);
-			System.out.println(demo);
+			app = demoMapper2.selectDemo(demoId);
+			System.out.println(app);
 
 			deleteCount = demoMapper2.deleteDemo(demoId);
-			System.out.println("delete from demo :" + deleteCount);*/
+			System.out.println("delete from app :" + deleteCount);*/
 			sqlSession.flushStatements();
 			//sqlSession.commit();
 			//sqlSession.commit();
