@@ -1,11 +1,9 @@
 package com.yuntai.util;
 
-import com.google.common.base.Function;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Ordering;
-import com.google.common.collect.Streams;
 import com.yuntai.hdp.access.RequestPack;
 import com.yuntai.hdp.access.ResultPack;
 import com.yuntai.hdp.access.service.AccessHospitalHandler;
@@ -20,9 +18,10 @@ import sun.misc.SharedSecrets;
 import java.io.File;
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
-import java.lang.management.ThreadMXBean;
 import java.net.Socket;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

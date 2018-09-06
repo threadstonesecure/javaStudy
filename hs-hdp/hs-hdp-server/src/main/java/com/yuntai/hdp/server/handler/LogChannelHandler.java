@@ -9,7 +9,6 @@ import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 
 /**

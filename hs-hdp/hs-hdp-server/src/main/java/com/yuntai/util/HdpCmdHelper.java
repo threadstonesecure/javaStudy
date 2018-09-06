@@ -37,7 +37,7 @@ public class HdpCmdHelper {
         ResultPack resultPack = HdpHelper.newResult(requestPack);
         try {
             JSONObject jsonObject = JSON.parseObject(requestPack.getBody());
-            String cmd = jsonObject.getString("hdpcmd");
+            String hdpcmd = jsonObject.getString("hdpcmd");
             Map<String, String> params = new HashMap<>();
             Set<String> keys = jsonObject.keySet();
             for (String key : keys) {
@@ -46,9 +46,9 @@ public class HdpCmdHelper {
 
             StringBuilder buf = new StringBuilder(200);
             buf.append(nodeConfig.toString() + NEWLINE);
-            buf.append(hdpCmd(cmd, params) + NEWLINE);
+            buf.append(hdpCmd(hdpcmd, params) + NEWLINE);
             buf.append("===========================end==========================" + NEWLINE + NEWLINE + NEWLINE);
-            if (nodeConfig.isCascade()) {
+            if (nodeConfig.isCascade() && !hdpcmd.equals("sendData")) {
                 ResultPack cascadeResultPack = dealCascadeHdp(requestPack);
                 if (cascadeResultPack != null)
                     buf.append(cascadeResultPack.getKind().equals("0") ? cascadeResultPack.getBody() : cascadeResultPack.getMsg());
