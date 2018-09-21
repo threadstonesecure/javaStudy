@@ -31,10 +31,11 @@ public class SimpleLuceneDemo {
     private Analyzer analyzer;
 
     @Before
-    public void init() throws Exception{
-        //analyzer = new CJKAnalyzer(); // 二元分词
-        analyzer = new StandardAnalyzer(); // 一元分词
-        //analyzer = new IKAnalyzer(true);
+    public void init() throws Exception {
+        // 不同的分词影响后面的查询
+       // analyzer = new CJKAnalyzer(); // 二元分词
+       // analyzer = new StandardAnalyzer(); // 一元分词
+        analyzer = new IKAnalyzer(true);
 
         path = FileSystems.getDefault().getPath("/tmp/testindex", "");
         directory = FSDirectory.open(path);
@@ -42,7 +43,7 @@ public class SimpleLuceneDemo {
     }
 
     @Test
-    public void deleteIndex() throws  Exception{
+    public void deleteIndex() throws Exception {
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
         IndexWriter iwriter = new IndexWriter(directory, config);
@@ -55,8 +56,8 @@ public class SimpleLuceneDemo {
 
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
-
         IndexWriter iwriter = new IndexWriter(directory, config);
+
         Document doc = new Document();
 
         String text = "This is the text to be indexed. by 邓隆通 Denglt";
@@ -125,13 +126,13 @@ public class SimpleLuceneDemo {
         IndexSearcher isearcher = new IndexSearcher(ireader);
         // QueryParser parser = new QueryParser("author", analyzer);  //
         MultiFieldQueryParser parser = new MultiFieldQueryParser(new String[]{"text"}, analyzer);
-        Query query = parser.parse("邓");
+        Query query = parser.parse("邓隆通");
         TopDocs topDocs = isearcher.search(query, 100);
-        printDocs(topDocs,isearcher);
+        printDocs(topDocs, isearcher);
     }
 
     @Test
-    public void queryAnd() throws Exception{
+    public void queryAnd() throws Exception {
         DirectoryReader ireader = DirectoryReader.open(directory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
         QueryParser parser = new QueryParser("text", analyzer);
@@ -139,22 +140,23 @@ public class SimpleLuceneDemo {
         Query query2 = parser.parse("邓隆通");
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
         builder.add(query1, BooleanClause.Occur.MUST);
-        builder.add(query2, BooleanClause.Occur.MUST);
+      //  builder.add(query2, BooleanClause.Occur.MUST);
+        Query query = builder.build();
 
-        TopDocs topDocs = isearcher.search(builder.build(), 100);
-        printDocs(topDocs,isearcher);
+        TopDocs topDocs = isearcher.search(query, 100);
+        printDocs(topDocs, isearcher);
     }
 
     /**
      * 分词
      */
     @Test
-    public void analyzerToken() throws IOException{
+    public void analyzerToken() throws IOException {
         // analyzer = new CJKAnalyzer();
-        TokenStream tokenStream = analyzer.tokenStream("content","邓隆通");
+        TokenStream tokenStream = analyzer.tokenStream("content", "邓隆通");
         tokenStream.addAttribute(CharTermAttribute.class);
         tokenStream.reset();
-        while (tokenStream.incrementToken()){
+        while (tokenStream.incrementToken()) {
             CharTermAttribute charTermAttribute = tokenStream.getAttribute(CharTermAttribute.class);
             System.out.println(charTermAttribute.toString());
         }
@@ -166,64 +168,72 @@ public class SimpleLuceneDemo {
      * 按照分词结果，使用and 查询
      */
     @Test
-    public void searchWord() throws Exception{
+    public void searchWord() throws Exception {
         DirectoryReader ireader = DirectoryReader.open(directory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
+
         List<String> tokens = new ArrayList<>();
-        TokenStream tokenStream = analyzer.tokenStream("token","邓隆");
+        TokenStream tokenStream = analyzer.tokenStream("token", "邓隆");
         tokenStream.addAttribute(CharTermAttribute.class);
         tokenStream.reset();
-        while (tokenStream.incrementToken()){
+        while (tokenStream.incrementToken()) {
             CharTermAttribute charTermAttribute = tokenStream.getAttribute(CharTermAttribute.class);
             tokens.add(charTermAttribute.toString());
         }
         tokenStream.end();
         tokenStream.close();
-        BooleanQuery.Builder builder = new BooleanQuery.Builder();
-        for (String token :tokens){
-            TermQuery query = new TermQuery(new Term("text",token));
-            builder.add(query,BooleanClause.Occur.MUST);
-        }
 
-        TopDocs topDocs = isearcher.search(builder.build(), 100);
-        printDocs(topDocs,isearcher);
+        BooleanQuery.Builder builder = new BooleanQuery.Builder();
+        for (String token : tokens) {
+            TermQuery query = new TermQuery(new Term("text", token));
+            builder.add(query, BooleanClause.Occur.MUST);
+        }
+        Query query = builder.build();
+
+        TopDocs topDocs = isearcher.search(query, 100);
+        printDocs(topDocs, isearcher);
     }
+
     @Test
     public void termQuery() throws Exception {
         DirectoryReader ireader = DirectoryReader.open(directory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
-        TermQuery query = new TermQuery(new Term("text","denglt"));
+
+        TermQuery query = new TermQuery(new Term("text", "denglt"));
         TopDocs topDocs = isearcher.search(query, 100);
-        printDocs(topDocs,isearcher);
+        printDocs(topDocs, isearcher);
 
-        query = new TermQuery(new Term("text","Denglt")); // 无法找到 大写问题
+        query = new TermQuery(new Term("text", "Denglt")); // 无法找到 大写问题
         topDocs = isearcher.search(query, 100);
-        printDocs(topDocs,isearcher);
+        printDocs(topDocs, isearcher);
 
-        query = new TermQuery(new Term("text","邓")); //
+        query = new TermQuery(new Term("text", "邓隆")); //
         topDocs = isearcher.search(query, 100);
-        printDocs(topDocs,isearcher);
+        printDocs(topDocs, isearcher);
     }
 
+    /**
+     * wildcard 通配符
+     * @throws Exception
+     */
     @Test
     public void wildcardQuery() throws Exception {
         DirectoryReader ireader = DirectoryReader.open(directory);
         IndexSearcher isearcher = new IndexSearcher(ireader);
 
-
-        Query query = new WildcardQuery(new Term("text","*邓隆通*")); //
+        Query query = new WildcardQuery(new Term("text", "*邓隆通*")); //
         TopDocs topDocs = isearcher.search(query, 100);
-        printDocs(topDocs,isearcher);
+        printDocs(topDocs, isearcher);
 
         System.out.println("===============");
-        query = new TermQuery(new Term("text","邓隆通")); //
+        query = new TermQuery(new Term("text", "邓隆通")); //
         topDocs = isearcher.search(query, 100);
-        printDocs(topDocs,isearcher);
+        printDocs(topDocs, isearcher);
 
     }
 
 
-    private void printDocs(TopDocs topDocs, IndexSearcher isearcher ) throws Exception{
+    private void printDocs(TopDocs topDocs, IndexSearcher isearcher) throws Exception {
         ScoreDoc[] hits = topDocs.scoreDocs;
         if (hits.length == 0) {
             System.out.println("no found !");
@@ -233,10 +243,10 @@ public class SimpleLuceneDemo {
         System.out.println(hits.length);
         for (ScoreDoc hit : hits) {
             Document d = isearcher.doc(hit.doc);
-            System.out.println("doc=" + hit.doc + " score=" + hit.score);
-            System.out.println("id:" + d.getField("id").stringValue());
-            System.out.println("text:" + d.getField("text").stringValue());
-            System.out.println("author:" + d.get("author"));
+            System.out.print("doc=" + hit.doc + " score=" + hit.score);
+            System.out.print(", id:" + d.getField("id").stringValue());
+            System.out.print(", text:" + d.getField("text").stringValue());
+            System.out.println(", author:" + d.get("author"));
         }
     }
 

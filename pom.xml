@@ -510,6 +510,12 @@
             </dependency>
 
             <dependency>
+                <groupId>com.ikAnalyzer</groupId>
+                <artifactId>IKAnalyzer</artifactId>
+                <version>2013</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.github.stuxuhai</groupId>
                 <artifactId>jpinyin</artifactId>
                 <version>${jpinyin-version}</version>

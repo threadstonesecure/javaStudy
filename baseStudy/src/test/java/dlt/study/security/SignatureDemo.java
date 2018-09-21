@@ -30,6 +30,7 @@ public class SignatureDemo {
         //得到公钥
         RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
 
+        // 私钥 签名
         Signature sign = Signature.getInstance("SHA1withRSA");
 
         sign.initSign(privateKey);
@@ -37,6 +38,7 @@ public class SignatureDemo {
         sign.update("zyy".getBytes());
         byte[] signData = sign.sign();
 
+        // 公钥 认证
         Signature verifySign = Signature.getInstance("SHA1withRSA");
         verifySign.initVerify(publicKey);
         //用于验签的数据

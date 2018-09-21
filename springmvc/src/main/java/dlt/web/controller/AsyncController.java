@@ -91,6 +91,11 @@ public class AsyncController {
         return result;
     }
 
+    /**
+     * 需要a task executor.  <task:executor></task:executor>
+     *
+     * @return
+     */
     @RequestMapping(value = "shortWebAsync", produces = "application/json;charset=UTF-8")
     public WebAsyncTask<User> shortWebAsyncTask() {
         logger.info("Entering controller");

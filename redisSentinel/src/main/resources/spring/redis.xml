@@ -9,7 +9,7 @@
     <bean id="jedisConnectionFactory"
           class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
         <!-- <constructor-arg index="0" value="#{ null }" />-->
-        <constructor-arg index="0" ref="redisSentinelConfiguration"/>
+        <constructor-arg index="0" ref="redisClusterConfiguration"/>
         <constructor-arg index="1" ref="jedisPoolConfig"/>
         <property name="usePool" value="true"/>
         <property name="password" value="hsyt"/>
@@ -27,6 +27,29 @@
         </constructor-arg>
     </bean>
 
+    <!--节点配置 -->
+    <bean name="master1" class="org.springframework.data.redis.connection.RedisNode">
+        <constructor-arg index="0" value="${cluster.master_1.host}"/>
+        <constructor-arg index="1" value="${cluster.master_1.port}"/>
+    </bean>
+    <bean name="master2" class="org.springframework.data.redis.connection.RedisNode">
+        <constructor-arg index="0" value="${cluster.master_2.host}"/>
+        <constructor-arg index="1" value="${cluster.master_2.port}"/>
+    </bean>
+    <bean name="master3" class="org.springframework.data.redis.connection.RedisNode">
+        <constructor-arg index="0" value="${cluster.master_3.host}"/>
+        <constructor-arg index="1" value="${cluster.master_3.port}"/>
+    </bean>
+
+    <bean id="redisClusterConfiguration" class="org.springframework.data.redis.connection.RedisClusterConfiguration">
+        <property name="clusterNodes">
+            <set>
+                <ref bean="master1"/>
+                <ref bean="master2"/>
+                <ref bean="master3"/>
+            </set> </property>
+        <property name="maxRedirects" value="3"/>
+    </bean>
 
     <!-- jedis pool配置 -->
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">

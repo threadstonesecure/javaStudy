@@ -270,8 +270,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.janeluo</groupId>
-            <artifactId>ikanalyzer</artifactId>
+            <groupId>com.ikAnalyzer</groupId>
+            <artifactId>IKAnalyzer</artifactId>
         </dependency>
 
         <dependency>
