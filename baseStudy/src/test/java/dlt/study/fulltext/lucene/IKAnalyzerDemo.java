@@ -1,4 +1,4 @@
-package dlt.study.fulltext;
+package dlt.study.fulltext.lucene;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;

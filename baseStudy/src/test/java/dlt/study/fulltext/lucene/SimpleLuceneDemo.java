@@ -1,4 +1,4 @@
-package dlt.study.fulltext;
+package dlt.study.fulltext.lucene;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
@@ -33,9 +33,9 @@ public class SimpleLuceneDemo {
     @Before
     public void init() throws Exception {
         // 不同的分词影响后面的查询
-       // analyzer = new CJKAnalyzer(); // 二元分词
-       // analyzer = new StandardAnalyzer(); // 一元分词
-        analyzer = new IKAnalyzer(true);
+        analyzer = new CJKAnalyzer(); // 二元分词
+        // analyzer = new StandardAnalyzer(); // 一元分词
+        // analyzer = new IKAnalyzer(true);
 
         path = FileSystems.getDefault().getPath("/tmp/testindex", "");
         directory = FSDirectory.open(path);
@@ -48,6 +48,7 @@ public class SimpleLuceneDemo {
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
         IndexWriter iwriter = new IndexWriter(directory, config);
         iwriter.deleteAll();
+        // iwriter.deleteDocuments()
         iwriter.close();
     }
 
@@ -58,9 +59,10 @@ public class SimpleLuceneDemo {
         config.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
         IndexWriter iwriter = new IndexWriter(directory, config);
 
+
         Document doc = new Document();
 
-        String text = "This is the text to be indexed. by 邓隆通 Denglt";
+        String text = "This is the text to be indexed . by 邓隆通 Denglt";
         doc.add(new Field("id", "1", TextField.TYPE_STORED));  // id 字段最好用StringField（即setTokenized(false)）
         doc.add(new StringField("name", "邓隆通", Field.Store.NO));
         doc.add(new TextField("text", text, Field.Store.YES));
@@ -68,6 +70,7 @@ public class SimpleLuceneDemo {
         doc.add(new TextField("author", "denglt", Field.Store.YES)); // index ,but not store
         //iwriter.addDocument(doc);
         iwriter.updateDocument(new Term("id", "1"), doc);
+        // iwriter.updateDocValues()
 
         doc = new Document();
         text = "This is the text to be indexed. by 老王";
@@ -140,7 +143,7 @@ public class SimpleLuceneDemo {
         Query query2 = parser.parse("邓隆通");
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
         builder.add(query1, BooleanClause.Occur.MUST);
-      //  builder.add(query2, BooleanClause.Occur.MUST);
+        //  builder.add(query2, BooleanClause.Occur.MUST);
         Query query = builder.build();
 
         TopDocs topDocs = isearcher.search(query, 100);
@@ -194,6 +197,11 @@ public class SimpleLuceneDemo {
         printDocs(topDocs, isearcher);
     }
 
+    /**
+     * 词查找
+     *
+     * @throws Exception
+     */
     @Test
     public void termQuery() throws Exception {
         DirectoryReader ireader = DirectoryReader.open(directory);
@@ -207,13 +215,14 @@ public class SimpleLuceneDemo {
         topDocs = isearcher.search(query, 100);
         printDocs(topDocs, isearcher);
 
-        query = new TermQuery(new Term("text", "邓隆")); //
+        query = new TermQuery(new Term("text", "邓隆")); // CJKAnalyzer 可以查询到记录
         topDocs = isearcher.search(query, 100);
         printDocs(topDocs, isearcher);
     }
 
     /**
      * wildcard 通配符
+     *
      * @throws Exception
      */
     @Test
@@ -232,6 +241,27 @@ public class SimpleLuceneDemo {
 
     }
 
+
+    /**
+     * 短语 查找
+     * like el:
+     * curl -X GET "localhost:9200/bank/_search" -H 'Content-Type: application/json' -d'
+     * {
+     *   "query": { "match_phrase": { "address": "mill lane" } }
+     * }
+     * '
+     *
+     * @throws Exception
+     */
+    @Test
+    public void phraseQuery() throws Exception {
+
+        DirectoryReader ireader = DirectoryReader.open(directory);
+        IndexSearcher isearcher = new IndexSearcher(ireader);
+        PhraseQuery query = new PhraseQuery(2, "text", "text", "indexed");
+        TopDocs topDocs = isearcher.search(query, 100);
+        printDocs(topDocs, isearcher);
+    }
 
     private void printDocs(TopDocs topDocs, IndexSearcher isearcher) throws Exception {
         ScoreDoc[] hits = topDocs.scoreDocs;

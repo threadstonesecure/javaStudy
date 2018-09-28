@@ -84,6 +84,10 @@ public class MemoryMxDemo {
         System.out.println(sb.toString());
     }
 
+    /**
+     * 查看 Heap 和 非Heap
+     */
+
     @Test
     public void memoryMXBean() {
         MemoryMXBean memoryMXBean = ManagementFactory.getMemoryMXBean();
@@ -98,7 +102,7 @@ public class MemoryMxDemo {
 
 
     /**
-     * 查看 Heap 和 非Heap 结构
+     * 查看 Heap 和 非Heap 各内存结构
      */
     @Test
     public void memoryPoolMXBean() {
@@ -113,8 +117,6 @@ public class MemoryMxDemo {
             System.out.println("usage:" + memoryPoolMXBean.getUsage());
             //System.out.println(memoryPoolMXBean.getPeakUsage());
         });
-
-
     }
 
     @Test

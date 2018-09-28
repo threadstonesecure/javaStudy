@@ -1,4 +1,4 @@
-package dlt.study.fulltext;
+package dlt.study.fulltext.lucene;
 
 import java.io.IOException;
 import java.nio.file.*;

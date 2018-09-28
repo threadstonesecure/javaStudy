@@ -104,6 +104,11 @@ public class AsyncController {
         return new WebAsyncTask<>(asyncTask);
     }
 
+    /**
+     * 处理timeoute
+     *
+     * @return
+     */
     @RequestMapping(value = "longWebAsync", produces = "application/json;charset=UTF-8")
     public WebAsyncTask<User> longWebAsyncTask() {
         logger.info("Entering controller");
