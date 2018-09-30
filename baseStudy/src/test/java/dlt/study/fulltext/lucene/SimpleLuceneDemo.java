@@ -188,7 +188,7 @@ public class SimpleLuceneDemo {
 
         BooleanQuery.Builder builder = new BooleanQuery.Builder();
         for (String token : tokens) {
-            TermQuery query = new TermQuery(new Term("text", token));
+            TermQuery query = new TermQuery(new ø("text", token));
             builder.add(query, BooleanClause.Occur.MUST);
         }
         Query query = builder.build();
