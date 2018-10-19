@@ -14,7 +14,9 @@ import java.util.stream.Stream;
  * 在使用这种 数据源—惰性操作—惰性操作—急性操作 流水线时，流水线中的惰性几乎是不可见的，因为计算过程被夹在数据源和最终结果（或副作用操作）之间。这使得API的可用性和性能得到了改善
  */
 public class StreamDemo {
-    List<User> users = Lists.newArrayList(new User("denglt", 100), new User("zyy", 100), new User("xxx", 50));
+    List<User> users = Lists.newArrayList(new User("denglt", 100),
+            new User("zyy", 100),
+            new User("xxx", 50));
 
     @Test
     public void sumAge() {
@@ -83,12 +85,12 @@ public class StreamDemo {
     }
 
     @Test
-    public void allMatch(){
+    public void allMatch() {
         System.out.println(users.stream().allMatch(u -> u.getAge() > 0));
     }
 
     @Test
-    public void noneMatch(){
+    public void noneMatch() {
         System.out.println(users.stream().noneMatch(u -> u.getAge() > 100));
     }
 
@@ -99,22 +101,22 @@ public class StreamDemo {
     }
 
     @Test
-    public void distinct (){
-        Stream.of("denglt","zyy","zyy","xxx").distinct().forEach(System.out::println);
+    public void distinct() {
+        Stream.of("denglt", "zyy", "zyy", "xxx").distinct().forEach(System.out::println);
     }
 
     @Test
-    public void flatMap(){
-        Stream.of("denglt","zyy","zyy","xxx").flatMap( t -> Stream.of(t,t)).forEach(System.out::println);
-        Map<String,Long> group =  Stream.of("denglt","zyy","zyy","xxx","Denglt").flatMap(t -> Stream.of(t,t)).
-                                              flatMap( t -> Stream.of(t,t)).
-                                              collect(Collectors.groupingBy( t-> t.toLowerCase(),Collectors.counting()));
-        group.forEach((k,v) -> System.out.println(k + " -> " + v));
+    public void flatMap() {
+        // Stream.of("denglt", "zyy", "zyy", "xxx").flatMap(t -> Stream.of(t, t)).forEach(System.out::println);
+        Map<String, Long> group = Stream.of("denglt", "zyy", "zyy", "xxx", "Denglt").flatMap(t -> Stream.of(t, t)).
+                flatMap(t -> Stream.of(t, t)).
+                collect(Collectors.groupingBy(t -> t.toLowerCase(), Collectors.counting()));
+        group.forEach((k, v) -> System.out.println(k + " -> " + v));
     }
 
     @Test
-    public void peek(){
-        users.stream().peek(t -> t.setAge(t.getAge() *2)).forEach(System.out::println);
+    public void peek() {
+        users.stream().peek(t -> t.setAge(t.getAge() * 2)).forEach(System.out::println);
     }
 
     @Test
@@ -124,8 +126,9 @@ public class StreamDemo {
 
     @Test
     public void reduce() {
+        users = Lists.newArrayList(new User("denglt", 100));
         OptionalInt optionalInt = users.stream().mapToInt(User::getAge).reduce((p1, p2) -> p1 + p2);
-        int sumAge = users.stream().mapToInt(User::getAge).reduce(0, (p1, p2) -> p1 + p2);
+        int sumAge = users.stream().mapToInt(User::getAge).reduce(1, (p1, p2) -> p1 + p2);
         System.out.println(sumAge);
         System.out.println(optionalInt.getAsInt());
     }
