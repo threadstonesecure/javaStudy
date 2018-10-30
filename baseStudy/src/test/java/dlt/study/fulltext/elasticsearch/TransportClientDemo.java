@@ -1,6 +1,7 @@
 package dlt.study.fulltext.elasticsearch;
 
 import com.google.common.collect.Maps;
+import org.apache.lucene.index.Terms;
 import org.elasticsearch.action.ActionFuture;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequest;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
@@ -34,6 +35,10 @@ import org.elasticsearch.index.reindex.*;
 import org.elasticsearch.script.Script;
 import org.elasticsearch.script.ScriptType;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
+import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
+import org.elasticsearch.search.aggregations.bucket.histogram.Histogram;
+import org.elasticsearch.search.aggregations.bucket.terms.LongTerms;
 import org.elasticsearch.search.sort.SortOrder;
 import org.elasticsearch.transport.client.PreBuiltTransportClient;
 import org.junit.After;
@@ -44,6 +49,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
@@ -107,7 +113,7 @@ public class TransportClientDemo {
         xContentBuilder.startObject()
                 .field("dynamic", "false")
                 .startObject("properties")
-                .startObject("message").field("type", "text").field("analyzer", "ik_max_word").endObject()
+                .startObject("message").field("type", "text").field("analyzer", "DP").endObject()
                 .startObject("name.en").field("type", "text").field("analyzer", "standard").endObject()
                 .startObject("age").field("type", "integer")/*.field("analyzer", "standard")*/.endObject()
                 .startObject("title").field("type", "text").endObject()
@@ -287,6 +293,8 @@ public class TransportClientDemo {
 
     }
 
+
+
     @Test
     public void bulkApi() throws Exception {
         BulkRequestBuilder bulkRequestBuilder = client.prepareBulk();
@@ -372,7 +380,7 @@ public class TransportClientDemo {
         client.admin().indices().prepareRefresh().get();
     }
 
-    public static BulkProcessor getBulkProcessor(Client client) {
+    private static BulkProcessor getBulkProcessor(Client client) {
         return BulkProcessor.builder(
                 client,
                 new BulkProcessor.Listener() {
@@ -425,17 +433,19 @@ public class TransportClientDemo {
     @Test
     public void search() {
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
-        boolQueryBuilder.must(QueryBuilders.matchQuery("address", "华观路"));
+        boolQueryBuilder.must(QueryBuilders.matchQuery("address", "华观路"));  // and
         boolQueryBuilder.filter(QueryBuilders.rangeQuery("age").from(30).to(100));
-      //  boolQueryBuilder.must(QueryBuilders.termQuery("age",42));
-
+        // boolQueryBuilder.should()  or
+        // boolQueryBuilder.mustNot() not
+        //  boolQueryBuilder.must(QueryBuilders.termQuery("age",42));
+        // QueryBuilders.matchPhraseQuery() // 短语
         System.out.println(Strings.toString(boolQueryBuilder));
 
         SearchResponse response = client.prepareSearch(indexName)
                 .setTypes("_doc")
                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                 .setQuery(boolQueryBuilder)                 // Query
-              //  .setPostFilter(QueryBuilders.rangeQuery("age").from(40).to(100))     // Filter
+                //  .setPostFilter(QueryBuilders.rangeQuery("age").from(40).to(100))     // Filter
                 .setFrom(0).setSize(60).setExplain(true)
                 //.highlighter()  高亮
                 .addSort("age", SortOrder.DESC)
@@ -446,6 +456,65 @@ public class TransportClientDemo {
         for (SearchHit searchHit : searchHits) {
             System.out.println(searchHit.getSourceAsMap());
         }
+    }
+
+    @Test
+    public void scrollSearch() {
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        boolQueryBuilder.must(QueryBuilders.matchQuery("address", "华观路"));
+        boolQueryBuilder.filter(QueryBuilders.rangeQuery("age").from(30).to(100));
+        //  boolQueryBuilder.must(QueryBuilders.termQuery("age",42));
+
+        System.out.println(Strings.toString(boolQueryBuilder));
+
+        SearchResponse scrollResp = client.prepareSearch(indexName)
+                .setTypes("_doc")
+                .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+                .setQuery(boolQueryBuilder)
+                .setScroll(new TimeValue(60000))
+                .setFrom(0).setSize(1).setExplain(true)
+                //.highlighter()  高亮
+                .addSort("age", SortOrder.DESC)
+                .get();
+        do {
+            for (SearchHit searchHit : scrollResp.getHits().getHits()) {
+                System.out.println(searchHit.getSourceAsMap());
+            }
+
+            scrollResp = client.prepareSearchScroll(scrollResp.getScrollId())
+                    .setScroll(new TimeValue(60000))
+                    .execute().actionGet();
+        } while (scrollResp.getHits().getHits().length != 0);
+    }
+
+    /**
+     * 聚合
+     */
+    @Test
+    public void aggregations() {
+        SearchResponse sr = client.prepareSearch(indexName)
+                .setTypes("_doc")
+                .setQuery(QueryBuilders.matchAllQuery())
+                .addAggregation(
+                        AggregationBuilders.terms("agg1").field("age")
+                )
+                .addAggregation(
+                        AggregationBuilders.dateHistogram("agg2")
+                                .field("birthday")
+                                .dateHistogramInterval(DateHistogramInterval.YEAR)
+                )
+                .get();
+
+        System.out.println(sr);
+        LongTerms agg1 = sr.getAggregations().get("agg1");
+        System.out.println(agg1);
+        Histogram agg2 = sr.getAggregations().get("agg2");
+        System.out.println(agg2);
+
+    }
+
+    @Test
+    public void joinQuery() {
 
     }
 }
