@@ -14,18 +14,18 @@ import org.redisson.api.RRemoteService;
 import org.redisson.api.RedissonClient;
 import org.redisson.api.RemoteInvocationOptions;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 @Service("hdpServer2HdpServer")
-public class HdpServer2HdpServer implements AccessHospitalHandler, UpdataHandler {
+public class HdpServer2HdpServer implements AccessHospitalHandler, UpdataHandler, ApplicationListener<ContextRefreshedEvent> {
 
-    private Log log = LogFactory.getLog(HdpServer2HdpServer.class);
+    public static Log log = LogFactory.getLog(HdpServer2HdpServer.class);
 
 
     @Resource
@@ -46,42 +46,50 @@ public class HdpServer2HdpServer implements AccessHospitalHandler, UpdataHandler
     @Value("${redisson.remoteservice.com.yuntai.hdp.access.service.UpdataHandler.workers:300}")
     private int updataHandlerWorkers;
 
-    @PostConstruct
-    public void init() {
+    private void initRedisson() {
 
-        if (nodeConfig.isToHosByCascade()) {
-            // 注册发布 UpdataHander 服务
-            RRemoteService remoteServer = RemoteServiceHelper.getRemoteService(redissonClient, "HdpServer2HdpServer");
-            remoteServer.register(UpdataHandler.class, updataHandler, updataHandlerWorkers);
-            // 创建 AccessHospitalHandler 客户端，
-           // remoteAccessHospitalHandler = remoteServer.get(AccessHospitalHandler.class, 60, TimeUnit.SECONDS, Math.max(accessHospitalHandlerWorkers / 60, 3), TimeUnit.SECONDS);
-            remoteAccessHospitalHandler = remoteServer.get(AccessHospitalHandler.class,
-                  RemoteInvocationOptions.defaults().noAck().expectResultWithin(60, TimeUnit.SECONDS));
-            rateLimiter = RateLimiter.create(accessHospitalHandlerWorkers);
+        try {
+            log.info("HdpServer2HdpServer is creating service and client");
+            if (nodeConfig.isToHosByCascade()) {
+                // 注册发布 UpdataHander 服务
+                RRemoteService remoteServer = RemoteServiceHelper.getRemoteService(redissonClient, "HdpServer2HdpServer");
+                remoteServer.register(UpdataHandler.class, updataHandler, updataHandlerWorkers);
+                // 创建 AccessHospitalHandler 客户端，
+                // remoteAccessHospitalHandler = remoteServer.get(AccessHospitalHandler.class, 60, TimeUnit.SECONDS, Math.max(accessHospitalHandlerWorkers / 60, 3), TimeUnit.SECONDS);
+                remoteAccessHospitalHandler = remoteServer.get(AccessHospitalHandler.class,
+                        RemoteInvocationOptions.defaults().noAck().expectResultWithin(60, TimeUnit.SECONDS));
+                rateLimiter = RateLimiter.create(accessHospitalHandlerWorkers);
 
+            }
+
+            if (nodeConfig.isToYunServiceByCascade()) {
+                // 注册发布 AccessHospitalHandler 服务
+                RRemoteService remoteServer = RemoteServiceHelper.getRemoteService(redissonClient, "HdpServer2HdpServer");
+                remoteServer.register(AccessHospitalHandler.class, accessHospitalHandler, accessHospitalHandlerWorkers);
+                // 创建 UpdataHander 客户端
+                //remoteUpdataHandler = remoteServer.get(UpdataHandler.class, 60, TimeUnit.SECONDS, Math.max(accessHospitalHandlerWorkers / 60, 3), TimeUnit.SECONDS);
+
+                remoteUpdataHandler = remoteServer.get(UpdataHandler.class,
+                        RemoteInvocationOptions.defaults().noAck().expectResultWithin(60, TimeUnit.SECONDS));
+
+                rateLimiter = RateLimiter.create(updataHandlerWorkers);
+
+            }
+            isInitOk = true;
+            initLatch.countDown();
+            log.info("HdpServer2HdpServer have successfully created service and client!");
+        } catch (Exception ex) {
+            log.error("HdpServer2HdpServer initRedisson server and client", ex);
         }
-
-        if (nodeConfig.isToYunServiceByCascade()) {
-            // 注册发布 AccessHospitalHandler 服务
-            RRemoteService remoteServer = RemoteServiceHelper.getRemoteService(redissonClient, "HdpServer2HdpServer");
-            remoteServer.register(AccessHospitalHandler.class, accessHospitalHandler, accessHospitalHandlerWorkers);
-            // 创建 UpdataHander 客户端
-            //remoteUpdataHandler = remoteServer.get(UpdataHandler.class, 60, TimeUnit.SECONDS, Math.max(accessHospitalHandlerWorkers / 60, 3), TimeUnit.SECONDS);
-
-            remoteUpdataHandler = remoteServer.get(UpdataHandler.class,
-                  RemoteInvocationOptions.defaults().noAck().expectResultWithin(60, TimeUnit.SECONDS));
-
-            rateLimiter = RateLimiter.create(updataHandlerWorkers);
-
-        }
-
     }
-
 
     @Override
     public ResultPack getHospitalResult(RequestPack request, int timeout) {
         ResultPack hospitalResult;
         try {
+            if (!isInitOk) {
+                initLatch.await(30, TimeUnit.SECONDS);
+            }
             rateLimiter.acquire();
             log.info(String.format("===>转发云服务对接请求到级联HdpServer:%s", request.toKeyString()));
             hospitalResult = remoteAccessHospitalHandler.getHospitalResult(request, timeout);
@@ -124,5 +132,13 @@ public class HdpServer2HdpServer implements AccessHospitalHandler, UpdataHandler
 
     private RateLimiter rateLimiter;
 
+    private CountDownLatch initLatch = new CountDownLatch(1);
+
+    private boolean isInitOk = false;
+
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent event) {
+        initRedisson();
+    }
 
 }

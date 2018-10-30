@@ -271,7 +271,7 @@ public class HdpHelper {
     static {
         accessHospitalHandler = SpringContextUtils.getBean("accessHospitalHandler");
         discoveryUpdataHandler = SpringContextUtils.getBean("discoveryUpdataHandler");
-        HDP_SERVER_VERSION = "3.5  optimize show memory";
+        HDP_SERVER_VERSION = "3.6 fix:HdpServer2HdpServer init";
     }
 
 
