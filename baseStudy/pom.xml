@@ -186,7 +186,6 @@
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.taobao-sdk-java</groupId>
             <artifactId>taobao-sdk-java</artifactId>

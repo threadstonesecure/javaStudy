@@ -74,7 +74,7 @@ public class TransportClientDemo {
         // on startup
         client = new PreBuiltTransportClient(Settings.EMPTY)
                 .addTransportAddress(new TransportAddress(InetAddress.getByName(host1), port));
-        //  .addTransportAddress(new TransportAddress(InetAddress.getByName("host2"), 9300));
+        //  .addTransportAddress(new TransportAddress(InetAddress.getByName("host2"), 9300)); // cluster
 
     }
 
@@ -152,7 +152,7 @@ public class TransportClientDemo {
                 .startObject("birthday").field("type", "date").endObject()
                 .endObject()
                 .endObject();
-        System.out.println(Strings.toString(xContentBuilder));
+        //System.out.println(Strings.toString(xContentBuilder));
         client.admin().indices().preparePutMapping(indexName)
                 .setType("_doc")
                 .setSource(xContentBuilder)
