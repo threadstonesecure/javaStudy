@@ -34,7 +34,7 @@ public class HdpCmdHelper {
     }
 
     public static ResultPack deal(RequestPack requestPack) {
-        if (isHdpCmdRequest(requestPack)) {
+        if (!isHdpCmdRequest(requestPack)) {
             throw new IllegalArgumentException("传入的参数" + requestPack + "错误！");
         }
         ResultPack resultPack = HdpHelper.newResult(requestPack);
