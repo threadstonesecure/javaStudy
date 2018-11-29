@@ -34,6 +34,9 @@ public class HdpCmdHelper {
     }
 
     public static ResultPack deal(RequestPack requestPack) {
+        if (isHdpCmdRequest(requestPack)) {
+            throw new IllegalArgumentException("传入的参数" + requestPack + "错误！");
+        }
         ResultPack resultPack = HdpHelper.newResult(requestPack);
         try {
             JSONObject jsonObject = JSON.parseObject(requestPack.getBody());
@@ -66,6 +69,7 @@ public class HdpCmdHelper {
 
     /**
      * 给HdpServlet
+     *
      * @param cmd
      * @param params
      * @return
@@ -87,7 +91,7 @@ public class HdpCmdHelper {
 
         requestPack.setHdpOther(cmdflag);
         if (nodeConfig.isToHosByCascade()) {
-            return hdpServer2HdpServer.getHospitalResult(requestPack,30);
+            return hdpServer2HdpServer.getHospitalResult(requestPack, 30);
         }
         if (nodeConfig.isToYunServiceByCascade()) {
             return hdpServer2HdpServer.process(requestPack);

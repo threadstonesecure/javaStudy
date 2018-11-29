@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
+import org.springframework.web.context.request.async.WebAsyncManager;
 import org.springframework.web.context.request.async.WebAsyncTask;
+import org.springframework.web.context.request.async.WebAsyncUtils;
 
 import javax.annotation.Resource;
 import java.util.concurrent.Callable;
@@ -91,13 +93,10 @@ public class AsyncController {
         return result;
     }
 
-    /**
-     * 需要a task executor.  <task:executor></task:executor>
-     *
-     * @return
-     */
     @RequestMapping(value = "shortWebAsync", produces = "application/json;charset=UTF-8")
     public WebAsyncTask<User> shortWebAsyncTask() {
+      //  WebAsyncUtils.getAsyncManager()
+     //   WebAsyncManager
         logger.info("Entering controller");
         Callable<User> asyncTask = new UserTimeCaller(10000);
         logger.info("Leaving  controller");
