@@ -104,7 +104,7 @@ public class ConsistentHash<K, T> {
 
         System.out.println("=========节点数据分布=================");
         Multiset<String> multiset = HashMultiset.create();
-        for (int i = 0; i < 1000000; i++) {
+        for (int i = 0; i < 100; i++) {
             multiset.add(consistentHash.get(getRandomString(i / 20)));
         }
 

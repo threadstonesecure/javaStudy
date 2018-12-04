@@ -6,11 +6,7 @@ import com.alibaba.dubbo.rpc.Result;
 
 public class FilterContext {
 
-    private static final ThreadLocal<FilterContext> LOCAL = new ThreadLocal<FilterContext>() {
-        protected FilterContext initialValue() {
-            return new FilterContext();
-        }
-    };
+    private static final ThreadLocal<FilterContext> LOCAL = ThreadLocal.withInitial(() -> new FilterContext());
     private Invoker<?> invoker;
     private Invocation invocation;
 

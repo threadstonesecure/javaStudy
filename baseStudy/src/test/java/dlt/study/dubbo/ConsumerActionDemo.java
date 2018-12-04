@@ -19,7 +19,7 @@ import java.util.List;
 public class ConsumerActionDemo {
 
     public static void main(String[] args) throws Throwable {
-        // 获取 注册中心 服务    RegistryConfig
+        // 获取 注册中心 服务    RegistryFactory
         RegistryFactory registryFactory = ExtensionLoader.getExtensionLoader(RegistryFactory.class).getAdaptiveExtension();
         URL registryURL = new URL("multicast", "224.5.6.7", 1234);  //multicast://224.5.6.7:1234
         Registry registry = registryFactory.getRegistry(registryURL);

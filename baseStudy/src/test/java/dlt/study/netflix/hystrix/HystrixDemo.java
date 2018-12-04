@@ -56,7 +56,7 @@ public class HystrixDemo {
 
     @Test
     public void fallback() {
-        String s = new CommandHelloWorld("Bob", 3000).execute();
+        String s = new CommandHelloWorld("Bob", 60010).execute();
         System.out.println("结果：" + s);  // Hello Failure Bob!
 
         System.out.println("finish!");

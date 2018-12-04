@@ -26,13 +26,14 @@ public class ExtensionDemo {
     public void getAdaptiveExtension() {
 
         ExtensionLoader<Filter> filterLoader = ExtensionLoader.getExtensionLoader(Filter.class);
-        filterLoader.getDefaultExtensionName(); // 触发器 ExtensionLoader.loadExtensionClasses
+        String defaultExtensionName = filterLoader.getDefaultExtensionName();// 触发器 ExtensionLoader.loadExtensionClasses
+        System.out.println(defaultExtensionName);
 
         String extensionName = filterLoader.getExtensionName(Filter.class);
         System.out.println(extensionName);
         extensionName = filterLoader.getExtensionName(CacheFilter.class);
         System.out.println(extensionName);
-        // Filter filter = filterLoader.getAdaptiveExtension();//Adaptive对象的目的： 当扩展点有依赖例外一个扩展点时，通过private T injectExtension(T instance) 方法注入的依赖扩展点是一个Adaptive实例
+        // error Filter filter = filterLoader.getAdaptiveExtension();//Adaptive对象的目的： 当扩展点有依赖例外一个扩展点时，通过private T injectExtension(T instance) 方法注入的依赖扩展点是一个Adaptive实例
 
     }
 
@@ -40,7 +41,7 @@ public class ExtensionDemo {
     public void getAdaptiveExtension2() {
         ExtensionLoader<CacheFactory> cacheFactorys = ExtensionLoader.getExtensionLoader(CacheFactory.class);
         CacheFactory cacheFactory = cacheFactorys.getAdaptiveExtension();
-        System.out.println(cacheFactory.getClass());
+        System.out.println(cacheFactory);
         URL url = new URL("dubbo", "127.0.0.1", 20888);
         url = url.addParameter("cache", "jcache");
         System.out.println(url.toFullString());
@@ -73,8 +74,9 @@ public class ExtensionDemo {
     @Test
     public void getAdaptiveCuster() {
         ExtensionLoader<Cluster> extensionLoader = ExtensionLoader.getExtensionLoader(Cluster.class);
+        //extensionLoader.getDefaultExtension()
         Cluster adaptiveExtension = extensionLoader.getAdaptiveExtension();
-        System.out.println(adaptiveExtension);
+        System.out.println(adaptiveExtension.getClass());
     }
 
     public class Protocol$Adpative implements com.alibaba.dubbo.rpc.Protocol {

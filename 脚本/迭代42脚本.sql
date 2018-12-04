@@ -18,7 +18,7 @@ commit;
 
 
 -- prp_cons_tkt_request  会诊请求
---增加邀请医生id
+-- 增加邀请医生id
 alter table  prp_cons_tkt_request add column invite_doc_id bigint(15) comment '邀请医生id';
 alter table  prp_cons_tkt_request add column invite_desc varchar(500) comment '邀请说明';
 

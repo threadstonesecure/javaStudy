@@ -15,7 +15,7 @@
 1531710423.528266 [0 192.168.1.134:48754] "RPUSH" "{remote_response}:28a15828-dd3f-43da-a0b4-ba6602e6d4dc" "{\"@class\":\"org.redisson.remote.RemoteServiceAck\",\"id\":\"00540602006e105a356c4f2dd0f92df794\"}"
 1531710423.547058 [0 192.168.1.134:48592] "RPUSH" "{remote_response}:28a15828-dd3f-43da-a0b4-ba6602e6d4dc" "{\"@class\":\"org.redisson.remote.RemoteServiceResponse\",\"id\":\"00540602006e105a356c4f2dd0f92df794\",\"result\":{\"@class\":\"com.yuntai.hdp.access.ResultPack\",\"callMode\":1,\"cmd\":\"\xe4\xb8\x9a\xe5\x8a\xa1\xe4\xbb\xa3\xe7\xa0\x81:10000\",\"hdpSeqno\":\"a38103f000b64cdebeaf75ef49b60ed0\",\"hosId\":\"999999-test\",\"kind\":\"-3\",\"msg\":\"\xe5\x8c\xbb\xe9\x99\xa2[999999-test]\xe6\xb2\xa1\xe6\x9c\x89\xe7\x99\xbb\xe9\x99\x86HDP\",\"returnTime\":1531710423532}}"
 1531710423.548393 [0 192.168.1.134:48698] "PEXPIRE" "{remote_response}:28a15828-dd3f-43da-a0b4-ba6602e6d4dc" "60000"
-1531710423.549423 [0 192.168.1.134:48700] "BLPOP" "{HdpServer2HdpServer:com.yuntai.hdp.access.service.AccessHospitalHandler}" "0"
+1531710423.549423 [0 192.168.1.134:48700] "BLPOP" "{HdpServer2HdpServer:com.yuntai.hdp.access.service.AccessHospitalHandler}" "0" // 注意服务端启动就会执行该命令
 
 1531710423.549508 [0 192.168.1.13:58296] "BLPOP" "{remote_response}:28a15828-dd3f-43da-a0b4-ba6602e6d4dc" "0"
 1531710423.550085 [0 192.168.1.13:58286] "DEL" "{HdpServer2HdpServer:remote}:00540602006e105a356c4f2dd0f92df794:ack"
