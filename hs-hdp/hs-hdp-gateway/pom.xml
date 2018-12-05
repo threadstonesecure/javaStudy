@@ -150,7 +150,7 @@
                     <includes>
                         <inlude>com/**</inlude>
                         <inlude>spring/**</inlude>
-                        <include>webapp/**</include>
+                        <include>META-INF/**</include>
                     </includes>
                     <archive>
                         <addMavenDescriptor>false</addMavenDescriptor>
@@ -247,9 +247,9 @@
         <resources>
             <resource>
                 <directory>src/main/java</directory>
-                <includes>
-                    <include>**/*.properties</include>
-                </includes>
+                <excludes>
+                    <exclude>**/*.java</exclude>
+                </excludes>
                 <filtering>false</filtering>
             </resource>
             <resource>
