@@ -9,9 +9,10 @@ import com.yuntai.util.spring.SpringContextUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.UUID;
 
 @Service("accessHospitalImpl")
@@ -21,8 +22,8 @@ public class AccessHospitalImpl implements AccessHospitalHandler, DowndataHandle
     @Value("${access.hdpserver.mode:dubbo}")
     private String toHdpServerMode;
 
-    @PostConstruct
-    public void init() {
+    @EventListener(value = ContextRefreshedEvent.class)
+    public void initToHdpServerMode() {
         switch (toHdpServerMode) {
             case "dubbo":
                 accessHospitalHandler = SpringContextUtils.getBean("dubbo.HdpServer.AccessHospitalHandler");
