@@ -20,7 +20,7 @@ public class CommandHelloWorld extends HystrixCommand<String> {
                                 //default -1   //If you set this to -1 then SynchronousQueue will be used, otherwise a positive value will be used with LinkedBlockingQueue.
                                 //Please note that this setting only takes effect if you also set allowMaximumSizeToDivergeFromCoreSize
                                 .withQueueSizeRejectionThreshold(5) // default 5. This property is not applicable if maxQueueSize == -1.
-                                .withKeepAliveTimeMinutes(1)  // this property controls how long a thread will go unused before being released
+                                .withKeepAliveTimeMinutes(1)  // default 1. this property controls how long a thread will go unused before being released
                                 .withAllowMaximumSizeToDivergeFromCoreSize(true) // default false
                                 .withMetricsRollingStatisticalWindowInMilliseconds(10000)
                                 .withMetricsRollingStatisticalWindowBuckets(10)
@@ -29,7 +29,7 @@ public class CommandHelloWorld extends HystrixCommand<String> {
                         HystrixCommandProperties.Setter()
                                 // Execution
                                 .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.THREAD)// 隔离方式
-                                .withExecutionTimeoutEnabled(true)
+                                .withExecutionTimeoutEnabled(true)  // default true
                                 .withExecutionTimeoutInMilliseconds(1000)  // default 1000
                                 .withExecutionIsolationThreadInterruptOnTimeout(true)  //发生超时时是否应该中断
                                 .withExecutionIsolationThreadInterruptOnFutureCancel(false) // default false /发生取消时是否应中断
@@ -39,14 +39,14 @@ public class CommandHelloWorld extends HystrixCommand<String> {
                                 .withFallbackEnabled(true)
                                 .withFallbackIsolationSemaphoreMaxConcurrentRequests(10) // default 10
                                 // Circuit Breaker
-                                .withCircuitBreakerEnabled(true)  // 启动熔断器
+                                .withCircuitBreakerEnabled(true)  // 启动熔断器 // default true
                                 .withCircuitBreakerRequestVolumeThreshold(20) // 10秒钟内至少20此请求失败，  default 20 (This property sets the minimum number of requests in a rolling window that will trip the circuit.)
                                 .withCircuitBreakerSleepWindowInMilliseconds(5000) //default 5000, 熔断跳闸后的5000毫秒内拒绝请求, 5s后进入半打开状态,放部分流量过去重试
                                 .withCircuitBreakerErrorThresholdPercentage(50) // 错误率达到50开启熔断保护 default 50
                                 .withCircuitBreakerForceOpen(false) // default false   是否强行启动断开，拒绝所有request
                                 .withCircuitBreakerForceClosed(false) // default false  是否强行关闭断开，接受request
                                 // Metrics
-                                .withMetricsRollingStatisticalWindowInMilliseconds(10000) // defalut 10s
+                                .withMetricsRollingStatisticalWindowInMilliseconds(10000) // defalut 10s // statisticalWindow
                                 .withMetricsRollingStatisticalWindowBuckets(10) // defalut 10 个 (metrics.rollingStats.timeInMilliseconds % metrics.rollingStats.numBuckets == 0)
                                 //Request Context
                                 .withRequestCacheEnabled(true)  // default true

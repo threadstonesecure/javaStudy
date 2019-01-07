@@ -1,47 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-	<bean id="txManager"
-		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
+    <bean id="txManager"
+          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 
-	<bean id="txManager2"
-		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
-	
-	<bean id="openSessionInterceptor"
-		class="org.springframework.orm.hibernate4.support.OpenSessionInterceptor">
-		<property name="sessionFactory" ref="sessionFactory" />
-	</bean>
+    <bean id="txManager2"
+          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
 
-	<!--org.springframework.transaction.interceptor.TransactionInterceptor-->
-	<!-- TxAdviceBeanDefinitionParser -->
-	<tx:advice id="txAdvice" transaction-manager="txManager">
-		<tx:attributes>
-			<tx:method name="*" />
-			<tx:method name="list*" read-only="true"  />
-			<tx:method name="get*" read-only="true" />
-			<tx:method name="load*" read-only="true" />
-			<tx:method name="find*" read-only="true" />
-		</tx:attributes>
-	</tx:advice>
+    <bean id="openSessionInterceptor"
+          class="org.springframework.orm.hibernate4.support.OpenSessionInterceptor">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 
-  <!--没有数据库时测试 	-->
-  <aop:config>
-		<aop:pointcut id="default"
-			expression="execution(public * dlt.application.impl..*Impl.*(..))" />
-		<aop:advisor advice-ref="openSessionInterceptor"
-			pointcut-ref="default" />
-		<aop:advisor advice-ref="txAdvice" pointcut-ref="default" />
-		<aop:advisor advice-ref="dataSourceInterceptor"
-			pointcut="execution(* javax.sql.DataSource.getConnection(..))" />
-	</aop:config>
+    <!--org.springframework.transaction.interceptor.TransactionInterceptor-->
+    <!-- TxAdviceBeanDefinitionParser -->
+    <tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="*"/>
+            <tx:method name="list*" read-only="true"/>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="load*" read-only="true"/>
+            <tx:method name="find*" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:aspectj-autoproxy />
+    <!--没有数据库时测试 	-->
+    <aop:config proxy-target-class="false">
+        <aop:pointcut id="default"
+                      expression="execution(public * dlt.application.impl..*Impl.*(..))"/>
+        <aop:advisor advice-ref="openSessionInterceptor"
+                     pointcut-ref="default"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="default"/>
+        <aop:advisor advice-ref="dataSourceInterceptor"
+                     pointcut="execution(* javax.sql.DataSource.getConnection(..))"/>
+    </aop:config>
 </beans>

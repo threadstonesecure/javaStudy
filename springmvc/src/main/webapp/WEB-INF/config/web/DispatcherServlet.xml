@@ -84,8 +84,8 @@
     <!-- 配置请求中断 -->
     <bean id="officeHoursInterceptor"
           class="dlt.web.interceptor.TimeBasedAccessInterceptor">
-        <property name="openingTime" value="9"/>
-        <property name="closingTime" value="22"/>
+        <property name="openingTime" value="8"/>
+        <property name="closingTime" value="23"/>
     </bean>
 
     <bean id="onlineInterceptor" class="dlt.web.interceptor.OnlineInterceptor">
