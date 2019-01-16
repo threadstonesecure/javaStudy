@@ -12,8 +12,25 @@ import java.beans.PropertyDescriptor;
 
 import static dlt.utils.CommonUtils.log;
 /**
+ create bean 过程中BeanPostProcessor执行的顺序：
+
+ bean = applyBeanPostProcessorsBeforeInstantiation(targetType, beanName);
+ if (bean != null) {
+ bean = applyBeanPostProcessorsAfterInitialization(bean, beanName);
+ return bean；
+ }
+ doCreateBean过程{
+     createBeanInstance;// 创建Bean实例
+     applyMergedBeanDefinitionPostProcessors;
+     populateBean; //Bean 属性赋值、autowire ，调用1、InstantiationAwareBeanPostProcessor.postProcessAfterInstantiation
+     applyBeanPostProcessorsBeforeInitialization();
+     invokeInitMethods(); // Bean上定义的初始化方法(InitializingBean、@PostConstruct)
+     applyBeanPostProcessorsAfterInitialization();
+ }
+
  * Created by denglt on 2016/11/25.
  */
+
 
 @Service
 public class LogBeanPostProcessor1 implements InstantiationAwareBeanPostProcessor, Ordered ,BeanFactoryAware{

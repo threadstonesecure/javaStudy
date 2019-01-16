@@ -24,6 +24,11 @@ public class MyAopAdvisor extends AbstractPointcutAdvisor {
         this.pointcut = buildPointcut(MyAop.class);
     }
 
+    public MyAopAdvisor(Class<? extends Annotation> annotationType){
+        this.advice = buildAdvice();
+        this .pointcut = buildPointcut(annotationType);
+
+    }
     @Override
     public Pointcut getPointcut() {
         return pointcut;
@@ -38,9 +43,9 @@ public class MyAopAdvisor extends AbstractPointcutAdvisor {
         return new MyAopMethodInterceptor();
     }
 
-    private Pointcut buildPointcut(Class<? extends Annotation> myAopAnnotationType){
-        Pointcut cpc = new AnnotationMatchingPointcut(myAopAnnotationType);
-        Pointcut mpc = new AnnotationMatchingPointcut(null,myAopAnnotationType);
+    private Pointcut buildPointcut(Class<? extends Annotation> annotationType){
+        Pointcut cpc = new AnnotationMatchingPointcut(annotationType); // 类上
+        Pointcut mpc = new AnnotationMatchingPointcut(null,annotationType); // 方法上
         return new ComposablePointcut(cpc).union(mpc); // or
 
     }

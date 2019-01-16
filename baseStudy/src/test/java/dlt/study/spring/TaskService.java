@@ -2,6 +2,7 @@ package dlt.study.spring;
 
 import dlt.study.spring.aop.MyAop;
 import org.springframework.aop.framework.AopContext;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class TaskService implements ITask{
     }
 
 
-    //@Async
+    @Async
     public void doTask(){
         try {
             Object proxy = AopContext.currentProxy();  //ProxyConfig.setExposeProxy(true);

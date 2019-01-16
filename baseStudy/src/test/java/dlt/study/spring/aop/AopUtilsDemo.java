@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * Created by denglt on 2016/11/30.
  */
-public class StudyAop {
+public class AopUtilsDemo {
 
     @Before
     public void init(){
@@ -51,6 +51,8 @@ public class StudyAop {
         List<Object> interceptorsAndDynamicInterceptionAdvice =
                 defaultAdvisorChainFactory.getInterceptorsAndDynamicInterceptionAdvice(advisedSupport,doTask,TaskService.class);
         System.out.println(interceptorsAndDynamicInterceptionAdvice.size()); //0
+
+       // advisedSupport.getInterceptorsAndDynamicInterceptionAdvice(doTask,TaskService.class)
     }
 
     @Test
