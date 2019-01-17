@@ -34,7 +34,7 @@
         <dubbo-versoin>2.5.3</dubbo-versoin>
         <ehcache-core-version>2.6.9</ehcache-core-version>
         <ehcache-jcache-version>1.0.0</ehcache-jcache-version>
-        <fastjson-version>1.2.8</fastjson-version>
+        <fastjson-version>1.2.17</fastjson-version>
         <guava-version>23.0</guava-version>
         <hadoop-version>2.2.0</hadoop-version>
         <hbase-client-version>0.98.8-hadoop2</hbase-client-version>
@@ -104,19 +104,19 @@
                 </exclusions>
             </dependency>
 
-<!--
-            <dependency>
-                <groupId>org.terracotta</groupId>
-                <artifactId>ehcache-probe</artifactId>
-                <version>1.0.2</version>
-            </dependency>
+            <!--
+                        <dependency>
+                            <groupId>org.terracotta</groupId>
+                            <artifactId>ehcache-probe</artifactId>
+                            <version>1.0.2</version>
+                        </dependency>
 
-            <dependency>
-                <groupId>org.terracotta</groupId>
-                <artifactId>ehcache-monitor</artifactId>
-                <version>1.0.2</version>
-            </dependency>
--->
+                        <dependency>
+                            <groupId>org.terracotta</groupId>
+                            <artifactId>ehcache-monitor</artifactId>
+                            <version>1.0.2</version>
+                        </dependency>
+            -->
 
             <!-- apache utils -->
 
@@ -194,13 +194,13 @@
                 <version>${spring-version}</version>
             </dependency>
 
-<!--
-        <dependency>
-                <groupId>org.springframework.integration</groupId>
-                <artifactId>spring-integration-core</artifactId>
-                <version>${spring-version}</version>
-            </dependency>
-            -->
+            <!--
+                    <dependency>
+                            <groupId>org.springframework.integration</groupId>
+                            <artifactId>spring-integration-core</artifactId>
+                            <version>${spring-version}</version>
+                        </dependency>
+                        -->
 
             <!-- RedisLockRegistry -->
             <dependency>
@@ -309,13 +309,13 @@
                 <artifactId>netty-all</artifactId>
                 <version>${netty-version}</version>
             </dependency>
-<!--
-   不单独提供了
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-transport-native-epoll</artifactId>
-                <version>${netty-version}</version>
-            </dependency>-->
+            <!--
+               不单独提供了
+                        <dependency>
+                            <groupId>io.netty</groupId>
+                            <artifactId>netty-transport-native-epoll</artifactId>
+                            <version>${netty-version}</version>
+                        </dependency>-->
 
 
             <dependency>
@@ -650,6 +650,18 @@
                 <version>${elasticsearch-version}</version>
             </dependency>
 
+            <!-- feign -->
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-core</artifactId>
+                <version>10.1.0</version>
+            </dependency>
+<!--            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-jackson</artifactId>
+                <version>10.1.0</version>
+            </dependency>-->
+
         </dependencies>
     </dependencyManagement>
     <dependencies>
@@ -691,12 +703,6 @@
             <artifactId>mockito-core</artifactId>
             <version>2.18.0</version>
             <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-core</artifactId>
-            <version>10.1.0</version>
         </dependency>
 
     </dependencies>
