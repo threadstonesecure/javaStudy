@@ -74,6 +74,7 @@ public class FeignDemo {
         GitHub github = Feign.builder()
                 .decoder(new MyJsonDecoder())
                 .encoder(new MyJsonEncoder())
+                //.client()
                 // .errorDecoder()
                 // .requestInterceptor()
                 // .retryer()

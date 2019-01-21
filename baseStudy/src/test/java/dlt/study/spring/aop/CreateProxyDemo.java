@@ -84,6 +84,7 @@ public class CreateProxyDemo {
         System.out.println(aopBean.getClass());
         Object aopBean2 = proxyFactoryBean.getObject();
         System.out.println(aopBean == aopBean2);
+
         if (aopBean instanceof TaskService) {
             ((TaskService) aopBean).doTask();
         }
