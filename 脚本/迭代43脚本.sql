@@ -20,3 +20,6 @@ alter table olt_prescription_review_log modify column `pharmacist_id` bigint(15)
 alter table olt_prescription_review_log modify column `pharmacist_name` varchar(30) NULL DEFAULT '' COMMENT '审核药师名称';
 alter table olt_prescription_review_log modify column `review_result` tinyint(2)  NULL COMMENT '审核结果: 1-不通过,2-审核通过,3-系统自动通过,4-双签通过,5-自动跳过,6-医生修改处方';
 alter table olt_prescription_review_log add column opsp_id bigint(15)  NULL  COMMENT '处方单保存点Id';
+
+
+alter table olt_drug_provider add column YUN_ID bigint(15);

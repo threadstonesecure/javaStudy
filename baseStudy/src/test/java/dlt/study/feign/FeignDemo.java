@@ -3,12 +3,21 @@ package dlt.study.feign;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.netflix.hystrix.HystrixCommand;
+import com.netflix.hystrix.HystrixCommandGroupKey;
+import com.netflix.hystrix.HystrixCommandKey;
+import com.netflix.hystrix.HystrixCommandProperties;
 import feign.*;
 import feign.codec.EncodeException;
 import feign.codec.Encoder;
 import feign.codec.StringDecoder;
+import feign.hystrix.FallbackFactory;
+import feign.hystrix.HystrixFeign;
+import feign.hystrix.SetterFactory;
+import org.junit.Test;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
@@ -70,7 +79,8 @@ public class FeignDemo {
         }
     }
 
-    public static void main(String[] args) {
+    @Test
+    public void feign() {
         GitHub github = Feign.builder()
                 .decoder(new MyJsonDecoder())
                 .encoder(new MyJsonEncoder())
@@ -79,6 +89,7 @@ public class FeignDemo {
                 // .requestInterceptor()
                 // .retryer()
                 // .options()
+                // .contract()
                 .logger(new ConsoleLogger())
                 .logLevel(Logger.Level.FULL)
                 //.queryMapEncoder()
@@ -94,8 +105,63 @@ public class FeignDemo {
             System.out.println(contributor.login + " (" + contributor.contributions + ")");
         }
 
-
         github.postContributors("OpenFeign", "feign", queryMap); // 仅看日志
+    }
+
+    @Test
+    public void hystrixFeign() {
+        GitHub github = HystrixFeign.builder()
+                .decoder(new MyJsonDecoder())
+                .encoder(new MyJsonEncoder())
+                //.client()
+                // .errorDecoder()
+                // .requestInterceptor()
+                // .retryer()
+                // .options()
+                // .contract()
+                .logger(new ConsoleLogger())
+                .logLevel(Logger.Level.FULL)
+                //.queryMapEncoder()
+                .setterFactory(new MySetterFactory())
+                .target(GitHub.class, "https://api.github.com",new MyFallbackFactory());
+        List<Contributor> result = github.postContributors("OpenFeign", "feign", Maps.newHashMap());
+        System.out.println("result =" + result); // Fallback
+    }
+
+    class MySetterFactory implements SetterFactory {
+
+        @Override
+        public HystrixCommand.Setter create(Target<?> target, Method method) {
+            String groupKey = target.name();
+            String commandKey = Feign.configKey(target.type(), method);
+            return HystrixCommand.Setter
+                    .withGroupKey(HystrixCommandGroupKey.Factory.asKey(groupKey))
+                    .andCommandKey(HystrixCommandKey.Factory.asKey(commandKey))
+                    .andCommandPropertiesDefaults(HystrixCommandProperties.Setter()
+                            .withExecutionTimeoutEnabled(true)
+                            .withExecutionTimeoutInMilliseconds(6000)
+                            .withExecutionIsolationSemaphoreMaxConcurrentRequests(10) // default 10
+                            .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE) //为SEMAPHORE时，在调用线程执行run(),性能更好点
+                    );
+        }
+    }
+
+    class MyFallbackFactory implements FallbackFactory<GitHub> {
+        @Override
+        public GitHub create(Throwable cause) {
+            System.out.println("error ->" + cause);
+            return new GitHub() {
+                @Override
+                public List<Contributor> contributors(String owner, String repo, Map<String, Object> queryMap) {
+                    return null;
+                }
+
+                @Override
+                public List<Contributor> postContributors(String owner, String repo, Map<String, Object> bodyMap) {
+                    return null;
+                }
+            };
+        }
     }
 }
 
