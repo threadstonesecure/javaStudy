@@ -114,16 +114,18 @@ public class JacksonTest {
     public void readJson2List2() throws Exception {
         String json = "[{\"id\":1,\"name\":\"hoojo\",\"email\":\"hoojo_@126.com\",\"address\":\"china-Guangzhou\",\"birthday\":\"2014-09-18 17:15:39\"},{\"id\":1,\"name\":\"hoojo\",\"email\":\"hoojo_@126.com\",\"address\":\"china-Guangzhou\",\"birthday\":\"2014-09-18 17:15:39\"}]";
         Type type = JacksonTest.class.getDeclaredField("abs").getGenericType();
-        System.out.println(type);
+        System.out.println("type -> " + type);
 
         TypeReference<List<AccountBean>> typeReference = new TypeReference<List<AccountBean>>() {
         };
 
         Type type2 = typeReference.getType();
 
+        System.out.println("type2 ->" + type2);
         System.out.println(type == type2);
-        System.out.println(type.getClass());
-        System.out.println(type.getTypeName());
+
+        System.out.println("type.getClass -> " + type.getClass());
+        System.out.println("type.getTypeName ->" + type.getTypeName());
 
         System.out.println("=================");
         if (type instanceof ParameterizedTypeImpl) {
@@ -131,8 +133,8 @@ public class JacksonTest {
             for (Type type1 : parameterizedType.getActualTypeArguments()) {
                 System.out.println(type1);
             }
-            System.out.println(parameterizedType.getRawType());
-            System.out.println(parameterizedType.getOwnerType());
+            System.out.println("type.getRawType -> " + parameterizedType.getRawType());
+            System.out.println("type.getOwnerType ->" + parameterizedType.getOwnerType());
         }
         System.out.println("=============================");
         List<AccountBean> list = (List<AccountBean>) JsonUtils.toObject(json, type, null);

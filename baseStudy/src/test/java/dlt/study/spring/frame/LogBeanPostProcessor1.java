@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 import java.beans.PropertyDescriptor;
 
 import static dlt.utils.CommonUtils.log;
-/**
+/***
+
  create bean 过程中BeanPostProcessor执行的顺序：
 
  bean = applyBeanPostProcessorsBeforeInstantiation(targetType, beanName);
