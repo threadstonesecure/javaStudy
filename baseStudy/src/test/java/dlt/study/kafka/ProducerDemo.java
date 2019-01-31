@@ -34,6 +34,7 @@ public class ProducerDemo {
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, "33554432"); // The total bytes of memory the producer can use to buffer records waiting to be sent to the server.
         props.put(ProducerConfig.BATCH_SIZE_CONFIG, "16384"); // 16k //The producer will attempt to batch records together into fewer requests whenever multiple records are being sent to the same partition
         props.put(ProducerConfig.LINGER_MS_CONFIG, "1"); // 发送延时1ms，default 0
+       // props.put(ProducerConfig.);
     }
 
     @Test
@@ -101,7 +102,7 @@ public class ProducerDemo {
 
 /**
  * 注意：
- * callback一般在生产者的I/O线程中执行，所以是相当的快的，否则将延迟其他的线程的消息发送。
+ * callback一般在生产者的I/O线程中执行，所以要是相当的快的，否则将延迟其他的线程的消息发送。
  * 如果你需要执行阻塞或计算昂贵（消耗）的回调，建议在callback主体中使用自己的Executor来并行处理。
  */
 class MyCallback implements Callback {
