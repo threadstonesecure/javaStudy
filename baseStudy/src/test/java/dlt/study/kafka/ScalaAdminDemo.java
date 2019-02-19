@@ -23,7 +23,7 @@ public class ScalaAdminDemo {
     private static AdminClient adminClient;
 
     static {
-        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.1.134:19092");
+        props.put(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
         adminClient = AdminClient.create(props);
     }
 

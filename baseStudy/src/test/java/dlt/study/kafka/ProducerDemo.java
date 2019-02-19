@@ -34,6 +34,7 @@ public class ProducerDemo {
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, "33554432"); // The total bytes of memory the producer can use to buffer records waiting to be sent to the server.
         props.put(ProducerConfig.BATCH_SIZE_CONFIG, "16384"); // 16k //The producer will attempt to batch records together into fewer requests whenever multiple records are being sent to the same partition
         props.put(ProducerConfig.LINGER_MS_CONFIG, "1"); // 发送延时1ms，default 0
+       // props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG) 分区类
        // props.put(ProducerConfig.);
     }
 
