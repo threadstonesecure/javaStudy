@@ -26,7 +26,7 @@ public class CronExpression {
 
     @Test
     public void cron2(){
-        CronTrigger cronTrigger = new CronTrigger("1 0 0 * * ?");
+        CronTrigger cronTrigger = new CronTrigger("1 0,4 0 * * ?");
         SimpleTriggerContext simpleTriggerContext = new SimpleTriggerContext();
         for(int i=0; i< 10;i++){
             Date d = cronTrigger.nextExecutionTime(simpleTriggerContext);
