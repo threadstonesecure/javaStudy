@@ -29,6 +29,10 @@ public class ProducerDemo {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
         props.put(ProducerConfig.ACKS_CONFIG, "1"); //[0,1,ALL]
+                                      //Kafka 某个 broker 宕机，然后重新选举 partition 的 leader。
+                                      // 大家想想，要是此时其他的 follower 刚好还有些数据没有同步，结果此时 leader 挂了，
+                                      // 然后选举某个 follower 成 leader 之后，不就少了一些数据
+                                      // acks = ALL 可以避免
         props.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "gzip");  //[ none, gzip, snappy, or lz4]
         props.put(ProducerConfig.RETRIES_CONFIG, "0");// default 0
         props.put(ProducerConfig.BUFFER_MEMORY_CONFIG, "33554432"); // The total bytes of memory the producer can use to buffer records waiting to be sent to the server.

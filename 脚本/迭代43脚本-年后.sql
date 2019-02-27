@@ -3,6 +3,7 @@ create table olt_doc_visit_pat_plan(
     dvpp_id bigint(15) NOT NULL AUTO_INCREMENT COMMENT '药师随访计划id',
     DOC_ID bigint(15) NOT NULL COMMENT '医生ID',
     DOC_NAME varchar(20) NOT NULL COMMENT '医生姓名',
+    US_ID bigint(15) NOT NULL COMMENT '用户Id',
     PAT_ID bigint(15) NOT NULL COMMENT '患者ID',
     PAT_NAME varchar(20) NOT NULL COMMENT '患者姓名',
     pat_age_desc varchar(4)  COMMENT '就诊人年龄文本,包含单位',
@@ -17,6 +18,8 @@ create table olt_doc_visit_pat_plan(
     key(doc_id,status),
     key(doc_id,pat_id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 comment = '药师随访患者计划表';
+
+-- alter table olt_doc_visit_pat_plan add US_ID bigint(15) NOT NULL COMMENT '用户Id';
 
 -- 药师随访患者任务表
 create table  olt_doc_visit_pat_task (
