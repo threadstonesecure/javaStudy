@@ -18,7 +18,7 @@ public class DubboCacheDemo {
 
     @Test
     public void dubboCache() throws Exception {
-        SpringContextUtils.init(new String[]{"dubbo-client.xml", "redis.xml"});
+        SpringContextUtils.init(new String[]{"dubbo-client-cache.xml", "redis.xml"});
         final AccessHospitalHandler accessHospitalHandler = SpringContextUtils.getBean("accessHospitalHandler");
         //Thread.sleep(10000);
         for (int i = 0; i < 1; i++) {

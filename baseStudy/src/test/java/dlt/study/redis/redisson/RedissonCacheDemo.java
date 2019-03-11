@@ -5,8 +5,10 @@ import dlt.study.spring.JUnit4Spring;
 import org.junit.Test;
 import org.redisson.api.*;
 import org.redisson.client.codec.StringCodec;
+import org.redisson.codec.JsonJacksonCodec;
 
 import javax.annotation.Resource;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 

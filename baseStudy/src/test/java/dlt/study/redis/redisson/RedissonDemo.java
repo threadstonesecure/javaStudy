@@ -40,6 +40,7 @@ public class RedissonDemo extends JUnit4Spring {
     public void configCluster() throws Exception {
         Config config = new Config();
         config.setUseLinuxNativeEpoll(false);
+        //config.setCodec()
         config.useClusterServers()
                 .setPassword("")
                 //可以用"rediss://"来启用SSL连接
@@ -93,27 +94,23 @@ public class RedissonDemo extends JUnit4Spring {
 
     }
 
-
     @Test
     public void atomicLong() throws Exception {
         System.out.println(this.redissonClient);
-        RAtomicLong longObject = redissonClient.getAtomicLong("myLong");
-        // longObject.set(3);
+        RAtomicLong longObject = redissonClient.getAtomicLong("myAtomicLong");
+        longObject.set(3);
         boolean b = longObject.compareAndSet(3, 401);  // 同步
         System.out.println(b);
 
         RFuture<Boolean> booleanRFuture = longObject.compareAndSetAsync(401, 402); // 异步
-        booleanRFuture.addListener(new FutureListener<Boolean>() {
-            @Override
-            public void operationComplete(Future<Boolean> future) throws Exception {
-                if (future.isSuccess()) {
-                    // 取得结果
-                    Boolean result = future.getNow();
-                    // ...
-                } else {
-                    // 对发生错误的处理
-                    Throwable cause = future.cause();
-                }
+        booleanRFuture.addListener(future -> {
+            if (future.isSuccess()) {
+                // 取得结果
+                Boolean result = future.getNow();
+                // ...
+            } else {
+                // 对发生错误的处理
+                Throwable cause = future.cause();
             }
         });
         //booleanRFuture.handle()  // 1.8 后使用
@@ -280,24 +277,26 @@ public class RedissonDemo extends JUnit4Spring {
         RBucket<String> mybucket = redissonClient.getBucket("mybucket", StringCodec.INSTANCE);
         mybucket.set("denglt");
         String s = mybucket.get();
+        //mybucket.compareAndSet()
         System.out.println("read from redis ->" + s);
 
         RBuckets buckets = redissonClient.getBuckets(StringCodec.INSTANCE);
-        List<RBucket<String>> rBuckets = buckets.find("mybu*"); // 多key操作
-        //redissonClient.getKeys();
-
+        List<RBucket<String>> rBuckets = buckets.find("mybu"); // 多key操作
+        rBuckets.forEach(r -> System.out.println(r.get()));
     }
 
     @Test
     public void binaryStream() throws Exception {
-        RBinaryStream mybucket = redissonClient.getBinaryStream("mybucket");
-        byte[] bytes = mybucket.get();
-        System.out.println("read from redis -> " + new String(bytes));
+        RBinaryStream myStream = redissonClient.getBinaryStream("myStream");
 
-        OutputStream outputStream = mybucket.getOutputStream();
+
+        OutputStream outputStream = myStream.getOutputStream();
         outputStream.write(" -> zyy".getBytes());
         outputStream.write(" -> dzy".getBytes());
         outputStream.write(" -> dwx".getBytes());
+
+        byte[] bytes = myStream.get();
+        System.out.println("read from redis -> " + new String(bytes));
 
 
     }
@@ -319,6 +318,7 @@ public class RedissonDemo extends JUnit4Spring {
     @Test
     public void bloomFilter() {
         RBloomFilter<String> myBloomFilter = redissonClient.getBloomFilter("myBloomFilter", StringCodec.INSTANCE);
+        // redissonClient.getB
         myBloomFilter.delete();
         myBloomFilter.tryInit(10000, 0.03);
         for (int i = 0; i < 100; i++) {
@@ -362,4 +362,14 @@ public class RedissonDemo extends JUnit4Spring {
 /*        mySortedSet.trySetComparator()
         mySortedSet.add()  // 会加个分布式lock*/
     }
+
+    @Test
+    public void longAdder() {
+        RLongAdder atomicLong = redissonClient.getLongAdder("myLongAdder");
+        atomicLong.add(12);
+        atomicLong.increment();
+        atomicLong.decrement();
+        System.out.println(atomicLong.sum());
+    }
+
 }

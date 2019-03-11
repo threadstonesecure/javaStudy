@@ -32,3 +32,9 @@ create table  olt_doc_visit_pat_task (
   key(dvpp_id),
   key(DOC_ID,visit_date)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 comment = '药师随访患者任务表';
+
+insert into cfg_enum_dict( ENUM_NAME,ENUM_TYPE,ENUM_VALUE,ENUM_TXT,state)
+   values('随访类型','PHA_DOC_VISIT_TYPE','1','默认随访单',1),
+        ('随访类型','PHA_DOC_VISIT_TYPE','2','结核病专用',0),
+        ('随访类型','PHA_DOC_VISIT_TYPE','3','糖尿病专用',0);
+commit;
