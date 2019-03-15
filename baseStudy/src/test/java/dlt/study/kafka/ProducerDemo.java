@@ -2,6 +2,8 @@ package dlt.study.kafka;
 
 import com.google.common.collect.Lists;
 import dlt.study.log4j.Log;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.producer.*;
 import org.apache.kafka.common.KafkaException;
 import org.apache.kafka.common.errors.AuthorizationException;
@@ -15,6 +17,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Future;
 
@@ -77,11 +80,14 @@ public class ProducerDemo {
      */
     @Test
     public void tran() {
-        props.put("transactional.id", "my-transactional-id");
+        props.put("transactional.id", "my-transactional-id"); // 设置事务id
         props.put(ProducerConfig.ACKS_CONFIG, "all");  // 必须为all
         props.put(ProducerConfig.RETRIES_CONFIG, "1"); // 必须 > 0
-        props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG,"true");
+        props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG,"true");  // 设置幂等性
         Producer<String, String> producer = new KafkaProducer<>(props);
+        // Specify buffer size in config,这里不进行设置这个属性,如果设置了,还需要执行producer.flush()来把缓存中消息发送出去
+
+        //props.put("batch.size", 16384);
         producer.initTransactions(); // 执行一次
         try {
             producer.beginTransaction();
@@ -90,6 +96,7 @@ public class ProducerDemo {
                 producer.send(record, new MyCallback());
             }
             throw new KafkaException();
+           // producer.sendOffsetsToTransaction(); //消费-生产并存,用来确认消费
             //producer.commitTransaction();
         } catch (ProducerFencedException | OutOfOrderSequenceException | AuthorizationException e) {
             // We can't recover from these exceptions, so our only option is to close the producer and exit.
@@ -102,6 +109,29 @@ public class ProducerDemo {
         }
         producer.close();
     }
+
+
+ /*   @Test
+    public  void consume-transform-produce (){
+        KafkaConsumer consumer = new KafkaConsumer<>(props);
+        KafkaProducer producer = new KafkaProducer<>(props);
+
+        long CONSUMER_POLL_TIMEOUT = 1000;
+        producer.initTransactions();
+
+        while(true) {
+            ConsumerRecords records = consumer.poll(CONSUMER_POLL_TIMEOUT);
+            if (!records.isEmpty()) {
+                producer.beginTransaction();
+                List outputRecords = processRecords(records);
+                for (ProducerRecord outputRecord : outputRecords) {
+                    producer.send(outputRecord);
+                }
+                producer.sendOffsetsToTransaction(getUncommittedOffsets());
+                producer.commitTransaction();
+            }
+        }
+    }*/
 }
 
 
