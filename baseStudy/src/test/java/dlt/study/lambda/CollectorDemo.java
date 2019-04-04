@@ -124,6 +124,19 @@ public class CollectorDemo {
     }
 
     @Test
+    public void groupHaving() {
+        Map<String, Long> groups = users.stream().collect(Collectors.groupingBy(User::getUserName, Collectors.counting()));
+        groups.values().removeIf(v -> v <= 2L);
+        System.out.println(groups.size());
+
+        Object groups2 = users.stream().collect(Collectors.collectingAndThen(Collectors.groupingBy(User::getUserName, Collectors.counting()), m -> {
+            m.values().removeIf(v -> v <= 1L);
+            return m;
+        }));
+        System.out.println(groups2);
+    }
+
+    @Test
     public void myCollector() {
         Collector<User, ?, OneString<User>> collector; // = Collectors.toCollection(() -> new OneString<>(u -> "" + u.getAge()));
         collector = Collector.of(() -> new OneString<>(u -> "" + u.getAge()),

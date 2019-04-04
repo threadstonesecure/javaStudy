@@ -1,4 +1,7 @@
 迭代44
 accquery (最近医生开单诊断)
+common-service-base(阿里云快递查询)
 hs-yun-service-online  -- 消息样式展示调整:排班消息
 yt-dct-restapi (最近医生开单诊断、消息样式展示调整:处方单消息、设置随访计划)
+yt-dct-service (随访 羔羊胃)
+yt-yun-restapi(业务快递查询)

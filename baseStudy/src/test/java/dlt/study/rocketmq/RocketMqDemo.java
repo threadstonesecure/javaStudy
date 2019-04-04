@@ -2,13 +2,15 @@ package dlt.study.rocketmq;
 
 import dlt.study.log4j.Log;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
-import org.apache.rocketmq.client.consumer.listener.*;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
+import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageExt;
-import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 import org.apache.rocketmq.remoting.common.RemotingHelper;
 import org.junit.Test;
 
@@ -41,6 +43,8 @@ public class RocketMqDemo {
                     ("Hello RocketMQ " +
                             i).getBytes(RemotingHelper.DEFAULT_CHARSET) /* Message body */
             );
+            // This message will be delivered to consumer 10 seconds later.
+            //msg.setDelayTimeLevel(3);
             //Call send message to deliver message to one of brokers.
             SendResult sendResult = producer.send(msg, (mqs, msg1, arg) -> {
                 return mqs.get(0); // 全放在第一个queue
@@ -87,7 +91,6 @@ public class RocketMqDemo {
                 }
                 Log.info(String.format("Receive New Messages: %s %s %n", body, msg));
             });
-
             String body = new String(msgs.get(0).getBody());
             if (body.equals("Hello RocketMQ 0")){
                 // 就是要 later try to consume
@@ -110,7 +113,7 @@ public class RocketMqDemo {
     @Test
     public void consumer2() throws Exception {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("c_denglt_m");
-       // consumer.setMessageModel(MessageModel.BROADCASTING);
+       // consumer.setMessageModel(MessageModel.BROADCASTING); //  MessageModel.CLUSTERING
        // consumer.setInstanceName("denglt"); // MessageModel.CLUSTERING模式下如果instanceName、consumerGroup都相同的Consumer会同时收到Message，有点like BROADCASTING模式，但instanceName=DEFAULT例外
         consumer.setNamesrvAddr(namesrv);
         consumer.subscribe(topic, "*");

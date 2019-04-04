@@ -11,3 +11,10 @@ create table olt_doc_visit_pat_record_dynamic(
 
 insert into cfg_enum_dict( ENUM_NAME,ENUM_TYPE,ENUM_VALUE,ENUM_TXT,state)
    values('随访类型','PHA_DOC_VISIT_TYPE','4','萎缩性胃炎专用',1);
+
+alter table dct_doc_r_pat add column crc_rel_id bigint(20) COMMENT '创建crc与患者关系的来源rel_id';
+
+alter table hos_doctor add column crc_doc_id bigint(15)  COMMENT '医生对应的crc的doc_id';
+
+
+alter table olt_doc_visit_pat_record_dynamic add column item_key_group varchar(100) COMMENT 'item_key分组';
