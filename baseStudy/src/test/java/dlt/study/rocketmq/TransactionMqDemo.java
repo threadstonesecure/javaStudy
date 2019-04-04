@@ -1,10 +1,7 @@
 package dlt.study.rocketmq;
 
 import org.apache.rocketmq.client.exception.MQClientException;
-import org.apache.rocketmq.client.producer.LocalTransactionState;
-import org.apache.rocketmq.client.producer.SendResult;
-import org.apache.rocketmq.client.producer.TransactionListener;
-import org.apache.rocketmq.client.producer.TransactionMQProducer;
+import org.apache.rocketmq.client.producer.*;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageConst;
 import org.apache.rocketmq.common.message.MessageExt;
@@ -53,7 +50,7 @@ public class TransactionMqDemo {
                 // transactionCheckMax
                 // transactionTimeout
                 msg.putUserProperty(MessageConst.PROPERTY_CHECK_IMMUNITY_TIME_IN_SECONDS,"3");
-                SendResult sendResult = producer.sendMessageInTransaction(msg, null);
+                TransactionSendResult sendResult = producer.sendMessageInTransaction(msg, null);
                 System.out.printf("%s%n", sendResult);
 
                 Thread.sleep(10);

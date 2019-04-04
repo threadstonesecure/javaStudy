@@ -44,6 +44,7 @@ public class RocketMqDemo {
                             i).getBytes(RemotingHelper.DEFAULT_CHARSET) /* Message body */
             );
             // This message will be delivered to consumer 10 seconds later.
+            // messageDelayLevel = "1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h";
             //msg.setDelayTimeLevel(3);
             //Call send message to deliver message to one of brokers.
             SendResult sendResult = producer.send(msg, (mqs, msg1, arg) -> {
