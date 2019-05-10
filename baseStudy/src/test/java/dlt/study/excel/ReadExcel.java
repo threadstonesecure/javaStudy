@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.junit.Test;
 
 import static dlt.study.excel.WriteExcel.outputFile;
 
@@ -17,13 +18,11 @@ import static dlt.study.excel.WriteExcel.outputFile;
  *
  */
 public class ReadExcel {
-	static String fileName=  "c:\\\\副本规划预案导入模板－茂名.xls";
+	static String fileName=  "/Users/denglt/Downloads/光路信息_sub.xls"  ; // "c:\\\\副本规划预案导入模板－茂名.xls";
 	static String fileName2= "c:\\\\副本规划预案导入模板－茂名2.xls";
-	public static void main(String[] args){
-		//readExcel();
-		modifyExcel();
-	}
-	public static void readExcel(){
+
+	@Test
+	public  void readExcel(){
 		try{
 			POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(fileName));
 			HSSFWorkbook wb = new HSSFWorkbook(fs);
@@ -43,7 +42,9 @@ public class ReadExcel {
 			e.printStackTrace();
 		}
 	}
-	public static void modifyExcel(){
+
+	@Test
+	public void modifyExcel(){
 		try{
 			POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(fileName));
 			HSSFWorkbook wb = new HSSFWorkbook(fs,true);

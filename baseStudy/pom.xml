@@ -17,16 +17,16 @@
             <artifactId>dltUtils</artifactId>
         </dependency>
 
-<!-- 暂时删除
-    <dependency>
-            <groupId>org.terracotta</groupId>
-            <artifactId>ehcache-probe</artifactId>
-        </dependency>
+        <!-- 暂时删除
+            <dependency>
+                    <groupId>org.terracotta</groupId>
+                    <artifactId>ehcache-probe</artifactId>
+                </dependency>
 
-        <dependency>
-            <groupId>org.terracotta</groupId>
-            <artifactId>ehcache-monitor</artifactId>
-        </dependency>-->
+                <dependency>
+                    <groupId>org.terracotta</groupId>
+                    <artifactId>ehcache-monitor</artifactId>
+                </dependency>-->
 
         <!-- jcache -->
         <dependency>
@@ -418,6 +418,14 @@
                 </executions>
             </plugin>
         </plugins>
-
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>**/*.xls</include>
+                </includes>
+            </resource>
+        </resources>
     </build>
 </project>

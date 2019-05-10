@@ -16,6 +16,14 @@ import org.junit.Test;
 
 
 /**
+ * 启动 rocketmq 命令:
+ *   1) ./mqnamesrv &
+ *   2) ./mqbroker -c ../conf/mybroker.conf -n localhost:9876 &
+ *
+ *   eg:
+ *      ./mqadmin topicList -n localhost:9876
+ *      ./mqadmin clusterList -n localhost:9876
+ *
  * @Description:
  * @Package: dlt.study.rocketmq
  * @Author: denglt
@@ -25,7 +33,7 @@ import org.junit.Test;
 public class RocketMqDemo {
 
     private String topic = "mytopic";
-    private String namesrv = "127.0.0.1:9876";
+    private String namesrv = "127.0.0.1:9876";  //
 
     @Test
     public void producer() throws Exception {
@@ -114,7 +122,7 @@ public class RocketMqDemo {
     @Test
     public void consumer2() throws Exception {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("c_denglt_m");
-       // consumer.setMessageModel(MessageModel.BROADCASTING); //  MessageModel.CLUSTERING
+       // consumer.setMessageModel(MessageModel.BROADCASTING); // default MessageModel.CLUSTERING
        // consumer.setInstanceName("denglt"); // MessageModel.CLUSTERING模式下如果instanceName、consumerGroup都相同的Consumer会同时收到Message，有点like BROADCASTING模式，但instanceName=DEFAULT例外
         consumer.setNamesrvAddr(namesrv);
         consumer.subscribe(topic, "*");
