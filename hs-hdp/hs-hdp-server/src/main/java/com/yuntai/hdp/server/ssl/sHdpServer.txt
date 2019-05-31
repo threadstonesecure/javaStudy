@@ -1,0 +1,144 @@
+密钥库类型: jks
+密钥库提供方: SUN
+
+您的密钥库包含 2 个条目
+
+别名: securehdpserver
+创建日期: 2015-12-19
+条目类型: PrivateKeyEntry
+证书链长度: 2
+证书[1]:
+所有者: CN=denglt, OU=hs, O=hs, ST=zj, C=CN
+发布者: EMAILADDRESS=denglt@hundsun.com, CN=denglt, OU=hs, O=hs, L=hangzhou, ST=zj, C=CN
+序列号: 1
+有效期为 Sat Dec 19 14:30:34 CST 2015 至 Mon Nov 25 14:30:34 CST 2115
+证书指纹:
+	 MD5:  FD:3E:96:66:E4:F4:58:4A:99:E2:51:F5:3E:94:2C:CB
+	 SHA1: 2A:30:01:E1:BC:1E:17:CD:AD:7E:65:34:D4:8F:28:6F:B0:62:91:BF
+	 SHA256: 74:86:D9:F0:C6:87:77:A5:E0:1C:39:C5:F6:67:55:A6:75:D4:F2:04:90:1C:7B:09:BA:3A:D4:F2:09:51:F5:F7
+签名算法名称: SHA1withRSA
+主体公共密钥算法: 2048 位 RSA 密钥
+版本: 3
+
+扩展: 
+
+#1: ObjectId: 2.16.840.1.113730.1.13 Criticality=false
+0000: 16 1D 4F 70 65 6E 53 53   4C 20 47 65 6E 65 72 61  ..OpenSSL Genera
+0010: 74 65 64 20 43 65 72 74   69 66 69 63 61 74 65     ted Certificate
+
+
+#2: ObjectId: 2.5.29.35 Criticality=false
+AuthorityKeyIdentifier [
+KeyIdentifier [
+0000: 1D E7 36 F1 7D EF 08 30   AB E2 49 AD 2B F2 2D 84  ..6....0..I.+.-.
+0010: 4C 7C 30 BF                                        L.0.
+]
+]
+
+#3: ObjectId: 2.5.29.19 Criticality=false
+BasicConstraints:[
+  CA:false
+  PathLen: undefined
+]
+
+#4: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: BB 3B E0 DA 91 C5 C4 4E   20 E9 76 A3 73 A2 D4 DF  .;.....N .v.s...
+0010: 99 FA 15 EA                                        ....
+]
+]
+
+证书[2]:
+所有者: EMAILADDRESS=denglt@hundsun.com, CN=denglt, OU=hs, O=hs, L=hangzhou, ST=zj, C=CN
+发布者: EMAILADDRESS=denglt@hundsun.com, CN=denglt, OU=hs, O=hs, L=hangzhou, ST=zj, C=CN
+序列号: a5905d5afc89c9ed
+有效期为 Sat Dec 19 14:22:38 CST 2015 至 Mon Nov 25 14:22:38 CST 2115
+证书指纹:
+	 MD5:  34:19:47:AA:87:FF:E6:9D:B9:34:12:34:4D:F9:43:DF
+	 SHA1: 85:01:5E:13:CA:3B:9B:16:F9:DF:E6:7D:4C:91:6C:BF:3B:34:E3:A2
+	 SHA256: E0:6B:21:88:79:F3:50:11:A8:F9:83:26:D4:EB:FB:86:C0:DD:7B:FB:C7:74:33:A0:A9:6E:3D:F6:23:C0:AC:50
+签名算法名称: SHA1withRSA
+主体公共密钥算法: 1024 位 RSA 密钥
+版本: 3
+
+扩展: 
+
+#1: ObjectId: 2.5.29.35 Criticality=false
+AuthorityKeyIdentifier [
+KeyIdentifier [
+0000: 1D E7 36 F1 7D EF 08 30   AB E2 49 AD 2B F2 2D 84  ..6....0..I.+.-.
+0010: 4C 7C 30 BF                                        L.0.
+]
+[EMAILADDRESS=denglt@hundsun.com, CN=denglt, OU=hs, O=hs, L=hangzhou, ST=zj, C=CN]
+SerialNumber: [    a5905d5a fc89c9ed]
+]
+
+#2: ObjectId: 2.5.29.19 Criticality=false
+BasicConstraints:[
+  CA:true
+  PathLen:2147483647
+]
+
+#3: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 1D E7 36 F1 7D EF 08 30   AB E2 49 AD 2B F2 2D 84  ..6....0..I.+.-.
+0010: 4C 7C 30 BF                                        L.0.
+]
+]
+
+
+
+*******************************************
+*******************************************
+
+
+别名: ca_root
+创建日期: 2015-12-19
+条目类型: trustedCertEntry
+
+所有者: EMAILADDRESS=denglt@hundsun.com, CN=denglt, OU=hs, O=hs, L=hangzhou, ST=zj, C=CN
+发布者: EMAILADDRESS=denglt@hundsun.com, CN=denglt, OU=hs, O=hs, L=hangzhou, ST=zj, C=CN
+序列号: a5905d5afc89c9ed
+有效期为 Sat Dec 19 14:22:38 CST 2015 至 Mon Nov 25 14:22:38 CST 2115
+证书指纹:
+	 MD5:  34:19:47:AA:87:FF:E6:9D:B9:34:12:34:4D:F9:43:DF
+	 SHA1: 85:01:5E:13:CA:3B:9B:16:F9:DF:E6:7D:4C:91:6C:BF:3B:34:E3:A2
+	 SHA256: E0:6B:21:88:79:F3:50:11:A8:F9:83:26:D4:EB:FB:86:C0:DD:7B:FB:C7:74:33:A0:A9:6E:3D:F6:23:C0:AC:50
+签名算法名称: SHA1withRSA
+主体公共密钥算法: 1024 位 RSA 密钥
+版本: 3
+
+扩展: 
+
+#1: ObjectId: 2.5.29.35 Criticality=false
+AuthorityKeyIdentifier [
+KeyIdentifier [
+0000: 1D E7 36 F1 7D EF 08 30   AB E2 49 AD 2B F2 2D 84  ..6....0..I.+.-.
+0010: 4C 7C 30 BF                                        L.0.
+]
+[EMAILADDRESS=denglt@hundsun.com, CN=denglt, OU=hs, O=hs, L=hangzhou, ST=zj, C=CN]
+SerialNumber: [    a5905d5a fc89c9ed]
+]
+
+#2: ObjectId: 2.5.29.19 Criticality=false
+BasicConstraints:[
+  CA:true
+  PathLen:2147483647
+]
+
+#3: ObjectId: 2.5.29.14 Criticality=false
+SubjectKeyIdentifier [
+KeyIdentifier [
+0000: 1D E7 36 F1 7D EF 08 30   AB E2 49 AD 2B F2 2D 84  ..6....0..I.+.-.
+0010: 4C 7C 30 BF                                        L.0.
+]
+]
+
+
+
+*******************************************
+*******************************************
+
+

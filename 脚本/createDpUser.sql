@@ -1,10 +1,10 @@
 -- @author denglt 
 -- 创建药商账号
 
-SET @username = '邓隆通';
-SET @phone_no = '13825101877';  -- 15814589872
-SET @dp_id = 17; --药商id
-SET @hos_id = NULL; --医院id 
+SET @username = 'Vicky';
+SET @phone_no = '15558180291';  -- 15814589872
+SET @dp_id = 17; -- 药商id
+SET @hos_id = 100318; -- 医院id 
 SET @_salt = uuid();
 SET @_passwd = '123456';
 SET @salt = md5(@_salt);
@@ -50,4 +50,9 @@ SELECT
     WHERE phone_no =@phone_no), pv_id
 FROM olt_opm_privilege; 
 
-
+SELECT *
+FROM olt_opm_privilege_r_user
+WHERE ou_id IN 
+    (SELECT ou_id
+    FROM olt_opm_user
+    WHERE phone_no='15814589872'); 
