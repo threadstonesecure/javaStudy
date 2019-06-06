@@ -1,15 +1,17 @@
 package dlt.study.security;
 
+import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
+import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.*;
 
@@ -40,7 +42,8 @@ public class RSACipher {
     }
 
     /**
-     *  使用CipherOutputStream 实现，推荐该方法
+     * 使用CipherOutputStream 实现，推荐该方法
+     *
      * @param publicKey
      * @param srcBytes
      * @return
@@ -105,6 +108,47 @@ public class RSACipher {
             return byteArrayOutputStream.toByteArray();
         }
         return null;
+    }
+
+    /**
+     * 得到公钥
+     *
+     * @param key 密钥字符串（经过base64编码）
+     * @throws Exception
+     */
+    public static PublicKey getPublicKey(String key) throws Exception {
+        byte[] keyBytes;
+        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PublicKey publicKey = keyFactory.generatePublic(keySpec);
+        return publicKey;
+    }
+
+    /**
+     * 得到私钥
+     *
+     * @param key 密钥字符串（经过base64编码）
+     * @throws Exception
+     */
+    public static PrivateKey getPrivateKey(String key) throws Exception {
+        byte[] keyBytes;
+        keyBytes = (new BASE64Decoder()).decodeBuffer(key);
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+        PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+        return privateKey;
+    }
+
+    /**
+     * 得到密钥字符串（经过base64编码）
+     *
+     * @return
+     */
+    public static String base64(Key key) throws Exception {
+        byte[] keyBytes = key.getEncoded();
+        String s = (new BASE64Encoder()).encode(keyBytes);
+        return s;
     }
 
     /**
