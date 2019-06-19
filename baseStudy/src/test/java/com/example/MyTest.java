@@ -1,8 +1,9 @@
 package com.example;
 
-import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 
-import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * @Description:
@@ -16,5 +17,7 @@ public class MyTest {
     public static void main(String[] args) {
         Integer i = null;
         System.out.println( i != 0);
+        List<String> list = Lists.newLinkedList();
+       // List<Object> list2 = (List<Object>)list;
     }
 }
